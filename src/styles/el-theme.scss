@@ -1,0 +1,46 @@
+/* 改变主题色变量 */
+$--color-primary: #00F0FA;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
+
+@import "../../node_modules/element-ui/packages/theme-chalk/src/index.scss";
+
+.el-button--primary{
+  border: 1px solid #64eefa;
+  background: #00F0FA;
+  box-shadow: 0 0 5px #00F0FA;
+  color: #001F3A;
+}
+
+.el-button--info{
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+
+.el-button--info:hover{
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+.lighted-input .el-input__inner{
+  border: 1px solid #64eefa;
+  background: #001430;
+  box-shadow: 0 0 5px #00F0FA;
+  color: #001F3A;
+}
+
+.el-table th.is-leaf, .el-table td{
+  border-bottom: none;
+}
+
+.el-table tr{
+  border: 2px solid #5EEEFA;
+}
+
+.el-form-item__error{
+  color: #ffaf57;
+}

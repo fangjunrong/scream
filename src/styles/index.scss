@@ -1,0 +1,103 @@
+@import './variables.scss';
+
+body {
+  height: 100%;
+  background-color: $bgBodyColor;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app{
+  height: 100%;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+ul,ol,li{
+  list-style: none;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+div:focus{
+  outline: none;
+ }
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+.lighted-text{
+  text-shadow: 0 0 5px #00F0FA;
+  color: #00F0FA;
+}
+
+.sinput .el-input__inner{
+  background: #001F30;
+  border: 1px solid #5EEEFA;
+  border-radius: 8px;
+}
+
+.s-button-primary{
+  display: inline-block;
+  border: 1px solid #64eefa;
+  background: #00F0FA;
+  box-shadow: 0 0 5px #00F0FA;
+  color: #001F3A;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  color: #001532;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0;
+  transition: .1s;
+  font-weight: 500;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+}

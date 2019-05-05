@@ -1,0 +1,29 @@
+@import './variables.scss';
+@mixin link{
+  color: $operateColor;
+  cursor: pointer;
+}
+
+@mixin miniTxt{
+  font-weight: normal;
+  color: $miniTxtColor;
+  font-size: $miniTxtSize;
+}
+
+@mixin mediumTxt{
+  font-weight: normal;
+  color: $mediumTxtColor;
+  font-size: $mediumTxtSize
+}
+
+@mixin clearfix {
+  clear: both;
+  *zoom: 1;
+  &:after {
+    display: block;
+    clear: both;
+    content: "\0020";
+    visibility: hidden;
+    height: 0;
+  }
+}
