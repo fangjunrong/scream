@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store/index'
-import '@/utils/permission' // permission control
+// import '@/utils/permission' // permission control
 
 import Element from './utils/element'
 import '@/styles/el-theme.scss'

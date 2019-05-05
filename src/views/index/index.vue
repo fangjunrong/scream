@@ -4,12 +4,14 @@
     <div class="index__container">
       <div class="index__container-top boxs">
         <div class="index__container-horizon-box1 box">
-          <div class="charts1">
+          <div class="chart1">
             <LittleTitle title="在线活跃率"/>
             <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
           </div>
-          <LittleTitle title="台阶数"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+          <div class="chart2">
+            <LittleTitle title="台阶数"/>
+            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+          </div>
         </div>
         <div class="index__container-horizon-box2 box">
           <el-carousel trigger="click" height="448px">
@@ -20,12 +22,21 @@
         </div>
         <div class="index__container-horizon-box3 box">
           <littleTilte title="外骨骼数量 总数量"/>
-          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 250px"/>
-          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 250px"/>
+          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 220px"/>
+          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 220px"/>
         </div>
       </div>
       <div class="index__container-bottom boxs">
-        <div class="index__container-horizon-box1 box"></div>
+        <div class="index__container-horizon-box1 box">
+          <div class="chart3">
+            <LittleTitle title="在线活跃率"/>
+            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+          </div>
+          <div class="chart4">
+            <LittleTitle title="台阶数"/>
+            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+          </div>
+        </div>
         <div class="index__container-horizon-box2 box"></div>
         <div class="index__container-horizon-box3 box"></div>
       </div>
@@ -65,12 +76,12 @@ export default {
           {
             name: '访问来源',
             type: 'pie',
-            radius: ['60%', '70%'],
+            radius: ['50%', '80%'],
             center: ['50%', '50%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,
             itemStyle: {
-              borderWidth: 16, // 设置border的宽度有多大
+              borderWidth: 20, // 设置border的宽度有多大
               borderColor: '#001430'
             },
             label: {
@@ -255,6 +266,13 @@ export default {
       padding: 16px;
       border: solid 1px #64eefa;
       border-radius: 8px;
+    }
+    &-top{
+      overflow: hidden;
+    }
+    &-bottom{
+      overflow: hidden;
+      margin-top: 16px;
     }
     &-horizon{
       &-box1{

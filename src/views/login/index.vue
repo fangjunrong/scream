@@ -53,6 +53,7 @@ export default {
       this.$refs[loginInfo].validate((valid) => {
         if (valid) {
           alert('submit!')
+          this.$router.push('/index')
         } else {
           console.log('error submit!!')
           return false
