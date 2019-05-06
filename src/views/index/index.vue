@@ -43,10 +43,12 @@
         </div>
         <div class="index__container-horizon-box2 box">
           <div class="half">
-            <v-chart :options="arealine" :theme="themearealine"/>
+            <LittleTitle title="工作效率"/>
+            <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
           </div>
           <div class="half">
-            <v-chart :options="arealine" :theme="themearealine"/>
+            <LittleTitle title="成本费用"/>
+            <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
           </div>
         </div>
         <div class="index__container-horizon-box3 box">
@@ -312,7 +314,7 @@ export default {
 .index{
   background-color: #000310;
   &__container{
-    padding: 15px 85px;
+    padding: 15px 80px;
     .box{
       float: left;
       padding: 16px;
@@ -339,8 +341,8 @@ export default {
         margin-left: 16px;
       }
       &-box3{
-        height: 520px;
-        width: 480px;
+        height: 480px;
+        width: 520px;
         margin-left: 16px;
       }
     }
@@ -366,19 +368,20 @@ export default {
   padding: 26px 20px 0;
 }
 
- .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 150px;
-    margin: 0;
-  }
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+}
 
 .el-carousel__item:nth-child(2n) {
-     background-color: #99a9bf;
-  }
+    background-color: #020B50;
+}
 
-  .el-carousel__item:nth-child(2n+1) {
-     background-color: #d3dce6;
-  }
+.el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+}
+
 </style>

@@ -31,4 +31,20 @@ export default {
   fill: currentColor;
   overflow: hidden;
 }
+
+.index .el-carousel__indicator .el-carousel__button{
+  width: 50px;
+	height: 8px;
+	background-color: #0668A2;
+	border-radius: 4px;
+	opacity: 0.3;
+}
+
+.index .el-carousel__indicator.is-active .el-carousel__button{
+  width: 50px;
+	height: 8px;
+	background-color: #64EEFA;
+  box-shadow: 0 0 10px #64EEFA;
+	border-radius: 4px;
+}
 </style>
