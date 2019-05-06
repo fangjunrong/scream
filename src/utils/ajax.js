@@ -8,6 +8,7 @@ import { Message } from 'element-ui'
 // axios 默认配置 更多配置查看Axios中文文档
 axios.defaults.timeout = 10000 // 超时默认值
 axios.defaults.baseURL = process.env.BASE_URL // 默认baseURL
+// axios.defaults.baseURL = '/api/'
 axios.defaults.responseType = 'json' // 默认数据响应类型
 axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 axios.defaults.withCredentials = false // 表示跨域请求时是否需要使用凭证
@@ -17,7 +18,7 @@ axios.defaults.withCredentials = false // 表示跨域请求时是否需要使�
 // 先获取是否有cookie或者stroge的author认证。读取的到的话，就添加到header，没有的话，就返回重新登录
 axios.interceptors.request.use(config => {
   var userToken = Cookies.get('UserToken') ? Cookies.get('UserToken') : ''
-  config.headers.common['Authorization'] = userToken
+  config.headers.common['token'] = userToken
   return config
 }, err => {
   return Promise.reject(err)

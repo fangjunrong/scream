@@ -3,13 +3,13 @@
   <div class="index">
     <div class="index__form">
       <p class="index__form-title lighted-text">尖叫智能物流平台</p>
-      <el-form ref="loginInfo" :model="loginInfo" :rules="loginInfoRule">
+      <el-form ref="loginInfo" :model="loginInfo" :rules="loginInfoRule" autocomplete="off">
         <div class="index__form-container">
           <el-form-item prop="name" style="margin-top: 70px;">
-            <input v-model="loginInfo.name" class="index__form-container-input username" placeholder="请输入用户名"/>
+            <input v-model="loginInfo.name" autocomplete="off" class="index__form-container-input username" placeholder="请输入用户名"/>
           </el-form-item>
           <el-form-item prop="password">
-            <input v-model="loginInfo.password" class="index__form-container-input password" placeholder="请输入密码" />
+            <input v-model="loginInfo.password" autocomplete="off" type="password" class="index__form-container-input password" placeholder="请输入密码" />
           </el-form-item>
           <el-button type="primary" class="index__form-container-submit" @click="login('loginInfo')">立即登录</el-button>
         </div>
@@ -19,14 +19,16 @@
 </template>
 <script>
 import { setToken } from '@/utils/common'
+import { mapActions } from 'vuex'
+// import axios from 'axios'
 
 export default {
   name: '',
   data() {
     return {
       loginInfo: {
-        name: '',
-        password: ''
+        name: 'admin',
+        password: '123456'
       },
       loginInfoRule: {
         name: [{
@@ -41,6 +43,9 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapActions('user', [
+      'fetchLogin'
+    ]),
     async fakelogin() {
       if (this.loginParms.yst === '' || this.loginParms.yst === undefined) {
         alert('请输入SapId')
@@ -50,12 +55,18 @@ export default {
       this.$router.push('/index')
     },
     async login(loginInfo) {
-      this.$refs[loginInfo].validate((valid) => {
+      this.$refs[loginInfo].validate(async valid => {
         if (valid) {
-          alert('submit!')
+          const result = await this.fetchLogin({
+            name: this.loginInfo.name,
+            password: this.loginInfo.password
+          })
+          if (result.code !== 200) {
+            this.$message.warning(result.message)
+          }
+          setToken('token', result.data.token)
           this.$router.push('/index')
         } else {
-          console.log('error submit!!')
           return false
         }
       })

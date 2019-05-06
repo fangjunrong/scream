@@ -44,3 +44,15 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 .el-form-item__error{
   color: #ffaf57;
 }
+
+.el-menu-vertical-demo > .el-menu-item{
+  background-color: #00092B !important;
+  box-shadow: inset 0px 0px 25px 0px rgba(0, 174, 255, 0.4);
+  border: solid 1px #64eefa;
+}
+
+.el-submenu__title{
+  background-color: #00092B !important;
+  box-shadow: inset 0px 0px 25px 0px rgba(0, 174, 255, 0.4);
+  border: solid 1px #64eefa;
+}

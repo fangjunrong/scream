@@ -31,11 +31,12 @@ export default {
 }
 .el-main{
   display: flex;
-  padding: 5px;
+  padding: 0;
 }
 .leftSide{
   width: 220px;
-  background-color: #ddd;
+  padding: 16px 0 0 5px;
+  background-color: #000310;
   transition: all .3s ease-out;
 }
 .rightSide{

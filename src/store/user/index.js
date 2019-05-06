@@ -1,5 +1,5 @@
 import { ajax } from '@/utils/ajax'
-import { removeToken } from '@/utils/common'
+import { removeToken, apiConstant } from '@/utils/common'
 
 const user = {
   namespaced: true,
@@ -13,13 +13,13 @@ const user = {
       state.loginInfo = loginInfo
     },
     clearToken: (state, key) => {
-      removeToken()
+      removeToken(key)
     }
   },
 
   actions: {
     async fetchLogin({ commit }, data) {
-      const result = await ajax.get('auth/login', data)
+      const result = await ajax.post(apiConstant.login, data)
       commit('setLoginInfo', result.data)
       return result
     }

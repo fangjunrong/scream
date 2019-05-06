@@ -16,15 +16,16 @@ export default {
 </script>
 <style lang='scss' scoped>
 .littleTitle{
+  width: 100%;
   height: 30px;
   &-title{
     display: inline-block;
     height: 14px;
     line-height: 14px;
     font-size: 14px;
-    margin: 8px 8px 8px 18px;
+    margin: 8px 8px 8px 0;
     text-indent: 8px;
-    color: #0df0f9;
+    color: #e1e1e1;
     border-left: 2px solid #0df0f9;
   }
 }

@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'Header',
   data() {
@@ -20,9 +21,22 @@ export default {
       name: 'scream'
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    ...mapState('user', [
+      'loginInfo'
+    ]),
+    ...mapMutations('user', [
+      'clearToken'
+    ]),
     logout() {
-      console.log('logout')
+      this.clearToken('token')
+      this.$router.push('/login')
+    },
+    init() {
+      this.name = this.loginInfo().name
     }
   }
 }
@@ -43,7 +57,7 @@ export default {
       &-avatar{
         float: left;
         margin-right: 8px;
-        display: inline-block;
+        display: block;
         width: 26px;
         height: 26px;
         border-radius: 13px;
@@ -60,6 +74,7 @@ export default {
         font-size: 16px;
         margin-right: 42px;
         color: #e1e1e1;
+        cursor: pointer;
       }
     }
   }

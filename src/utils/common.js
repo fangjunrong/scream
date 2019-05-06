@@ -16,8 +16,8 @@ export const PathToChinese = {
   'index': '首页'
 }
 
-const apiConstant = {
-  fakelogin: 'auth/fakelogin'
+export const apiConstant = {
+  login: '/login'
 }
 
 const common = {

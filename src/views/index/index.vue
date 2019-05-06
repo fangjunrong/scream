@@ -6,11 +6,11 @@
         <div class="index__container-horizon-box1 box">
           <div class="chart1">
             <LittleTitle title="在线活跃率"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
           </div>
           <div class="chart2">
             <LittleTitle title="台阶数"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
           </div>
         </div>
         <div class="index__container-horizon-box2 box">
@@ -20,10 +20,14 @@
             </el-carousel-item>
           </el-carousel>
         </div>
-        <div class="index__container-horizon-box3 box">
-          <littleTilte title="外骨骼数量 总数量"/>
-          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 220px"/>
-          <v-chart :options="circle" :theme="themeCircle" style="height: 250px;width: 220px"/>
+        <div class="index__container-horizon-box3 box circle">
+          <LittleTitle title="外骨骼数量 总数量"/>
+          <div class="half">
+            <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+          </div>
+          <div class="half">
+            <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+          </div>
         </div>
       </div>
       <div class="index__container-bottom boxs">
@@ -37,15 +41,25 @@
             <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
           </div>
         </div>
-        <div class="index__container-horizon-box2 box"></div>
-        <div class="index__container-horizon-box3 box"></div>
+        <div class="index__container-horizon-box2 box">
+          <div class="half">
+            <v-chart :options="arealine" :theme="themearealine"/>
+          </div>
+          <div class="half">
+            <v-chart :options="arealine" :theme="themearealine"/>
+          </div>
+        </div>
+        <div class="index__container-horizon-box3 box">
+          <LittleTitle title="开机次数 弯腰次数"/>
+          <v-chart :options="columnar" :theme="themecolumnar" style="height: 400px; width: 448px;"/>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import ECharts from 'vue-echarts'
-import 'echarts'
+import echarts from 'echarts'
 import circle from '@/utils/echartsTheme/circle.json'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 import arealine from '@/utils/echartsTheme/brokeline.json'
@@ -62,6 +76,14 @@ export default {
     return {
       textarea: '',
       circle: {
+        title: {
+          text: '外骨骼数量',
+          left: 'center',
+          textStyle: {
+            fontSize: '16',
+            color: '#e1e1e1'
+          }
+        },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -147,10 +169,16 @@ export default {
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           splitLine: { // 网格线
             'show': false
+          },
+          axisTick: {
+            show: false
           }
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          axisTick: {
+            show: false
+          }
         },
         series: [{
           data: [320, 680, 280, 480, 1290, 500, 1320],
@@ -205,8 +233,7 @@ export default {
       },
       columnar: {
         title: {
-          text: '世界人口总量',
-          subtext: '数据来自网络'
+          // text: '世界人口'
         },
         tooltip: {
           trigger: 'axis',
@@ -225,16 +252,39 @@ export default {
         },
         xAxis: {
           type: 'value',
-          boundaryGap: [0, 0.01]
+          boundaryGap: [0, 0.01],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
         },
         yAxis: {
           type: 'category',
-          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
         },
         series: [
           {
             name: '2011年',
             type: 'bar',
+            itemStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0, 0, 0, 1,
+                  [
+                    { offset: 0, color: '#0167e8' },
+                    { offset: 1, color: '#00c6ff' }
+                  ]
+                )
+              }
+            },
             data: [18203, 23489, 29034, 104970, 131744, 630230]
           },
           {
@@ -246,6 +296,7 @@ export default {
       },
       themeCircle: '',
       themebrokeline: '',
+      themearealine: '',
       themecolumnar: ''
     }
   },
@@ -253,12 +304,13 @@ export default {
     this.themeCircle = circle
     this.themebrokeline = brokeline
     this.themearealine = arealine
-    this.thcolumnar = columnar
+    this.themecolumnar = columnar
   }
 }
 </script>
 <style lang="scss" scoped>
 .index{
+  background-color: #000310;
   &__container{
     padding: 15px 85px;
     .box{
@@ -266,6 +318,8 @@ export default {
       padding: 16px;
       border: solid 1px #64eefa;
       border-radius: 8px;
+      background-color: #001432;
+      overflow: hidden;
     }
     &-top{
       overflow: hidden;
@@ -291,6 +345,13 @@ export default {
       }
     }
   }
+}
+.circle .half{
+  margin: 30px 0 40px 0;
+}
+.half{
+  float: left;
+  width: 50%;
 }
 .el-header{
   height: 50px;
