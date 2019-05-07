@@ -6,6 +6,7 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 
 @import "../../node_modules/element-ui/packages/theme-chalk/src/index.scss";
 
+//按钮
 .el-button--primary{
   border: 1px solid #64eefa;
   background: #00F0FA;
@@ -26,6 +27,7 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   border: 1px solid #fff;
 }
 
+//输入框
 .lighted-input .el-input__inner{
   border: 1px solid #64eefa;
   background: #001430;
@@ -56,10 +58,12 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 //   margin-top: 8px;
 // }
 
+//form表单
 .el-form-item__error{
   color: #ffaf57;
 }
 
+//菜单
 .el-menu-vertical-demo > .el-menu-item{
   background-color: #00092B !important;
   box-shadow: inset 0px 0px 25px 0px rgba(0, 174, 255, 0.4);
@@ -70,4 +74,40 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   background-color: #00092B !important;
   box-shadow: inset 0px 0px 25px 0px rgba(0, 174, 255, 0.4);
   border: solid 1px #64eefa;
+}
+
+//分页
+.el-pagination{
+  color: #e1e1e1;
+  &__total{
+    color: #e1e1e1;
+  }
+  &__jump{
+    background-color: #001432;
+    color: #e1e1e1;
+  }
+  &__editor{
+    .el-input__inner{
+      background-color: #001432;
+      color: #e1e1e1;
+      border: 1px solid #e1e1e1;
+    }
+  }
+  .el-select .el-input .el-input__inner{
+    background-color: #001432;
+    color: #e1e1e1;
+    border: 1px solid #e1e1e1;
+  }
+  button:disabled{
+    background-color: #001432;
+    color: #e1e1e1;
+  }
+  .el-pager li{
+    background-color: #001432;
+    color: #e1e1e1;
+  }
+  .btn-next{
+    background-color: #001432;
+    color: #e1e1e1;
+  }
 }

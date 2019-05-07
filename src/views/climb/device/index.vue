@@ -13,7 +13,7 @@
       </el-form>
     </div>
     <div class="climbDevice-table">
-      <el-table
+      <!-- <el-table
         :data="tableData"
         class="climbDevice-table-content">
         <el-table-column
@@ -71,7 +71,7 @@
             </div>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
       <table class="selftable selftable-head">
         <tr>
           <th width="auto">ID</th>
@@ -85,22 +85,6 @@
           <th width="10%">创建时间</th>
           <th width="170">操作</th>
         </tr>
-        <!-- <tr v-for="item in tableData" :key="item.id">
-          <td></td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.model }}</td>
-          <td>{{ item.sn }}</td>
-          <td>{{ item.company }}</td>
-          <td>{{ item.customer }}</td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.createTime }}</td>
-          <td>
-            <el-button type="primary">修改</el-button>
-            <el-button type="primary">删除</el-button>
-          </td>
-        </tr> -->
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
@@ -114,12 +98,12 @@
           <td width="10%">{{ item.id }}</td>
           <td width="10%">{{ item.createTime }}</td>
           <td width="170">
-            <el-button type="primary">修改</el-button>
-            <el-button type="primary">删除</el-button>
+            <el-button type="primary" class="selftable-btn">修改</el-button>
+            <el-button type="primary" class="selftable-btn">删除</el-button>
           </td>
         </tr>
       </table>
-      <ul class="ul-table">
+      <!-- <ul class="ul-table">
         <li>
           <ul>
             <li class="ul-table-1">设备ID</li>
@@ -151,7 +135,7 @@
             </li>
           </ul>
         </li>
-      </ul>
+      </ul> -->
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -236,6 +220,14 @@ export default {
   &-head{
     height: 40px;
     line-height: 40px;
+  }
+  &-btn{
+    padding: 6px 20px;
+  }
+}
+.selftable-body{
+  td{
+    padding: 0 6px;
   }
 }
 
