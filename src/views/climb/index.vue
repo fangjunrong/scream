@@ -11,7 +11,4 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climb{
-  background-color: #001432;
-}
 </style>

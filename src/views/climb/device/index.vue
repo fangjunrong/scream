@@ -6,10 +6,19 @@
     <div class="climbDevice-filter">
       <el-form :inline="true">
         <el-form-item label="名称">
-          <el-input class="sinput"></el-input>
+          <el-input v-model="filter.name" class="sinput"></el-input>
         </el-form-item>
-        <input type="button" class="s-button-primary" value="查询" />
-        <el-button type="info" class="climbDevice-filter-add">添加</el-button>
+        <el-form-item label="序列号">
+          <el-input v-model="filter.sn" class="sinput"></el-input>
+        </el-form-item>
+        <el-form-item label="客户">
+          <el-input v-model="filter.customer" class="sinput"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-input v-model="filter.department" class="sinput"></el-input>
+        </el-form-item>
+        <input type="button" class="s-button-primary climbDevice-filter-search" value="查询" @click="search()"/>
+        <el-button type="info" class="climbDevice-filter-add" @click="add()">添加</el-button>
       </el-form>
     </div>
     <div class="climbDevice-table">
@@ -74,28 +83,28 @@
       </el-table> -->
       <table class="selftable selftable-head">
         <tr>
-          <th width="auto">ID</th>
+          <th width="50">ID</th>
           <th width="10%">名称</th>
-          <th width="10%">型号</th>
+          <th width="15%">型号</th>
           <th width="10%">序列号</th>
           <th width="10%">所属厂商</th>
           <th width="10%">客户</th>
-          <th width="10%">归属部门</th>
-          <th width="10%">联系人</th>
+          <th width="8%">归属部门</th>
+          <th width="8%">联系人</th>
           <th width="10%">创建时间</th>
           <th width="170">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="auto">{{ item.id }}</td>
+          <td width="50">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
-          <td width="10%">{{ item.model }}</td>
+          <td width="15%">{{ item.model }}</td>
           <td width="10%">{{ item.sn }}</td>
           <td width="10%">{{ item.company }}</td>
           <td width="10%">{{ item.customer }}</td>
-          <td width="10%">{{ item.id }}</td>
-          <td width="10%">{{ item.id }}</td>
+          <td width="8%">{{ item.department }}</td>
+          <td width="8%">{{ item.contacts }}</td>
           <td width="10%">{{ item.createTime }}</td>
           <td width="170">
             <el-button type="primary" class="selftable-btn">修改</el-button>
@@ -126,8 +135,8 @@
             <li class="ul-table-4">{{ item.sn }}</li>
             <li class="ul-table-5">{{ item.company }}</li>
             <li class="ul-table-6">{{ item.customer }}</li>
-            <li class="ul-table-7">{{ item.id }}</li>
-            <li class="ul-table-8">{{ item.id }}</li>
+            <li class="ul-table-7">{{ item.department }}</li>
+            <li class="ul-table-8">{{ item.contacts }}</li>
             <li class="ul-table-9">{{ item.createTime }}</li>
             <li class="ul-table-10">
               <el-button type="primary" class="ul-table-btn">修改</el-button>
@@ -136,11 +145,13 @@
           </ul>
         </li>
       </ul> -->
+    </div>
+    <div class="climbDevice-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="100"
-        :total="400"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
         layout="total, sizes, prev, pager, next, jumper"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange">
@@ -150,10 +161,17 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import _ from 'lodash'
 export default {
   name: 'ClimbDevice',
   data() {
     return {
+      filter: {
+        name: '',
+        sn: '',
+        customer: '',
+        department: ''
+      },
       tableData: [],
       pagination: {
         currentPage: 1,
@@ -179,6 +197,22 @@ export default {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+    },
+    async search() {
+      const param = _.assign(this.filter, { pageSize: 5, pageNumber: 1 })
+      const result = await this.fetchClimbDeviceList(param)
+      console.log(result)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+    },
+    add() {
+
     },
     handleSizeChange(val) {
       console.log(val)
@@ -193,10 +227,16 @@ export default {
 .climbDevice{
   &-filter{
     padding: 16px;
+    .sinput{
+      width: 150px;
+    }
+    &-search{
+      width: 125px;
+    }
     &-add{
       float: right;
       margin-right: 20px;
-      width: 100px;
+      width: 125px;
     }
   }
   &-table{
@@ -206,6 +246,12 @@ export default {
         border-collapse:separate;
         border-spacing:0px 10px;
       }
+    }
+  }
+  &-pagination{
+    margin-top: 42px;
+    .el-pagination{
+      float: right;
     }
   }
 }
@@ -225,9 +271,14 @@ export default {
     padding: 6px 20px;
   }
 }
+.selftable-head{
+  th{
+    padding: 0 8px;
+  }
+}
 .selftable-body{
   td{
-    padding: 0 6px;
+    padding: 0 8px;
   }
 }
 

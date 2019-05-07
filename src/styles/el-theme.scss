@@ -83,31 +83,31 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
     color: #e1e1e1;
   }
   &__jump{
-    background-color: #001432;
+    background-color: #000310;
     color: #e1e1e1;
   }
   &__editor{
     .el-input__inner{
-      background-color: #001432;
+      background-color: #000310;
       color: #e1e1e1;
       border: 1px solid #e1e1e1;
     }
   }
   .el-select .el-input .el-input__inner{
-    background-color: #001432;
+    background-color: #000310;
     color: #e1e1e1;
     border: 1px solid #e1e1e1;
   }
   button:disabled{
-    background-color: #001432;
+    background-color: #000310;
     color: #e1e1e1;
   }
   .el-pager li{
-    background-color: #001432;
+    background-color: #000310;
     color: #e1e1e1;
   }
   .btn-next{
-    background-color: #001432;
+    background-color: #000310;
     color: #e1e1e1;
   }
 }
