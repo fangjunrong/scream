@@ -1,5 +1,5 @@
 <template>
-  <div class="buttock">
+  <div class="manage">
     <transition name="el-zoom-in-top">
       <router-view></router-view>
     </transition>
@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-  name: 'Buttock'
+  name: 'Manage'
 }
 </script>
 <style lang='scss' scoped>

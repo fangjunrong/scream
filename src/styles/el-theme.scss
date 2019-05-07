@@ -33,13 +33,28 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   color: #001F3A;
 }
 
-.el-table th.is-leaf, .el-table td{
-  border-bottom: none;
-}
+// .el-table tr{
+//   background-color: #001432;
+// }
 
-.el-table tr{
-  border: 2px solid #5EEEFA;
-}
+// .el-table th.is-leaf{
+//   border-radius: 8px;
+//   background-color: #001432;
+//   border-bottom: none;
+// }
+
+// .el-table__header{
+//   background-color: #001432;
+// 	border-radius: 8px;
+//   border: 1px solid #5EEEFA;
+// }
+
+// .el-table__row{
+//   background-color: #001432 !important;
+// 	border-radius: 8px;
+//   border: 1px solid #5EEEFA !important;
+//   margin-top: 8px;
+// }
 
 .el-form-item__error{
   color: #ffaf57;

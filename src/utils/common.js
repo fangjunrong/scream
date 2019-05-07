@@ -17,7 +17,10 @@ export const PathToChinese = {
 }
 
 export const apiConstant = {
-  login: '/login'
+  login: '/login',
+  climbDeviceList: '/sys/climb/deviceList',
+  climbDeviceEdit: '/sys/climb/deviceEdit',
+  climbDeviceDelete: '/sys/climb/deviceDelete'
 }
 
 const common = {

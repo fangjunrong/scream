@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate' // localStorage存储持久化
 import user from './user/index'
+import climb from './climb/index'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
 
   },
   modules: {
-    user
+    user,
+    climb
   }
 })
 

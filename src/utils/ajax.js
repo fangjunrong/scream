@@ -17,7 +17,7 @@ axios.defaults.withCredentials = false // 表示跨域请求时是否需要使�
 // 在ajax发送之前拦截
 // 先获取是否有cookie或者stroge的author认证。读取的到的话，就添加到header，没有的话，就返回重新登录
 axios.interceptors.request.use(config => {
-  var userToken = Cookies.get('UserToken') ? Cookies.get('UserToken') : ''
+  var userToken = Cookies.get('token') ? Cookies.get('token') : ''
   config.headers.common['token'] = userToken
   return config
 }, err => {

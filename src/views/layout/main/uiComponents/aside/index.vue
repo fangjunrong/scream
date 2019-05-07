@@ -69,6 +69,15 @@
         <el-menu-item index="/main/climb/position">定位信息</el-menu-item>
         <el-menu-item index="/main/climb/data">统计图标</el-menu-item>
       </el-submenu>
+      <el-submenu index="6">
+        <template slot="title">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-climb"></use>
+          </svg>
+          <span slot="title">系统管理</span>
+        </template>
+        <el-menu-item index="/main/manage/user">用户管理</el-menu-item>
+      </el-submenu>
     </el-menu>
   </div>
 </template>

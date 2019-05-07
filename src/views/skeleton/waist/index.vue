@@ -1,6 +1,8 @@
 <template>
   <div class="waist">
-    <router-view></router-view>
+    <transition name="el-zoom-in-top">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 <script>

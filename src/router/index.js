@@ -143,6 +143,20 @@ export const constantRouterMap = [
               import('@/views/skeleton/buttock/businessET/index')
           }]
         }]
+      },
+      {
+        path: 'manage',
+        name: 'manage',
+        component: () =>
+          import('@/views/manage/index'),
+        children: [
+          {
+            path: 'user',
+            name: 'userManage',
+            component: () =>
+              import('@/views/manage/user/index')
+          }
+        ]
       }
     ]
   },

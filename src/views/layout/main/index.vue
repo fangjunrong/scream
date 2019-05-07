@@ -6,7 +6,9 @@
         <Aside/>
       </div>
       <div class="rightSide">
-        <router-view></router-view>
+        <transition name="el-zoom-in-top">
+          <router-view></router-view>
+        </transition>
       </div>
     </el-main>
   </div>
