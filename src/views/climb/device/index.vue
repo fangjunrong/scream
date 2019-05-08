@@ -246,6 +246,9 @@ export default {
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
     },
+    async getData(param) {
+      return await this.fetchClimbDeviceList(param)
+    },
     add() {
       this.info.visible = true
       this.info.typeText = '新增'
@@ -287,11 +290,29 @@ export default {
       }).catch(() => {
       })
     },
-    handleSizeChange(val) {
-      console.log(val)
+    async handleSizeChange(val) {
+      const result = await this.getData({
+        pageNumber: val,
+        pageSize: 10
+      })
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     },
-    handleCurrentChange(val) {
-      console.log(val)
+    async handleCurrentChange(val) {
+      const result = await this.getData({
+        pageNumber: val,
+        pageSize: 10
+      })
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     }
   }
 }
