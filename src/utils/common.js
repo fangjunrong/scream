@@ -20,7 +20,10 @@ export const apiConstant = {
   login: '/login',
   climbDeviceList: '/sys/climb/deviceList',
   climbDeviceEdit: '/sys/climb/deviceEdit',
-  climbDeviceDelete: '/sys/climb/deviceDelete'
+  climbDeviceDelete: '/sys/climb/deviceDelete',
+  userList: '/sys/user/users',
+  userEdit: '/sys/user/useredit',
+  userDelete: '/sys/user/userdelete'
 }
 
 const common = {

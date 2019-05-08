@@ -21,7 +21,7 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   border-radius: 8px;
 }
 
-.el-button--info:hover{
+.el-button--info:hover, .el-button--info:focus{ // todo按钮点击样式
   color: #000;
   background-color: #fff;
   border: 1px solid #fff;
@@ -146,6 +146,13 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
       line-height: 18px;
       border-right: 1px solid rgba(41,173,255,0.5);
     }
+  }
+  .el-select-dropdown{
+    background: #001F30;
+    border: 1px solid #5EEEFA;
+  }
+  .el-select-dropdown__item.hover, .el-select-dropdown__item:hover{
+    background: #5EEEFA;
   }
   .el-icon-close:before{
     color: #64eefa;

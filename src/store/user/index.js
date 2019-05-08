@@ -22,6 +22,19 @@ const user = {
       const result = await ajax.post(apiConstant.login, data)
       commit('setLoginInfo', result.data)
       return result
+    },
+    async fetchUserList({ commit }, data) {
+      const result = await ajax.post(`${apiConstant.userList}?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`, data)
+      // commit('setLoginInfo', result.data)
+      return result
+    },
+    async changeUser({ commit }, data) {
+      const result = await ajax.post(apiConstant.userEdit, data)
+      return result
+    },
+    async deleteUser({ commit }, data) {
+      const result = await ajax.post(apiConstant.userDelete, data)
+      return result
     }
   }
 }

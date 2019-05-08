@@ -1,62 +1,64 @@
 <template>
   <div class="index">
     <Header />
-    <div class="index__container">
-      <div class="index__container-top boxs">
-        <div class="index__container-horizon-box1 box">
-          <div class="chart1">
-            <LittleTitle title="在线活跃率"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+    <transition name="el-zoom-in-top">
+      <div class="index__container">
+        <div class="index__container-top boxs">
+          <div class="index__container-horizon-box1 box">
+            <div class="chart1">
+              <LittleTitle title="在线活跃率"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+            </div>
+            <div class="chart2">
+              <LittleTitle title="台阶数"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+            </div>
           </div>
-          <div class="chart2">
-            <LittleTitle title="台阶数"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+          <div class="index__container-horizon-box2 box">
+            <el-carousel trigger="click" height="448px">
+              <el-carousel-item v-for="item in 4" :key="item">
+                <h3 class="small">{{ item }}</h3>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+          <div class="index__container-horizon-box3 box circle">
+            <LittleTitle title="外骨骼数量 总数量"/>
+            <div class="half">
+              <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+            </div>
+            <div class="half">
+              <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+            </div>
           </div>
         </div>
-        <div class="index__container-horizon-box2 box">
-          <el-carousel trigger="click" height="448px">
-            <el-carousel-item v-for="item in 4" :key="item">
-              <h3 class="small">{{ item }}</h3>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-        <div class="index__container-horizon-box3 box circle">
-          <LittleTitle title="外骨骼数量 总数量"/>
-          <div class="half">
-            <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+        <div class="index__container-bottom boxs">
+          <div class="index__container-horizon-box1 box">
+            <div class="chart3">
+              <LittleTitle title="在线活跃率"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+            </div>
+            <div class="chart4">
+              <LittleTitle title="台阶数"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+            </div>
           </div>
-          <div class="half">
-            <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+          <div class="index__container-horizon-box2 box">
+            <div class="half">
+              <LittleTitle title="工作效率"/>
+              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+            </div>
+            <div class="half">
+              <LittleTitle title="成本费用"/>
+              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+            </div>
+          </div>
+          <div class="index__container-horizon-box3 box">
+            <LittleTitle title="开机次数 弯腰次数"/>
+            <v-chart :options="columnar" :theme="themecolumnar" style="height: 400px; width: 448px;"/>
           </div>
         </div>
       </div>
-      <div class="index__container-bottom boxs">
-        <div class="index__container-horizon-box1 box">
-          <div class="chart3">
-            <LittleTitle title="在线活跃率"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
-          </div>
-          <div class="chart4">
-            <LittleTitle title="台阶数"/>
-            <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
-          </div>
-        </div>
-        <div class="index__container-horizon-box2 box">
-          <div class="half">
-            <LittleTitle title="工作效率"/>
-            <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
-          </div>
-          <div class="half">
-            <LittleTitle title="成本费用"/>
-            <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
-          </div>
-        </div>
-        <div class="index__container-horizon-box3 box">
-          <LittleTitle title="开机次数 弯腰次数"/>
-          <v-chart :options="columnar" :theme="themecolumnar" style="height: 400px; width: 448px;"/>
-        </div>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 <script>

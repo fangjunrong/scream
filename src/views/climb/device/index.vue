@@ -292,8 +292,8 @@ export default {
     },
     async handleSizeChange(val) {
       const result = await this.getData({
-        pageNumber: val,
-        pageSize: 10
+        pageNumber: 1,
+        pageSize: val
       })
       if (result.code !== 200) {
         this.$message.warning(result.message)
@@ -347,32 +347,6 @@ export default {
     .el-pagination{
       float: right;
     }
-  }
-}
-.selftable{
-  width: 100%;
-  text-align: left;
-  word-break: break-word;
-  background-color: #001432;
-  border: 1px solid #5EEEFA;
-  border-radius: 8px;
-  margin-top: 4px;
-  &-head{
-    height: 40px;
-    line-height: 40px;
-  }
-  &-btn{
-    padding: 6px 20px;
-  }
-}
-.selftable-head{
-  th{
-    padding: 0 8px;
-  }
-}
-.selftable-body{
-  td{
-    padding: 0 8px;
   }
 }
 

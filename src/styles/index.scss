@@ -103,3 +103,30 @@ a:hover {
   font-size: 14px;
   border-radius: 4px;
 }
+
+.selftable{
+  width: 100%;
+  text-align: left;
+  word-break: break-word;
+  background-color: #001432;
+  border: 1px solid #5EEEFA;
+  border-radius: 8px;
+  margin-top: 4px;
+  &-head{
+    height: 40px;
+    line-height: 40px;
+  }
+  &-btn{
+    padding: 6px 20px;
+  }
+}
+.selftable-head{
+  th{
+    padding: 0 8px;
+  }
+}
+.selftable-body{
+  td{
+    padding: 0 8px;
+  }
+}
