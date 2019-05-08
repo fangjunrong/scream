@@ -106,8 +106,48 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
     background-color: #000310;
     color: #e1e1e1;
   }
+  .el-pager li.active{
+    color: #00F0FA;
+  }
+  .btn-prev{
+    background-color: #000310;
+    color: #e1e1e1;
+  }
   .btn-next{
     background-color: #000310;
     color: #e1e1e1;
+  }
+}
+
+// 弹出框
+.el-dialog{
+  border: 1px solid #64eefa;
+  border-radius: 8px;
+  background-color: #000310;
+  opacity: 0.9;
+  &__title{
+    color: #64eefa;
+  }
+  .el-form-item{
+    background: #001F30;
+    border: 1px solid #5EEEFA;
+    color: #64eefa;
+    border-radius: 8px;
+    .el-input__inner{
+      border: none;
+      border-radius: 8px;
+      color: #64eefa;
+      background: #001F30;
+    }
+    &__label{
+      color: #e1e1e1 !important;
+      height: 18px;
+      margin-top: 12px;
+      line-height: 18px;
+      border-right: 1px solid rgba(41,173,255,0.5);
+    }
+  }
+  .el-icon-close:before{
+    color: #64eefa;
   }
 }

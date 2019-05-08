@@ -107,8 +107,8 @@
           <td width="8%">{{ item.contacts }}</td>
           <td width="10%">{{ item.createTime }}</td>
           <td width="170">
-            <el-button type="primary" class="selftable-btn">修改</el-button>
-            <el-button type="primary" class="selftable-btn">删除</el-button>
+            <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
+            <el-button type="primary" class="selftable-btn" @click="deleteItem(item)">删除</el-button>
           </td>
         </tr>
       </table>
@@ -157,6 +157,35 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </div>
+    <el-dialog :visible.sync="info.visible" :title="info.typeText">
+      <el-form :model="info.data">
+        <el-form-item :label-width="formLabelWidth" label="名称">
+          <el-input v-model="info.data.name"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="型号">
+          <el-input v-model="info.data.model"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="序列号">
+          <el-input v-model="info.data.sn"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="所属厂商">
+          <el-input v-model="info.data.company"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="客户">
+          <el-input v-model="info.data.customer"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="归属部门">
+          <el-input v-model="info.data.department"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="联系人">
+          <el-input v-model="info.data.contacts"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="info.visible = false">取 消</el-button>
+        <el-button type="primary" @click="infoSubmit()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -173,6 +202,12 @@ export default {
         department: ''
       },
       tableData: [],
+      info: {
+        visible: false,
+        typeText: '新增',
+        data: {}
+      },
+      formLabelWidth: '100px',
       pagination: {
         currentPage: 1,
         pageSize: 100,
@@ -185,14 +220,15 @@ export default {
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbDeviceList'
+      'fetchClimbDeviceList',
+      'changeClimbDevice',
+      'deleteClimbDevice'
     ]),
     async init() {
       const result = await this.fetchClimbDeviceList({
         pageNumber: 1,
-        pageSize: 5
+        pageSize: 10
       })
-      console.log(result)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -201,9 +237,8 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async search() {
-      const param = _.assign(this.filter, { pageSize: 5, pageNumber: 1 })
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
       const result = await this.fetchClimbDeviceList(param)
-      console.log(result)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -212,7 +247,45 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     add() {
-
+      this.info.visible = true
+      this.info.typeText = '新增'
+      this.info.data = {}
+    },
+    change(item) {
+      this.info.visible = true
+      this.info.data = _.cloneDeep(item)
+      this.info.typeText = '修改'
+    },
+    async infoSubmit() {
+      const id = this.info.data.id ? this.info.data.id : ''
+      const result = await this.changeClimbDevice(this.info.data)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+        return false
+      }
+      if (id) {
+        this.$message.success('修改成功')
+      } else {
+        this.$message.success('添加成功')
+      }
+      this.info.visible = false
+      this.search()
+    },
+    async deleteItem(item) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async response => {
+        const result = await this.deleteClimbDevice({ id: item.id })
+        if (result.code !== 200) {
+          this.$message.warning(result.message)
+          return false
+        }
+        this.$message.success('删除成功')
+        this.search()
+      }).catch(() => {
+      })
     },
     handleSizeChange(val) {
       console.log(val)
