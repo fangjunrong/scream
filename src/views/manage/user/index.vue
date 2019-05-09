@@ -58,7 +58,7 @@
           <el-input v-model="info.data.nick"></el-input>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="是否管理员">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="info.data.isManage" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -245,53 +245,6 @@ export default {
       float: right;
     }
   }
-}
-
-.ul-table-1{
-  width: auto;
-}
-.ul-table-2{
-  width: 10%;
-}
-.ul-table-3{
-  width: 15%;
-}
-.ul-table-4{
-  width: 10%;
-}
-.ul-table-5{
-  width: 10%;
-}
-.ul-table-6{
-  width: 5%;
-}
-.ul-table-7{
-  width: 10%;
-}
-.ul-table-8{
-  width: 10%;
-}
-.ul-table-9{
-  width: 10%;
-}
-.ul-table-10{
-  width: 168px;
-}
-.ul-table > li{
-  margin-bottom: 4px;
-  border: solid 1px #64eefa;
-  border-radius: 8px;
-}
-.ul-table > li > ul{
-  overflow: hidden;
-}
-.ul-table > li > ul > li{
-  float: left;
-  padding: 6px;
-  word-break: break-word;
-}
-.ul-table-btn{
-  padding: 6px 20px;
 }
 </style>
 <style>
