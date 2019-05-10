@@ -6,7 +6,8 @@ import router from './router'
 import store from './store/index'
 // import '@/utils/permission' // permission control
 
-import Element from './utils/element'
+// import Element from './utils/element' // 部分引用
+import Element from 'element-ui' // 全部引用
 import '@/styles/el-theme.scss'
 import '@/styles/index.scss' // global css
 

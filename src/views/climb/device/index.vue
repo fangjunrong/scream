@@ -321,8 +321,13 @@ export default {
 .climbDevice{
   &-filter{
     padding: 16px;
+    background-color: #001432;
+    border-radius: 8px;
     .sinput{
       width: 150px;
+    }
+    .el-form-item{
+      margin-bottom: 0;
     }
     &-search{
       width: 125px;
@@ -334,6 +339,10 @@ export default {
     }
   }
   &-table{
+    background-color: #001432;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 30px 40px;
     &-content{
       background-color: #001432;
       .el-table__body{

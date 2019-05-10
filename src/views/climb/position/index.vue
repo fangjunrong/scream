@@ -1,15 +1,17 @@
 <template>
-  <div class="climbDevice">
-    <div class="climbDevice-title">
+  <div class="climbPosition">
+    <div class="climbPosition-title">
       <DetailTitle title="设备信息"/>
     </div>
-    <div class="climbDevice-filter">
+    <div class="climbPosition-filter">
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.date"
+            v-model="filter.createTime"
             type="date"
             placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
         <el-form-item label="客户">
@@ -18,44 +20,44 @@
         <el-form-item label="部门">
           <el-input v-model="filter.department" class="sinput"></el-input>
         </el-form-item>
-        <input type="button" class="s-button-primary climbDevice-filter-search" value="查询" @click="search()"/>
-        <el-button type="info" class="climbDevice-filter-add" @click="add()">添加</el-button>
+        <input type="button" class="s-button-primary climbPosition-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="climbDevice-table">
-      <table class="selftable selftable-head">
-        <tr>
-          <th width="50">ID</th>
-          <th width="10%">名称</th>
-          <th width="15%">型号</th>
-          <th width="10%">序列号</th>
-          <th width="10%">所属厂商</th>
-          <th width="10%">客户</th>
-          <th width="8%">归属部门</th>
-          <th width="8%">联系人</th>
-          <th width="10%">创建时间</th>
-          <th width="170">操作</th>
-        </tr>
-      </table>
-      <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
-        <tr>
-          <td width="50">{{ item.id }}</td>
-          <td width="10%">{{ item.name }}</td>
-          <td width="15%">{{ item.model }}</td>
-          <td width="10%">{{ item.sn }}</td>
-          <td width="10%">{{ item.company }}</td>
-          <td width="10%">{{ item.customer }}</td>
-          <td width="8%">{{ item.department }}</td>
-          <td width="8%">{{ item.contacts }}</td>
-          <td width="10%">{{ item.createTime }}</td>
-          <td width="170">
-            <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
-            <el-button type="primary" class="selftable-btn" @click="deleteItem(item)">删除</el-button>
-          </td>
-        </tr>
-      </table>
+    <div class="climbPosition-table">
+      <el-tabs tab-position="top" style="height: 200px;">
+        <el-tab-pane label="地图"></el-tab-pane>
+        <el-tab-pane label="列表">
+          <table class="selftable selftable-head">
+            <tr>
+              <th width="50">ID</th>
+              <th width="10%">名称</th>
+              <th width="15%">型号</th>
+              <th width="10%">序列号</th>
+              <th width="10%">所属厂商</th>
+              <th width="10%">客户</th>
+              <th width="8%">归属部门</th>
+              <th width="8%">联系人</th>
+              <th width="10%">创建时间</th>
+              <th width="170">操作</th>
+            </tr>
+          </table>
+          <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+            <tr>
+              <td width="50">{{ item.id }}</td>
+              <td width="10%">{{ item.name }}</td>
+              <td width="15%">{{ item.model }}</td>
+              <td width="10%">{{ item.sn }}</td>
+              <td width="10%">{{ item.company }}</td>
+              <td width="10%">{{ item.customer }}</td>
+              <td width="8%">{{ item.department }}</td>
+              <td width="8%">{{ item.contacts }}</td>
+              <td width="10%">{{ item.createTime }}</td>
+            </tr>
+          </table>
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    <div class="climbDevice-pagination">
+    <div class="climbPosition-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -66,42 +68,13 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </div>
-    <el-dialog :visible.sync="info.visible" :title="info.typeText">
-      <el-form :model="info.data">
-        <el-form-item :label-width="formLabelWidth" label="名称">
-          <el-input v-model="info.data.name"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="型号">
-          <el-input v-model="info.data.model"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="序列号">
-          <el-input v-model="info.data.sn"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="所属厂商">
-          <el-input v-model="info.data.company"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="客户">
-          <el-input v-model="info.data.customer"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="归属部门">
-          <el-input v-model="info.data.department"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="联系人">
-          <el-input v-model="info.data.contacts"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="info.visible = false">取 消</el-button>
-        <el-button type="primary" @click="infoSubmit()">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'ClimbDevice',
+  name: 'ClimbPosition',
   data() {
     return {
       filter: {
@@ -129,12 +102,12 @@ export default {
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbDeviceList',
-      'changeClimbDevice',
-      'deleteClimbDevice'
+      'fetchClimbPositionList',
+      'changeClimbPosition',
+      'deleteClimbPosition'
     ]),
     async init() {
-      const result = await this.fetchClimbDeviceList({
+      const result = await this.fetchClimbPositionList({
         pageNumber: 1,
         pageSize: 10
       })
@@ -147,7 +120,7 @@ export default {
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchClimbDeviceList(param)
+      const result = await this.fetchClimbPositionList(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -156,7 +129,7 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchClimbDeviceList(param)
+      return await this.fetchClimbPositionList(param)
     },
     add() {
       this.info.visible = true
@@ -170,7 +143,7 @@ export default {
     },
     async infoSubmit() {
       const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeClimbDevice(this.info.data)
+      const result = await this.changeClimbPosition(this.info.data)
       if (result.code !== 200) {
         this.$message.warning(result.message)
         return false
@@ -189,7 +162,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async response => {
-        const result = await this.deleteClimbDevice({ id: item.id })
+        const result = await this.deleteClimbPosition({ id: item.id })
         if (result.code !== 200) {
           this.$message.warning(result.message)
           return false
@@ -227,11 +200,16 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climbDevice{
+.climbPosition{
   &-filter{
     padding: 16px;
+    background-color: #001432;
+    border-radius: 8px;
     .sinput{
-      width: 150px;
+      width: 200px;
+    }
+    .el-form-item{
+      margin-bottom: 0;
     }
     &-search{
       width: 125px;
@@ -243,6 +221,10 @@ export default {
     }
   }
   &-table{
+    background-color: #001432;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 30px 40px;
     &-content{
       background-color: #001432;
       .el-table__body{
@@ -261,7 +243,7 @@ export default {
 
 </style>
 <style>
-.climbDevice .el-form-item__label{
+.climbPosition .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

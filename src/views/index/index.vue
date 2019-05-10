@@ -34,11 +34,11 @@
         <div class="index__container-bottom boxs">
           <div class="index__container-horizon-box1 box">
             <div class="chart3">
-              <LittleTitle title="在线活跃率"/>
+              <LittleTitle title="开机次数"/>
               <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
             </div>
             <div class="chart4">
-              <LittleTitle title="台阶数"/>
+              <LittleTitle title="重量等级"/>
               <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
             </div>
           </div>
