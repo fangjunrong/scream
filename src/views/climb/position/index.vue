@@ -25,33 +25,26 @@
     </div>
     <div class="climbPosition-table">
       <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="地图"></el-tab-pane>
+        <el-tab-pane label="地图">
+          <div id="amap" style="height:500px" tabindex="0"></div>
+        </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="50">ID</th>
-              <th width="10%">名称</th>
-              <th width="15%">型号</th>
-              <th width="10%">序列号</th>
-              <th width="10%">所属厂商</th>
-              <th width="10%">客户</th>
-              <th width="8%">归属部门</th>
-              <th width="8%">联系人</th>
-              <th width="10%">创建时间</th>
-              <th width="170">操作</th>
+              <th width="15%">设备ID</th>
+              <th width="20%">设备型号</th>
+              <th width="20%">设备序列号</th>
+              <th width="30%">定位信息(经度, 纬度)</th>
+              <th width="20%">更新时间</th>
             </tr>
           </table>
           <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="50">{{ item.id }}</td>
-              <td width="10%">{{ item.name }}</td>
-              <td width="15%">{{ item.model }}</td>
-              <td width="10%">{{ item.sn }}</td>
-              <td width="10%">{{ item.company }}</td>
-              <td width="10%">{{ item.customer }}</td>
-              <td width="8%">{{ item.department }}</td>
-              <td width="8%">{{ item.contacts }}</td>
-              <td width="10%">{{ item.createTime }}</td>
+              <td width="15%">{{ item.deviceId }}</td>
+              <td width="20%">{{ item.id }}</td>
+              <td width="20%">{{ item.id }}</td>
+              <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
+              <td width="20%">{{ item.createTime }}</td>
             </tr>
           </table>
         </el-tab-pane>
@@ -72,6 +65,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import AMap from 'AMap'
 import _ from 'lodash'
 export default {
   name: 'ClimbPosition',
@@ -117,6 +111,18 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
+    },
+    initMap() {
+      const map = new AMap.Map('amap', {
+        center: [116.397428, 39.90923],
+        resizeEnable: true,
+        zoom: 10
+      })
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
+      })
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })

@@ -86,6 +86,11 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/skeleton/waist/position/index')
           }, {
+            path: 'positionDetail',
+            name: 'skeletonWaistPositionDetail',
+            component: () =>
+              import('@/views/skeleton/waist/position/detail/index')
+          }, {
             path: 'device',
             name: 'skeletonWaistDevice',
             component: () =>
