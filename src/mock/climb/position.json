@@ -1,0 +1,28 @@
+{
+    "arr": [
+        {
+            "id": 3,
+            "deviceId": 1,
+            "longitude": "120.39",
+            "latitude": "30.4",
+            "createTime": "2018-10-15 17:26:47",
+            "isDelete": 0
+        },
+        {
+            "id": 2,
+            "deviceId": 2,
+            "longitude": "120.024568",
+            "latitude": "30.215855",
+            "createTime": "2018-10-16 16:26:21",
+            "isDelete": 0
+        },
+        {
+            "id": 1,
+            "deviceId": 1,
+            "longitude": "120.382029",
+            "latitude": "30.312903",
+            "createTime": "2018-10-15 16:26:06",
+            "isDelete": 0
+        }
+    ]
+}

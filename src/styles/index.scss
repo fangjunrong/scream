@@ -115,18 +115,34 @@ a:hover {
   &-head{
     height: 40px;
     line-height: 40px;
+    color: #00F0FA;
   }
   &-btn{
     padding: 6px 20px;
+    &-delete{
+      color: #000;
+      background-color: #ffaf57;
+      border: none;
+      &:hover{
+        color: #fff !important;
+        background-color: #ffaf57 !important;
+        border: none;
+      }
+      &:focus{
+        color: #fff !important;
+        background-color: #ffaf57 !important;
+        border: none;
+      }
+    }
   }
 }
 .selftable-head{
   th{
-    padding: 0 8px;
+    padding: 0 20px;
   }
 }
 .selftable-body{
   td{
-    padding: 12px 8px;
+    padding: 12px 20px;
   }
 }

@@ -76,6 +76,14 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   border: solid 1px #64eefa;
 }
 
+.el-submenu.is-active .el-submenu__title{
+  color: #00F0FA !important;
+}
+
+.el-menu-item.is-active{
+  color: #00F0FA !important;
+}
+
 //分页
 .el-pagination{
   color: #e1e1e1;
@@ -97,6 +105,9 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
     background-color: #000310;
     color: #e1e1e1;
     border: 1px solid #e1e1e1;
+  }
+  .el-pagination__editor.el-input{
+    margin: 0 10px;
   }
   button:disabled{
     background-color: #000310;
@@ -143,6 +154,8 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
       color: #e1e1e1 !important;
       height: 18px;
       margin-top: 12px;
+      text-align: left;
+      text-indent: 28px;
       line-height: 18px;
       border-right: 1px solid rgba(41,173,255,0.5);
     }
@@ -174,8 +187,18 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
   }
   .el-date-table th{
     color: #00F0FA;
-    border-bottom: 1px solid #64eefa;
+    border-bottom: 1px solid rgba(100,238,250, 0.3);
   }
+  .el-date-table td div{
+    color: #c0c4cc;
+  }
+  .el-date-table td.next-month div, .el-date-table td.prev-month div{
+    color: #606266;
+  }
+}
+.el-popper[x-placement^="bottom"] .popper__arrow::after{
+  top: 0;
+  border-bottom-color:#64eefa;
 }
 
 // tabs
@@ -216,4 +239,25 @@ $--font-path: '../../node_modules/element-ui/lib/theme-chalk/fonts';
 	background-blend-mode: normal, 
 		normal;
 	border-radius: 6px;
+}
+
+// message
+.el-message-box{
+  border: 1px solid #64eefa;
+  border-radius: 8px;
+  background-color: #000310;
+  opacity: 0.9;
+  &__title{
+    color: #64eefa;
+  }
+  &__message{
+    p{
+      color: #e1e1e1;
+    }
+  }
+  &__headerbtn{
+    .el-message-box__close{
+      color: #64eefa;
+    }
+  }
 }

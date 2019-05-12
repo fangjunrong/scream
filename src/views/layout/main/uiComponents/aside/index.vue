@@ -28,7 +28,7 @@
         <el-menu-item index="/main/skeleton/arm/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/person">人员信息</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/position">定位信息</el-menu-item>
-        <el-menu-item index="/main/skeleton/arm/data">统计图标</el-menu-item>
+        <el-menu-item index="/main/skeleton/arm/data">统计图表</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/businessET">商业ET</el-menu-item>
       </el-submenu>
       <el-submenu index="3">
@@ -42,7 +42,7 @@
         <el-menu-item index="/main/skeleton/waist/person">人员信息</el-menu-item>
         <el-menu-item index="/main/skeleton/waist/health">健康信息</el-menu-item>
         <el-menu-item index="/main/skeleton/waist/position">定位信息</el-menu-item>
-        <el-menu-item index="/main/skeleton/waist/data">统计图标</el-menu-item>
+        <el-menu-item index="/main/skeleton/waist/data">统计图表</el-menu-item>
         <el-menu-item index="/main/skeleton/waist/businessET">商业ET</el-menu-item>
       </el-submenu>
       <el-submenu index="4">
@@ -55,7 +55,7 @@
         <el-menu-item index="/main/skeleton/buttock/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/person">人员信息</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/position">定位信息</el-menu-item>
-        <el-menu-item index="/main/skeleton/buttock/data">统计图标</el-menu-item>
+        <el-menu-item index="/main/skeleton/buttock/data">统计图表</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/businessET">商业ET</el-menu-item>
       </el-submenu>
       <el-submenu index="5">
@@ -67,7 +67,7 @@
         </template>
         <el-menu-item index="/main/climb/device">设备信息</el-menu-item>
         <el-menu-item index="/main/climb/position">定位信息</el-menu-item>
-        <el-menu-item index="/main/climb/data">统计图标</el-menu-item>
+        <el-menu-item index="/main/climb/data">统计图表</el-menu-item>
       </el-submenu>
       <el-submenu index="6">
         <template slot="title">

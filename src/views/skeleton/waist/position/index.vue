@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonWaistPosition">
     <div class="skeletonWaistPosition-title">
-      <DetailTitle title="设备信息"/>
+      <DetailTitle title="定位信息"/>
     </div>
     <div class="skeletonWaistPosition-filter">
       <el-form :inline="true">
@@ -19,7 +19,9 @@
     </div>
     <div class="skeletonWaistPosition-table">
       <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="地图"></el-tab-pane>
+        <el-tab-pane label="地图">
+          <div id="map" style="height:500px" tabindex="0"></div>
+        </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
@@ -57,7 +59,9 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import AMap from 'AMap'
 import _ from 'lodash'
+import coordtransform from 'coordtransform'
 export default {
   name: 'SkeletonWaistPosition',
   data() {
@@ -102,6 +106,56 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
+    },
+    initMap() {
+      console.log('init')
+      debugger
+      const _self = this
+      const map = new AMap.Map('map')
+      if (_self.tableData.length > 0) {
+        // convert wgs84 to cj02
+        var cj02 = coordtransform.wgs84togcj02(_self.tableData[0].longitude, _self.tableData[0].latitude)
+        var point = new AMap.LngLat(cj02[0], cj02[1])// 中心点
+        map.setCenter(point)// 中心点
+        map.setZoom(13)// 缩放比例
+        // map.addControl(new AMap.Scale({ visible: true })) // 比例尺
+        var marker = new AMap.Marker({
+          position: point,
+          // offset: new AMap.Pixel(-12,-12),
+          title: _self.tableData[0].model + ' : ' + _self.tableData[0].id,
+          map: map
+        })
+        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0].id) }, _self.tableData[0].id)
+        for (let i = 1; i < _self.tableData.length; i += 1) {
+          // convert wgs84 to cj02
+          cj02 = coordtransform.wgs84togcj02(_self.tableData[i].longitude, _self.tableData[i].latitude)
+          point = new AMap.LngLat(cj02[0], cj02[1])
+          marker = new AMap.Marker({
+            position: point,
+            // offset: new AMap.Pixel(-12,-12),
+            title: _self.tableData[i].model + ' : ' + _self.tableData[i].id,
+            map: map
+          })
+          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i].id) }, _self.tableData[i].id)
+        }
+        map.setFitView()
+      } else {
+        point = new AMap.LngLat(120.1550674438, 30.2652944930)// 中心点
+        map.setCenter(point)// 中心点
+        map.setZoom(11)// 缩放比例
+        map.addControl(new AMap.Scale({ visible: true })) // 比例尺
+      }
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
+        map.addControl(new AMap.ToolBar())
+        map.addControl(new AMap.Scale())
+      })
+    },
+    jumpToDetail(id) {
+      this.$router.push({
+        name: 'skeletonWaistPositionDetail',
+        params: { sn: id }
+      })
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
@@ -195,13 +249,14 @@ export default {
     }
     .el-form-item{
       margin-bottom: 0;
+      margin-right: 30px;
     }
     &-search{
       width: 125px;
     }
     &-add{
       float: right;
-      margin-right: 20px;
+      margin-right: 30px;
       width: 125px;
     }
   }

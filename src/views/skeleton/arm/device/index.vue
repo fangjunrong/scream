@@ -51,7 +51,7 @@ export default {
     padding: 16px;
     &-add{
       float: right;
-      margin-right: 20px;
+      margin-right: 30px;
       width: 100px;
     }
   }

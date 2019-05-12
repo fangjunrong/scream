@@ -96,6 +96,7 @@ export default {
     }
     .el-form-item{
       margin-bottom: 0;
+      margin-right: 30px;
     }
     &-search{
       width: 125px;
