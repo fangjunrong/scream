@@ -38,7 +38,7 @@
           <td width="15%">{{ item.createTime }}</td>
           <td width="256">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
-            <el-button type="primary" class="selftable-btn" @click="deleteItem(item)">删除</el-button>
+            <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
             <el-button v-if="!item.status" type="primary" class="selftable-btn" @click="bindItem(item)">绑定</el-button>
             <el-button v-if="item.status" type="primary" class="selftable-btn" @click="unbindItem(item)">解绑</el-button>
           </td>
@@ -272,13 +272,14 @@ export default {
     }
     .el-form-item{
       margin-bottom: 0;
+      margin-right: 30px;
     }
     &-search{
       width: 125px;
     }
     &-add{
       float: right;
-      margin-right: 20px;
+      margin-right: 30px;
       width: 125px;
     }
   }

@@ -109,6 +109,8 @@ export default {
       this.initMap()
     },
     initMap() {
+      console.log('init')
+      debugger
       const _self = this
       const map = new AMap.Map('map')
       if (_self.tableData.length > 0) {
@@ -247,13 +249,14 @@ export default {
     }
     .el-form-item{
       margin-bottom: 0;
+      margin-right: 30px;
     }
     &-search{
       width: 125px;
     }
     &-add{
       float: right;
-      margin-right: 20px;
+      margin-right: 30px;
       width: 125px;
     }
   }
