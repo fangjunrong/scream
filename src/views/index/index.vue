@@ -316,7 +316,7 @@ export default {
 .index{
   background-color: #000310;
   &__container{
-    padding: 15px 80px;
+    padding: 15px 4.16%;
     .box{
       float: left;
       padding: 16px;

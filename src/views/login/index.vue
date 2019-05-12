@@ -78,7 +78,7 @@ export default {
 .index{
   height: 100%;
   width: 100%;
-  background: url('../../assets/login-bg.png');
+  background: url('../../assets/login-bg.gif');
   background-size: 100% 100%;
   &__form{
     position: fixed;
@@ -94,7 +94,6 @@ export default {
       line-height: 36px;
       text-align: center;
       letter-spacing: 2.9px;
-      color: #ffffff;
       margin-top: 64px;
       margin-bottom: 68px;
     }

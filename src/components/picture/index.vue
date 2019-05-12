@@ -41,7 +41,7 @@ export default {
   computed: {
     style() {
       const width = this.size.split(' ')[0]
-      const height = this.size.split(' ').length > 1 ? this.size.split(' ').length[1] : width
+      const height = this.size.split(' ').length > 1 ? this.size.split(' ')[1] : width
       const style = {
         width: `${width}px`,
         height: `${height}px`,

@@ -1,6 +1,23 @@
 <template>
   <div class="header">
     <div class="header__left">
+      <Picture
+        :src="screamLogo"
+        size="200 72"
+        class="logo1"
+        border="none"></Picture>
+      <Picture
+        :src="cainiaoLogo"
+        size="109 72"
+        class="logo2"
+        border="none"></Picture>
+      <Picture
+        :src="sysName"
+        size="760 72"
+        class="logo3"
+        border="none"></Picture>
+    </div>
+    <div class="header__center">
 
     </div>
     <div class="header__right">
@@ -14,11 +31,17 @@
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
+import screamLogo from '@/assets/scream-logo.png'
+import cainiaoLogo from '@/assets/cainiao-logo.png'
+import sysName from '@/assets/sys-name.png'
 export default {
   name: 'Header',
   data() {
     return {
-      name: 'scream'
+      name: 'scream',
+      screamLogo: screamLogo,
+      cainiaoLogo: cainiaoLogo,
+      sysName: sysName
     }
   },
   mounted() {
@@ -43,14 +66,27 @@ export default {
 </script>
 <style lang="scss" scope>
 .header{
-  display: flex;
-  justify-content: space-between;
   height: 72px;
   line-height: 72px;
   background: url('../../../../../assets/bg_header.png');
   background-size: 100% 100%;
+  &__left{
+    float: left;
+    height: 72px;
+    min-width: 1200px;
+    .logo1{
+      margin-left: 1.5% !important;
+    }
+    .logo2{
+      margin-left: 2.7% !important;
+    }
+    .logo3{
+      margin-left: 4.6% !important;
+    }
+  }
   &__right{
     display: flex;
+    float: right;
     width: 200px;
     justify-content: space-between;
     &-info{
