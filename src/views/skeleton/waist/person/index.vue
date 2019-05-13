@@ -24,7 +24,7 @@
           <th width="8%">文化水平</th>
           <th width="8%">穿戴设备</th>
           <th width="15%">更新时间</th>
-          <th width="170">操作</th>
+          <th width="200">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
@@ -38,7 +38,7 @@
           <td width="8%">{{ item.education }}</td>
           <td width="8%">{{ item.deviceModel }}</td>
           <td width="15%">{{ item.createTime }}</td>
-          <td width="170">
+          <td width="200">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
             <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
           </td>

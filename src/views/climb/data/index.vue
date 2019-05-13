@@ -24,14 +24,43 @@
         <el-tab-pane label="半月" @click="showHalfMonthly()"></el-tab-pane>
         <el-tab-pane label="一月" @click="showMonthly()"></el-tab-pane>
       </el-tabs>
+      <div class="climbData-charts-container">
+        <div class="chart1">
+          <LittleTitle title="在线活跃率"/>
+          <v-chart
+            ref="online"
+            :options="brokeline"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="brokeClick"/>
+        </div>
+        <div class="chart2">
+          <LittleTitle title="台阶数"/>
+          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+        </div>
+        <div class="chart3">
+          <LittleTitle title="开机次数"/>
+          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+        </div>
+        <div class="chart4">
+          <LittleTitle title="重量等级"/>
+          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import _ from 'lodash'
+import ECharts from 'vue-echarts'
+import 'echarts'
+import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
   name: 'ClimbData',
+  components: {
+    'v-chart': ECharts
+  },
   data() {
     return {
       filter: {
@@ -41,11 +70,51 @@ export default {
         department: ''
       },
       tableData: [],
-      formLabelWidth: '100px'
+      formLabelWidth: '100px',
+      themebrokeline: '',
+      onlineData: [320, 680, 280, 480, 1290, 500, 1320],
+      brokeline: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      }
     }
   },
   mounted() {
     this.init()
+    this.themebrokeline = brokeline
+    this.brokeline.series[0].data = this.onlineData
+    // setTimeout(() => {
+    //   this.brokeline.series[0].data = [1, 2, 3, 4]
+    // }, 2000)
   },
   methods: {
     ...mapActions('climb', [
@@ -54,11 +123,11 @@ export default {
       'deleteClimbData'
     ]),
     async init() {
-      const result = await this.fetchClimbDataList()
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
+      // const result = await this.fetchClimbDataList()
+      // if (result.code !== 200) {
+      //   this.$message.warning(result.message)
+      // }
+      // this.tableData = result.data.result
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
@@ -70,6 +139,15 @@ export default {
     },
     async getData(param) {
       return await this.fetchClimbDataList(param)
+    },
+    brokeClick(event) {
+      console.log(`value${event.value}--index${event.dataIndex}`)
+    },
+    onClick(event, instance, ECharts) {
+      console.log(arguments)
+    },
+    onReady(instance, ECharts) {
+      console.log(instance, ECharts)
     },
     showWeekly() {
 
@@ -87,12 +165,12 @@ export default {
 .climbData{
   &-filter{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     padding: 16px;
     background-color: #001432;
     border-radius: 8px;
     .sinput{
-      width: 150px;
+      width: 200px;
     }
     .el-form-item{
       margin-bottom: 0;
@@ -110,6 +188,12 @@ export default {
     border-radius: 8px;
     margin-top: 16px;
     padding: 30px 40px;
+    &-container{
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
   &-pagination{
     margin-top: 42px;

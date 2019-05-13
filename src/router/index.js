@@ -36,6 +36,16 @@ export const constantRouterMap = [
             name: 'climbData',
             component: () =>
               import('@/views/climb/data/index')
+          }, {
+            path: 'bootNum',
+            name: 'climbBootNum',
+            component: () =>
+              import('@/views/climb/bootNum/index')
+          }, {
+            path: 'bootNumDetail',
+            name: 'climbBootNumDetail',
+            component: () =>
+              import('@/views/climb/bootNumDetail/index')
           }
         ]
       },

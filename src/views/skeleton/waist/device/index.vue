@@ -23,7 +23,7 @@
           <th width="10%">穿戴人员</th>
           <th width="8%">状态</th>
           <th width="15%">更新时间</th>
-          <th width="256">操作</th>
+          <th width="280">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
@@ -36,7 +36,7 @@
           <td width="10%">{{ item.personName }}</td>
           <td width="8%">{{ item.status === 1 ? "已绑定" : "未绑定" }}</td>
           <td width="15%">{{ item.createTime }}</td>
-          <td width="256">
+          <td width="280">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
             <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
             <el-button v-if="!item.status" type="primary" class="selftable-btn" @click="bindItem(item)">绑定</el-button>

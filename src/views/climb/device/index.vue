@@ -92,7 +92,7 @@
           <th width="8%">归属部门</th>
           <th width="8%">联系人</th>
           <th width="10%">创建时间</th>
-          <th width="170">操作</th>
+          <th width="200">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
@@ -106,7 +106,7 @@
           <td width="8%">{{ item.department }}</td>
           <td width="8%">{{ item.contacts }}</td>
           <td width="10%">{{ item.createTime }}</td>
-          <td width="170">
+          <td width="200">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
             <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
           </td>
@@ -324,7 +324,7 @@ export default {
     background-color: #001432;
     border-radius: 8px;
     .sinput{
-      width: 150px;
+      width: 200px;
     }
     .el-form-item{
       margin-bottom: 0;
