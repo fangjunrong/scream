@@ -1,7 +1,7 @@
 <template>
   <div class="waistPerson">
     <div class="waistPerson-title">
-      <DetailTitle title="设备信息"/>
+      <DetailTitle title="人员信息"/>
     </div>
     <div class="waistPerson-filter">
       <el-form :inline="true">
@@ -244,7 +244,7 @@ export default {
     background-color: #001432;
     border-radius: 8px;
     .sinput{
-      width: 150px;
+      width: 200px;
     }
     .el-form-item{
       margin-bottom: 0;

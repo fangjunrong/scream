@@ -80,7 +80,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
           splitLine: { // 网格线
             'show': false
           },
@@ -141,7 +141,14 @@ export default {
       return await this.fetchClimbDataList(param)
     },
     brokeClick(event) {
+      console.log(event.name)
       console.log(`value${event.value}--index${event.dataIndex}`)
+      this.$router.push({
+        name: 'skeletonWaistBootNum',
+        query: {
+          date: event.name
+        }
+      })
     },
     onClick(event, instance, ECharts) {
       console.log(arguments)
@@ -165,7 +172,7 @@ export default {
 .climbData{
   &-filter{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 16px;
     background-color: #001432;
     border-radius: 8px;

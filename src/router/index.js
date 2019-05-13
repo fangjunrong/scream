@@ -84,6 +84,16 @@ export const constantRouterMap = [
             name: 'skeletonArmBusinessET',
             component: () =>
               import('@/views/skeleton/arm/businessET/index')
+          }, {
+            path: 'bootNum',
+            name: 'skeletonArmBootNum',
+            component: () =>
+              import('@/views/skeleton/arm/bootNum/index')
+          }, {
+            path: 'bootNumDetail',
+            name: 'skeletonArm/BootNumDetail',
+            component: () =>
+              import('@/views/skeleton/arm/bootNumDetail/index')
           }]
         }, {
           path: 'waist',
@@ -125,6 +135,16 @@ export const constantRouterMap = [
             name: 'skeletonWaistBusinessET',
             component: () =>
               import('@/views/skeleton/waist/businessET/index')
+          }, {
+            path: 'bootNum',
+            name: 'skeletonWaistBootNum',
+            component: () =>
+              import('@/views/skeleton/waist/bootNum/index')
+          }, {
+            path: 'bootNumDetail',
+            name: 'skeletonWaistBootNumDetail',
+            component: () =>
+              import('@/views/skeleton/waist/bootNumDetail/index')
           }]
         }, {
           path: 'buttock',
@@ -156,6 +176,16 @@ export const constantRouterMap = [
             name: 'skeletonButtockBusinessET',
             component: () =>
               import('@/views/skeleton/buttock/businessET/index')
+          }, {
+            path: 'bootNum',
+            name: 'skeletonButtockBootNum',
+            component: () =>
+              import('@/views/skeleton/buttock/bootNum/index')
+          }, {
+            path: 'bootNumDetail',
+            name: 'skeletonButtockBootNumDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/bootNumDetail/index')
           }]
         }]
       },

@@ -30,14 +30,14 @@
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
           <th width="30%">开机次数</th>
-          <th width="20%">更新时间</th>
+          <th width="20%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="15%">{{ item.deviceId }}</td>
-          <td width="20%">{{ item.id }}</td>
-          <td width="20%">{{ item.id }}</td>
+          <td width="20%">{{ item.model }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.sn }}</div></td>
           <td width="30%">{{ item.num }}</td>
           <td width="20%">{{ item.createTime }}</td>
         </tr>
@@ -54,29 +54,6 @@
         @current-change="handleCurrentChange">
       </el-pagination>
     </div>
-    <el-dialog :visible.sync="info.visible" :title="info.typeText">
-      <el-form :model="info.data">
-        <el-form-item :label-width="formLabelWidth" label="设备ID">
-          <el-input v-model="info.data.id"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="设备型号">
-          <el-input v-model="info.data.model"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="设备序列号">
-          <el-input v-model="info.data.sn"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="开机次数">
-          <el-input v-model="info.data.num"></el-input>
-        </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="最新更新时间">
-          <el-input v-model="info.data.createTime"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="info.visible = false">取 消</el-button>
-        <el-button type="primary" @click="infoSubmit()">确 定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -87,10 +64,9 @@ export default {
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
         customer: '',
-        department: ''
+        department: '',
+        createTime: ''
       },
       tableData: [],
       info: {
@@ -107,7 +83,9 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    const date = this.$route.params.date
+    this.filter.createTime = date
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
@@ -115,18 +93,6 @@ export default {
       'changeClimbDevice',
       'deleteClimbDevice'
     ]),
-    async init() {
-      const result = await this.fetchClimbDeviceList({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
       const result = await this.fetchClimbDeviceList(param)
@@ -140,65 +106,14 @@ export default {
     async getData(param) {
       return await this.fetchClimbDeviceList(param)
     },
-    change(item) {
-      this.info.visible = true
-      this.info.data = _.cloneDeep(item)
-      this.info.typeText = '修改'
-    },
-    async infoSubmit() {
-      const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeClimbDevice(this.info.data)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-        return false
-      }
-      if (id) {
-        this.$message.success('修改成功')
-      } else {
-        this.$message.success('添加成功')
-      }
-      this.info.visible = false
-      this.search()
-    },
-    async deleteItem(item) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async response => {
-        const result = await this.deleteClimbDevice({ id: item.id })
-        if (result.code !== 200) {
-          this.$message.warning(result.message)
-          return false
+    toDetail(item) {
+      this.$router.push({
+        name: 'climbBootNumDetail',
+        query: {
+          date: this.filter.createTime,
+          deviceSN: item.sn
         }
-        this.$message.success('删除成功')
-        this.search()
-      }).catch(() => {
       })
-    },
-    async handleSizeChange(val) {
-      const result = await this.getData({
-        pageNumber: 1,
-        pageSize: val
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
-    async handleCurrentChange(val) {
-      const result = await this.getData({
-        pageNumber: val,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
     }
   }
 }

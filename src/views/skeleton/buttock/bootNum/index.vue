@@ -5,6 +5,12 @@
     </div>
     <div class="climbDevice-filter">
       <el-form :inline="true">
+        <el-form-item label="客户">
+          <el-input v-model="filter.customer" class="sinput"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-input v-model="filter.department" class="sinput"></el-input>
+        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             v-model="filter.createTime"
@@ -20,16 +26,20 @@
     <div class="climbDevice-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="30%">ID</th>
-          <th width="30%">使用时间</th>
-          <th width="30%">所属时段</th>
+          <th width="15%">设备ID</th>
+          <th width="20%">设备型号</th>
+          <th width="20%">设备序列号</th>
+          <th width="30%">开机次数</th>
+          <th width="20%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="30%">{{ item.id }}</td>
-          <td width="30%">{{ item.time }}</td>
-          <td width="30%">{{ item.createTime }}</td>
+          <td width="15%">{{ item.deviceId }}</td>
+          <td width="20%">{{ item.model }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.sn }}</div></td>
+          <td width="30%">{{ item.num }}</td>
+          <td width="20%">{{ item.createTime }}</td>
         </tr>
       </table>
     </div>
@@ -54,6 +64,8 @@ export default {
   data() {
     return {
       filter: {
+        customer: '',
+        department: '',
         createTime: ''
       },
       tableData: [],
@@ -93,6 +105,15 @@ export default {
     },
     async getData(param) {
       return await this.fetchClimbDeviceList(param)
+    },
+    toDetail(item) {
+      this.$router.push({
+        name: 'skeletonButtockNumDetail',
+        query: {
+          date: this.filter.createTime,
+          deviceSN: item.sn
+        }
+      })
     }
   }
 }
