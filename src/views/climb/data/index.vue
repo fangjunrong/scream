@@ -29,22 +29,34 @@
           <LittleTitle title="在线活跃率"/>
           <v-chart
             ref="online"
-            :options="brokeline"
+            :options="activeRateOption"
             :theme="themebrokeline"
             style="height: 300px;width: 400px"
-            @click="brokeClick"/>
+            @click="activeRateClick"/>
         </div>
         <div class="chart2">
-          <LittleTitle title="台阶数"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <LittleTitle title="开机次数"/>
+          <v-chart
+            :options="bootNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="bootNumClick"/>
         </div>
         <div class="chart3">
-          <LittleTitle title="开机次数"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <LittleTitle title="台阶数"/>
+          <v-chart
+            :options="stepNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="stepNumClick"/>
         </div>
         <div class="chart4">
           <LittleTitle title="重量等级"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <v-chart
+            :options="weightNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="weightClick"/>
         </div>
       </div>
     </div>
@@ -72,8 +84,111 @@ export default {
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      onlineData: [320, 680, 280, 480, 1290, 500, 1320],
-      brokeline: {
+      activeRateData: [10, 20, 50, 60, 50, 80, 70],
+      stepNumData: [320, 680, 280, 480, 1290, 500, 1320],
+      bootNumData: [320, 680, 280, 480, 1290, 500, 1320],
+      bootNumdataX: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+      weightNumData: [320, 680, 280, 480, 1290, 500, 1320],
+      activeRateOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      stepNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      bootNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      weightNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -110,24 +225,24 @@ export default {
   },
   mounted() {
     this.init()
-    this.themebrokeline = brokeline
-    this.brokeline.series[0].data = this.onlineData
-    // setTimeout(() => {
-    //   this.brokeline.series[0].data = [1, 2, 3, 4]
-    // }, 2000)
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbDataList',
+      'fetchClimbBootNum',
       'changeClimbData',
       'deleteClimbData'
     ]),
     async init() {
-      // const result = await this.fetchClimbDataList()
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.tableData = result.data.result
+      this.themebrokeline = brokeline
+      const result = await this.fetchClimbBootNum()
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.bootNumData = result.data.result
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.stepNumOption.series[0].data = this.stepNumData
+      this.bootNumOption.series[0].data = this.bootNumData
+      this.weightNumOption.series[0].data = this.weightNumData
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
@@ -140,21 +255,37 @@ export default {
     async getData(param) {
       return await this.fetchClimbDataList(param)
     },
-    brokeClick(event) {
-      console.log(event.name)
-      console.log(`value${event.value}--index${event.dataIndex}`)
+    activeRateClick(event) {
       this.$router.push({
-        name: 'skeletonWaistBootNum',
+        name: 'climbBootNum',
         query: {
           date: event.name
         }
       })
     },
-    onClick(event, instance, ECharts) {
-      console.log(arguments)
+    bootNumClick(event) {
+      this.$router.push({
+        name: 'climbBootNum',
+        query: {
+          date: event.name
+        }
+      })
     },
-    onReady(instance, ECharts) {
-      console.log(instance, ECharts)
+    stepNumClick(event) {
+      this.$router.push({
+        name: 'climbStepNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    weightClick(event) {
+      this.$router.push({
+        name: 'climbWeight',
+        query: {
+          date: event.name
+        }
+      })
     },
     showWeekly() {
 

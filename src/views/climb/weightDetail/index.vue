@@ -1,11 +1,11 @@
 <template>
-  <div class="skeletonWaistPosition">
-    <div class="skeletonWaistPosition-title">
-      <DetailTitle title="定位信息"/>
+  <div class="climbWeightDetail">
+    <div class="climbWeightDetail-title">
+      <DetailTitle title="重量等级详情"/>
     </div>
-    <div class="skeletonWaistPosition-filter">
+    <div class="climbWeightDetail-filter">
       <el-form :inline="true">
-        <el-form-item label="日期" style="width: 200px">
+        <el-form-item label="日期">
           <el-date-picker
             v-model="filter.createTime"
             type="date"
@@ -14,37 +14,44 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary skeletonWaistPosition-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary climbWeightDetail-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="skeletonWaistPosition-table">
+    <div class="climbWeightDetail-table">
       <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="地图">
-          <div id="map" style="height:500px" tabindex="0"></div>
+        <el-tab-pane label="图表">
+          <div class="climbWeightDetail-charts-container">
+            <div class="chart1">
+              <LittleTitle title="台阶数"/>
+              <v-chart
+                ref="online"
+                :options="brokeline"
+                :theme="themebrokeline"
+                style="height: 300px;width: 400px"/>
+            </div>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="15%">设备ID</th>
-              <th width="20%">设备型号</th>
-              <th width="20%">设备序列号</th>
-              <th width="30%">定位信息(经度, 纬度)</th>
-              <th width="20%">更新时间</th>
+              <th width="15%">ID</th>
+              <th width="20%">台阶数</th>
+              <th width="20%">使用时间</th>
+              <th width="30%">所属时段</th>
             </tr>
           </table>
           <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ item.deviceId }}</td>
-              <td width="20%">{{ item.id }}</td>
-              <td width="20%">{{ item.id }}</td>
-              <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
-              <td width="20%">{{ item.createTime }}</td>
+              <td width="15%">{{ item.id }}</td>
+              <td width="20%">{{ item.steps }}</td>
+              <td width="20%">{{ item.date }}</td>
+              <td width="20%">{{ item.time }}</td>
             </tr>
           </table>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="skeletonWaistPosition-pagination">
+    <div class="climbWeightDetail-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -59,20 +66,31 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import AMap from 'AMap'
 import _ from 'lodash'
-import coordtransform from 'coordtransform'
+import ECharts from 'vue-echarts'
+import 'echarts'
+import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'SkeletonWaistPosition',
+  name: 'ClimbWeightDetail',
+  components: {
+    'v-chart': ECharts
+  },
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
-        customer: '',
-        department: ''
+        createTime: ''
       },
-      tableData: [],
+      tableData: [{
+        id: '0',
+        steps: '197',
+        date: '2019-04-26 23:56:20',
+        time: '晚上'
+      }, {
+        id: '1',
+        steps: '208',
+        date: '2019-04-26 21:30:39',
+        time: '晚上'
+      }],
       info: {
         visible: false,
         typeText: '新增',
@@ -83,6 +101,40 @@ export default {
         currentPage: 1,
         pageSize: 100,
         total: 100
+      },
+      themebrokeline: '',
+      brokeline: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [320, 680, 280, 480, 1290, 500, 1320],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
       }
     }
   },
@@ -90,74 +142,34 @@ export default {
     this.init()
   },
   methods: {
-    ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistPositionList',
-      'changeSkeletonWaistPosition',
-      'deleteSkeletonWaistPosition'
+    ...mapActions('climb', [
+      'fetchclimbWeightDetailList',
+      'changeclimbWeightDetail',
+      'deleteclimbWeightDetail'
     ]),
     async init() {
-      const result = await this.fetchSkeletonWaistPositionList({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      const date = this.$route.query.date
+      this.filter.createTime = date
+      // const result = await this.fetchclimbWeightDetailList({
+      //   pageNumber: 1,
+      //   pageSize: 10
+      // })
+      // if (result.code !== 200) {
+      //   this.$message.warning(result.message)
+      // }
+      // this.tableData = result.data.result
+      // this.pagination.pageSize = result.data.pagination.pageSize
+      // this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
-    initMap() {
-      const _self = this
-      const map = new AMap.Map('map')
-      if (_self.tableData.length > 0) {
-        // convert wgs84 to cj02
-        var cj02 = coordtransform.wgs84togcj02(_self.tableData[0].longitude, _self.tableData[0].latitude)
-        var point = new AMap.LngLat(cj02[0], cj02[1])// 中心点
-        map.setCenter(point)// 中心点
-        map.setZoom(13)// 缩放比例
-        // map.addControl(new AMap.Scale({ visible: true })) // 比例尺
-        var marker = new AMap.Marker({
-          position: point,
-          // offset: new AMap.Pixel(-12,-12),
-          title: _self.tableData[0].model + ' : ' + _self.tableData[0].id,
-          map: map
-        })
-        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0].id) }, _self.tableData[0].id)
-        for (let i = 1; i < _self.tableData.length; i += 1) {
-          // convert wgs84 to cj02
-          cj02 = coordtransform.wgs84togcj02(_self.tableData[i].longitude, _self.tableData[i].latitude)
-          point = new AMap.LngLat(cj02[0], cj02[1])
-          marker = new AMap.Marker({
-            position: point,
-            // offset: new AMap.Pixel(-12,-12),
-            title: _self.tableData[i].model + ' : ' + _self.tableData[i].id,
-            map: map
-          })
-          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i].id) }, _self.tableData[i].id)
-        }
-        map.setFitView()
-      } else {
-        point = new AMap.LngLat(120.1550674438, 30.2652944930)// 中心点
-        map.setCenter(point)// 中心点
-        map.setZoom(11)// 缩放比例
-        map.addControl(new AMap.Scale({ visible: true })) // 比例尺
-      }
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function() {
-        map.addControl(new AMap.ToolBar())
-        map.addControl(new AMap.Scale())
-      })
-    },
-    jumpToDetail(id) {
-      this.$router.push({
-        name: 'skeletonWaistPositionDetail',
-        params: { sn: id }
-      })
+    initCharts() {
+      this.themebrokeline = brokeline
+      this.brokeline.xAxis.data = _.map(this.tableData, 'date')
+      this.brokeline.series[0].data = _.map(this.tableData, 'steps')
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistPositionList(param)
+      const result = await this.fetchclimbWeightDetailList(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -166,7 +178,7 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonWaistPositionList(param)
+      return await this.fetchclimbWeightDetailList(param)
     },
     add() {
       this.info.visible = true
@@ -180,7 +192,7 @@ export default {
     },
     async infoSubmit() {
       const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeSkeletonWaistPosition(this.info.data)
+      const result = await this.changeclimbWeightDetail(this.info.data)
       if (result.code !== 200) {
         this.$message.warning(result.message)
         return false
@@ -199,7 +211,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async response => {
-        const result = await this.deleteSkeletonWaistPosition({ id: item.id })
+        const result = await this.deleteclimbWeightDetail({ id: item.id })
         if (result.code !== 200) {
           this.$message.warning(result.message)
           return false
@@ -237,7 +249,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.skeletonWaistPosition{
+.climbWeightDetail{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -281,7 +293,7 @@ export default {
 
 </style>
 <style>
-.skeletonWaistPosition .el-form-item__label{
+.climbWeightDetail .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

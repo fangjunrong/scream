@@ -6,10 +6,20 @@
       <el-form ref="loginInfo" :model="loginInfo" :rules="loginInfoRule" autocomplete="off">
         <div class="index__form-container">
           <el-form-item prop="name" style="margin-top: 70px;">
-            <input v-model="loginInfo.name" autocomplete="off" class="index__form-container-input username" placeholder="请输入用户名"/>
+            <input
+              v-model="loginInfo.name"
+              autocomplete="off"
+              class="index__form-container-input username"
+              placeholder="请输入用户名"/>
           </el-form-item>
           <el-form-item prop="password">
-            <input v-model="loginInfo.password" autocomplete="off" type="password" class="index__form-container-input password" placeholder="请输入密码" />
+            <input
+              v-model="loginInfo.password"
+              autocomplete="off"
+              type="password"
+              class="index__form-container-input password"
+              placeholder="请输入密码"
+              @keyup.enter="login('loginInfo')"/>
           </el-form-item>
           <el-button type="primary" class="index__form-container-submit" @click="login('loginInfo')">立即登录</el-button>
         </div>

@@ -46,6 +46,36 @@ export const constantRouterMap = [
             name: 'climbBootNumDetail',
             component: () =>
               import('@/views/climb/bootNumDetail/index')
+          }, {
+            path: 'stepNum',
+            name: 'climbStepNum',
+            component: () =>
+              import('@/views/climb/stepNum/index')
+          }, {
+            path: 'stepNumDetail',
+            name: 'climbStepNumDetail',
+            component: () =>
+              import('@/views/climb/stepNumDetail/index')
+          }, {
+            path: 'stepByDay',
+            name: 'climbStepByDay',
+            component: () =>
+              import('@/views/climb/stepByDay/index')
+          }, {
+            path: 'weight',
+            name: 'climbWeight',
+            component: () =>
+              import('@/views/climb/weight/index')
+          }, {
+            path: 'weightByDay',
+            name: 'climbWeightByDay',
+            component: () =>
+              import('@/views/climb/weightByDay/index')
+          }, {
+            path: 'weightDetail',
+            name: 'climbWeightDetail',
+            component: () =>
+              import('@/views/climb/weightDetail/index')
           }
         ]
       },

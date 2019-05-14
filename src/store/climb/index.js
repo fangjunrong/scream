@@ -45,6 +45,11 @@ const user = {
       const result = await ajax.post(apiConstant.climbDataList, data)
       // commit('setLoginInfo', result.data)
       return result
+    },
+    async fetchClimbBootNum({ commit }, data) {
+      const result = await ajax.post(apiConstant.climbDataBootNum, data)
+      // commit('setLoginInfo', result.data)
+      return result
     }
   }
 }

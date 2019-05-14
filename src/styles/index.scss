@@ -71,9 +71,22 @@ a:hover {
   }
 }
 
+.link{
+  color: $operateColor;
+  cursor: pointer;
+}
+
 .lighted-text{
   text-shadow: 0 0 5px #00F0FA;
   color: #00F0FA;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition-delay: 99999s;
+    -webkit-transition: color 99999s ease-out, background-color 99999s ease-out;
 }
 
 .sinput .el-input__inner{
@@ -88,7 +101,6 @@ a:hover {
   border: 1px solid #64eefa;
   background: #00F0FA;
   box-shadow: 0 0 5px #00F0FA;
-  color: #001F3A;
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
@@ -102,6 +114,9 @@ a:hover {
   padding: 12px 20px;
   font-size: 14px;
   border-radius: 4px;
+}
+.s-button-primary:hover, .s-button-primary:active{
+  color: #fff;
 }
 
 .selftable{

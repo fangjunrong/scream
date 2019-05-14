@@ -1,9 +1,9 @@
 <template>
-  <div class="climbDevice">
-    <div class="climbDevice-title">
-      <DetailTitle title="开机次数"/>
+  <div class="climbStepNum">
+    <div class="climbStepNum-title">
+      <DetailTitle title="台阶数"/>
     </div>
-    <div class="climbDevice-filter">
+    <div class="climbStepNum-filter">
       <el-form :inline="true">
         <el-form-item label="客户">
           <el-input v-model="filter.customer" class="sinput"></el-input>
@@ -20,16 +20,16 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary climbDevice-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary climbStepNum-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="climbDevice-table">
+    <div class="climbStepNum-table">
       <table class="selftable selftable-head">
         <tr>
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">开机次数</th>
+          <th width="30%">台阶数</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
@@ -43,7 +43,7 @@
         </tr>
       </table>
     </div>
-    <div class="climbDevice-pagination">
+    <div class="climbStepNum-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -60,7 +60,7 @@
 import { mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'ClimbDevice',
+  name: 'ClimbStepNum',
   data() {
     return {
       filter: {
@@ -68,37 +68,7 @@ export default {
         department: '',
         createTime: ''
       },
-      tableData: [{
-        deviceId: '22',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }, {
-        deviceId: '23',
-        model: 'ZW7170ES(1982)-IOT/宁波广力物流有限公司',
-        sn: '866289038483915',
-        num: '1',
-        createTime: '2019-05-6 23:56:35'
-      }, {
-        deviceId: '24',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }, {
-        deviceId: '25',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }, {
-        deviceId: '26',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -115,7 +85,7 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.query.date
+    const date = this.$route.params.date
     this.filter.createTime = date
     this.search()
   },
@@ -125,14 +95,13 @@ export default {
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      // const result = await this.fetchClimbBootNum(param)
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.bootNum = result.data.result
-      // this.pagination.pageSize = result.data.pagination.pageSize
-      // this.pagination.total = result.data.pagination.totalCount
-      console.log(param)
+      const result = await this.fetchClimbBootNum(param)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.bootNum = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
       return await this.fetchClimbBootNum(param)
@@ -174,7 +143,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climbDevice{
+.climbStepNum{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -212,7 +181,7 @@ export default {
 }
 </style>
 <style>
-.climbDevice .el-form-item__label{
+.climbStepNum .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

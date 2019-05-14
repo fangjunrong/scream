@@ -4,7 +4,7 @@
     <transition name="el-zoom-in-top">
       <div class="index__container">
         <div class="index__container-top boxs">
-          <div class="index__container-horizon-box1 box">
+          <div class="index__container-horizon-box1 box" @click="toClimbData">
             <div class="chart1">
               <LittleTitle title="在线活跃率"/>
               <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
@@ -33,23 +33,25 @@
         </div>
         <div class="index__container-bottom boxs">
           <div class="index__container-horizon-box1 box">
-            <div class="chart3">
+            <div class="chart3" @click="toClimbData">
               <LittleTitle title="开机次数"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
             <div class="chart4">
               <LittleTitle title="重量等级"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 220px;width: 268px"/>
+              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
             <div class="half">
               <LittleTitle title="工作效率"/>
               <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+              <div class="summary">工作效率（按月）：同比增长 <span class="num">20%</span> ，环比增长 <span class="num">30%</span></div>
             </div>
             <div class="half">
               <LittleTitle title="成本费用"/>
               <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+              <div class="summary">成本费用（按月）：同比减少 <span class="num">30%</span> ，环比减少 <span class="num">40%</span></div>
             </div>
           </div>
           <div class="index__container-horizon-box3 box">
@@ -309,6 +311,11 @@ export default {
     this.themebrokeline = brokeline
     this.themearealine = arealine
     this.themecolumnar = columnar
+  },
+  methods: {
+    toClimbData() {
+      this.$router.push({ name: 'climbData' })
+    }
   }
 }
 </script>
@@ -324,6 +331,23 @@ export default {
       border-radius: 8px;
       background-color: #001432;
       overflow: hidden;
+      cursor: pointer;
+      .summary{
+        color: #e1e1e1;
+        border: 1px solid $borderColor;
+        width: 300px;
+        height: 64px;
+        line-height: 64px;
+        text-align: center;
+        margin: 0 auto;
+        padding: 0 16px;
+        font-size: 12px;
+        box-sizing: content-box;
+        .num{
+          color: $textColor;
+          font-size: 16px;
+        }
+      }
     }
     &-top{
       overflow: hidden;

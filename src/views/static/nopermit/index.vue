@@ -27,7 +27,6 @@ export default {
     init() {
       var param = this.$route.query
       this.flag = param.type
-      console.log(this.flag)
     }
   }
 }

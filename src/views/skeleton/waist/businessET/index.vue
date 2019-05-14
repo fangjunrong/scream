@@ -133,8 +133,6 @@ export default {
       return await this.fetchwaistDataList(param)
     },
     brokeClick(event) {
-      console.log(event.name)
-      console.log(`value${event.value}--index${event.dataIndex}`)
       this.$router.push({
         name: 'climbBootNum',
         query: {

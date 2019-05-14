@@ -1,7 +1,7 @@
 <template>
   <div class="climbDevice">
     <div class="climbDevice-title">
-      <DetailTitle title="设备信息"/>
+      <DetailTitle title="开机次数详情"/>
     </div>
     <div class="climbDevice-filter">
       <el-form :inline="true">
@@ -28,8 +28,8 @@
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="30%">{{ item.id }}</td>
+          <td width="30%">{{ item.date }}</td>
           <td width="30%">{{ item.time }}</td>
-          <td width="30%">{{ item.createTime }}</td>
         </tr>
       </table>
     </div>
@@ -56,7 +56,17 @@ export default {
       filter: {
         createTime: ''
       },
-      tableData: [],
+      tableData: [{
+        id: '0',
+        steps: '197',
+        date: '2019-04-26 23:56:20',
+        time: '晚上'
+      }, {
+        id: '1',
+        steps: '208',
+        date: '2019-04-26 21:30:39',
+        time: '晚上'
+      }],
       info: {
         visible: false,
         typeText: '新增',
@@ -83,7 +93,23 @@ export default {
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchClimbDeviceList(param)
+      // const result = await this.fetchClimbDeviceList(param)
+      // if (result.code !== 200) {
+      //   this.$message.warning(result.message)
+      // }
+      // this.tableData = result.data.result
+      // this.pagination.pageSize = result.data.pagination.pageSize
+      // this.pagination.total = result.data.pagination.totalCount
+      console.log(param)
+    },
+    async getData(param) {
+      return await this.fetchClimbDeviceList(param)
+    },
+    async handleSizeChange(val) {
+      const result = await this.getData({
+        pageNumber: 1,
+        pageSize: val
+      })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -91,8 +117,17 @@ export default {
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
     },
-    async getData(param) {
-      return await this.fetchClimbDeviceList(param)
+    async handleCurrentChange(val) {
+      const result = await this.getData({
+        pageNumber: val,
+        pageSize: 10
+      })
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     }
   }
 }

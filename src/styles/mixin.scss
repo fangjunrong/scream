@@ -27,3 +27,37 @@
     height: 0;
   }
 }
+
+@mixin input{
+  color: $textColor;
+  border: 1px solid $borderColor;
+  background-color: $inputBgColor;
+}
+
+@mixin button{
+  color: $btnColor;
+  border: 1px solid $borderColor;
+  background-color: $btnBgColor;
+  border-radius: $normalRadius;
+}
+
+@mixin button-hover{
+  color: #fff;
+  border: 1px solid $borderColor;
+  background-color: $btnBgColor;
+  border-radius: $normalRadius;
+}
+
+@mixin button-active{
+  color: #fff;
+  border: 1px solid $borderColor;
+  background-color: $btnBgColor;
+  border-radius: $normalRadius;
+}
+
+@mixin button-warning{
+  color: $btnWarningColor;
+  border: 1px solid $borderColor;
+  background-color: $btnWarningBgColor;
+  border-radius: $normalRadius;
+}

@@ -1,9 +1,9 @@
 <template>
-  <div class="climbDevice">
-    <div class="climbDevice-title">
-      <DetailTitle title="开机次数"/>
+  <div class="climbWeight">
+    <div class="climbWeight-title">
+      <DetailTitle title="重量等级"/>
     </div>
-    <div class="climbDevice-filter">
+    <div class="climbWeight-filter">
       <el-form :inline="true">
         <el-form-item label="客户">
           <el-input v-model="filter.customer" class="sinput"></el-input>
@@ -20,30 +20,30 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary climbDevice-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary climbWeight-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="climbDevice-table">
+    <div class="climbWeight-table">
       <table class="selftable selftable-head">
         <tr>
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">开机次数</th>
+          <th width="30%">重量等级</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="15%">{{ item.deviceId }}</td>
+          <td width="15%">{{ item.id }}</td>
           <td width="20%">{{ item.model }}</td>
           <td width="20%"><div class="link" @click="toDetail(item)">{{ item.sn }}</div></td>
-          <td width="30%">{{ item.num }}</td>
-          <td width="20%">{{ item.createTime }}</td>
+          <td width="30%">{{ item.steps }}</td>
+          <td width="20%">{{ item.date }}</td>
         </tr>
       </table>
     </div>
-    <div class="climbDevice-pagination">
+    <div class="climbWeight-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -60,7 +60,7 @@
 import { mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'ClimbDevice',
+  name: 'ClimbWeight',
   data() {
     return {
       filter: {
@@ -69,35 +69,17 @@ export default {
         createTime: ''
       },
       tableData: [{
-        deviceId: '22',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
+        id: '0',
+        steps: '1',
+        date: '2019-04-26 23:56:20',
+        sn: '869300035529696',
+        model: 'ZW7170ES(2238)-IOT/福建泉州嘉太物流园	'
       }, {
-        deviceId: '23',
-        model: 'ZW7170ES(1982)-IOT/宁波广力物流有限公司',
-        sn: '866289038483915',
-        num: '1',
-        createTime: '2019-05-6 23:56:35'
-      }, {
-        deviceId: '24',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }, {
-        deviceId: '25',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
-      }, {
-        deviceId: '26',
-        model: 'ZW7170ES(1814)-IOT/山东省济南市',
-        sn: '866289038525335',
-        num: '0',
-        createTime: '2019-05-6 14:54:2'
+        id: '1',
+        steps: '2',
+        date: '2019-04-26 21:30:39',
+        sn: '869300035529696',
+        model: 'ZW7170ES(2238)-IOT/福建泉州嘉太物流园	'
       }],
       info: {
         visible: false,
@@ -115,7 +97,7 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.query.date
+    const date = this.$route.params.date
     this.filter.createTime = date
     this.search()
   },
@@ -125,6 +107,7 @@ export default {
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
+      console.log(param)
       // const result = await this.fetchClimbBootNum(param)
       // if (result.code !== 200) {
       //   this.$message.warning(result.message)
@@ -132,14 +115,13 @@ export default {
       // this.bootNum = result.data.result
       // this.pagination.pageSize = result.data.pagination.pageSize
       // this.pagination.total = result.data.pagination.totalCount
-      console.log(param)
     },
     async getData(param) {
       return await this.fetchClimbBootNum(param)
     },
     toDetail(item) {
       this.$router.push({
-        name: 'climbBootNumDetail',
+        name: 'climbWeightByDay',
         query: {
           date: this.filter.createTime,
           deviceSN: item.sn
@@ -174,7 +156,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climbDevice{
+.climbWeight{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -212,7 +194,7 @@ export default {
 }
 </style>
 <style>
-.climbDevice .el-form-item__label{
+.climbWeight .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
