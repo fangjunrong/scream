@@ -1,7 +1,7 @@
 <template>
   <div class="climbPosition">
     <div class="climbPosition-title">
-      <DetailTitle title="定位信息"/>
+      <DetailTitle title="设备信息"/>
     </div>
     <div class="climbPosition-filter">
       <el-form :inline="true">

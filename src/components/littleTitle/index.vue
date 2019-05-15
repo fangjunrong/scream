@@ -18,6 +18,9 @@ export default {
 .littleTitle{
   width: 100%;
   height: 30px;
+  background: url('../../assets/bg-little-title.png') center center no-repeat;
+  background-size: 100% 100%;
+  padding-left: 8px;
   &-title{
     display: inline-block;
     height: 14px;

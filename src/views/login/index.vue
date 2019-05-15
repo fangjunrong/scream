@@ -2,7 +2,7 @@
 <template>
   <div class="index">
     <div class="index__form">
-      <p class="index__form-title lighted-text">尖叫智能物流平台</p>
+      <p class="index__form-title lighted-text">尖叫智慧（物流）ET大脑</p>
       <el-form ref="loginInfo" :model="loginInfo" :rules="loginInfoRule" autocomplete="off">
         <div class="index__form-container">
           <el-form-item prop="name" style="margin-top: 70px;">
