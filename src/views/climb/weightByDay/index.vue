@@ -4,37 +4,28 @@
       <DetailTitle title="重量等级"/>
     </div>
     <div class="climbWeightByDay-filter">
-      <el-form :inline="true">
-        <el-form-item label="日期">
-          <el-date-picker
-            v-model="filter.createTime"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            class="sinput"></el-date-picker>
-        </el-form-item>
-        <input type="button" class="s-button-primary climbWeightByDay-filter-search" value="查询" @click="search()"/>
-      </el-form>
+      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
     <div class="climbWeightByDay-charts">
-      <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="一周" @click="showWeekly()"></el-tab-pane>
-        <el-tab-pane label="半月" @click="showHalfMonthly()"></el-tab-pane>
-        <el-tab-pane label="一月" @click="showMonthly()"></el-tab-pane>
+      <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
+        <el-tab-pane label="一周" name="7"></el-tab-pane>
+        <el-tab-pane label="半月" name="15"></el-tab-pane>
+        <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
       <div class="climbWeightByDay-charts-container">
-        <div class="chart1">
-          <LittleTitle title="台阶数"/>
+        <div class="chart3">
+          <LittleTitle title="重量等级"/>
           <v-chart
-            :options="brokeline"
+            :options="weightNumOption"
             :theme="themebrokeline"
             style="height: 300px;width: 400px"
-            @click="stepClick"/>
+            @click="weightClick"
+          />
         </div>
       </div>
     </div>
-</div></template>
+  </div>
+</template>
 <script>
 import { mapActions } from 'vuex'
 import _ from 'lodash'
@@ -51,7 +42,17 @@ export default {
       filter: {
         createTime: ''
       },
-      tableData: [],
+      tableData: [{
+        id: '0',
+        steps: '197',
+        date: '2019-04-26 23:56:20',
+        time: '晚上'
+      }, {
+        id: '1',
+        steps: '208',
+        date: '2019-04-26 21:30:39',
+        time: '晚上'
+      }],
       info: {
         visible: false,
         typeText: '新增',
@@ -63,15 +64,18 @@ export default {
         pageSize: 100,
         total: 100
       },
+      activeName: '30',
+      weightNumData: [],
+      weightNumDataX: [],
       themebrokeline: '',
-      brokeline: {
+      weightNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -86,7 +90,7 @@ export default {
           }
         },
         series: [{
-          data: [320, 680, 280, 480, 1290, 500, 1320],
+          data: this.onlineData,
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -99,71 +103,56 @@ export default {
       }
     }
   },
+  watch: {
+    activeName(newValue, oldValue) {
+      this.showDataByDays(newValue)
+    }
+  },
   mounted() {
-    const date = this.$route.params.date
-    this.filter.createTime = date
-    this.themebrokeline = brokeline
-    this.search()
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
+    const model = this.$route.query.model
+    this.filter.model = model
+    this.init()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchclimbWeightByDayList',
-      'changeclimbWeightByDay',
-      'deleteclimbWeightByDay'
+      'fetchClimbWeightTotal'
     ]),
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchclimbWeightByDayList(param)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
-    async getData(param) {
-      return await this.fetchclimbWeightByDayList(param)
-    },
-    async handleSizeChange(val) {
-      const result = await this.getData({
+    async init() {
+      this.themebrokeline = brokeline
+      const date = this.$route.query.date
+      this.filter.searchDate = date
+      const result = await this.fetchClimbWeightTotal({
         pageNumber: 1,
-        pageSize: val
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
-    async handleCurrentChange(val) {
-      const result = await this.getData({
-        pageNumber: val,
         pageSize: 10
       })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
+      this.weightNumData = result.data.map((v) => { return v.weightNum })
+      this.weightNumDataX = result.data.map((v) => { return v.showDate })
+      this.weightNumOption.series[0].data = this.weightNumData
+      this.weightNumOption.xAxis.data = this.weightNumDataX
     },
-    showWeekly() {
-
-    },
-    showHalfMonthly() {
-
-    },
-    showHMonthly() {
-
-    },
-    stepClick(event) {
+    weightClick(event) {
       this.$router.push({
         name: 'climbWeightDetail',
         query: {
-          date: event.name
+          date: event.name,
+          sn: this.filter.sn,
+          model: this.filter.model
         }
       })
+    },
+    showDataByDays(val) {
+      this.weightNumOption.series[0].data = this.spliceData(this.weightNumData, 0, val)
+      this.weightNumOption.xAxis.data = this.spliceData(this.weightNumDataX, 0, val)
+    },
+    spliceData(data, index, length) {
+      const _data = _.cloneDeep(data)
+      return _data.splice(index, length)
     }
   }
 }
@@ -184,6 +173,11 @@ export default {
     &-search{
       width: 125px;
     }
+    &-add{
+      float: right;
+      margin-right: 30px;
+      width: 125px;
+    }
   }
   &-charts{
     background-color: #001432;
@@ -192,12 +186,19 @@ export default {
     padding: 30px 40px;
     &-container{
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       flex-direction: row;
       flex-wrap: wrap;
     }
   }
+  &-pagination{
+    margin-top: 42px;
+    .el-pagination{
+      float: right;
+    }
+  }
 }
+
 </style>
 <style>
 .climbWeightByDay .el-form-item__label{

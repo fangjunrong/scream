@@ -19,10 +19,10 @@
       </ul>
     </div>
     <div class="climbData-charts">
-      <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="一周" @click="showWeekly()"></el-tab-pane>
-        <el-tab-pane label="半月" @click="showHalfMonthly()"></el-tab-pane>
-        <el-tab-pane label="一月" @click="showMonthly()"></el-tab-pane>
+      <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
+        <el-tab-pane label="一周" name="7"></el-tab-pane>
+        <el-tab-pane label="半月" name="15"></el-tab-pane>
+        <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
       <div class="climbData-charts-container">
         <div class="chart1">
@@ -45,7 +45,7 @@
         <div class="chart3">
           <LittleTitle title="台阶数"/>
           <v-chart
-            :options="stepNumOption"
+            :options="stepsNumOption"
             :theme="themebrokeline"
             style="height: 300px;width: 400px"
             @click="stepNumClick"/>
@@ -84,11 +84,15 @@ export default {
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      activeRateData: [10, 20, 50, 60, 50, 80, 70],
-      stepNumData: [320, 680, 280, 480, 1290, 500, 1320],
-      bootNumData: [320, 680, 280, 480, 1290, 500, 1320],
-      bootNumdataX: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
-      weightNumData: [320, 680, 280, 480, 1290, 500, 1320],
+      activeName: '30',
+      activeRateData: [],
+      activeRateDataX: [],
+      stepNumData: [],
+      stepNumDataX: [],
+      bootNumData: [],
+      bootNumdataX: [],
+      weightNumData: [],
+      weightNumDataX: '',
       activeRateOption: {
         tooltip: {
           trigger: 'item',
@@ -96,7 +100,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -111,7 +115,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -122,14 +126,14 @@ export default {
           }
         }]
       },
-      stepNumOption: {
+      stepsNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -177,7 +181,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -195,7 +199,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -223,37 +227,67 @@ export default {
       }
     }
   },
+  watch: {
+    activeName(newValue, oldValue) {
+      this.showDataByDays(newValue)
+    }
+  },
   mounted() {
     this.init()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbBootNum',
-      'changeClimbData',
-      'deleteClimbData'
+      'fetchClimbActiveRate',
+      'fetchClimbBootTotal',
+      'fetchClimbStepsTotal',
+      'fetchClimbWeightTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
-      const result = await this.fetchClimbBootNum()
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
+      const activeRateResult = await this.fetchClimbBootTotal()
+      if (activeRateResult.code !== 200) {
+        this.$message.warning(activeRateResult.message)
       }
-      this.bootNumData = result.data.result
+      this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
+      this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
+      const bootTotalResult = await this.fetchClimbBootTotal()
+      if (bootTotalResult.code !== 200) {
+        this.$message.warning(bootTotalResult.message)
+      }
+      this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
+      this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
+      const stepsTotalResult = await this.fetchClimbStepsTotal()
+      if (stepsTotalResult.code !== 200) {
+        this.$message.warning(stepsTotalResult.message)
+      }
+      this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
+      this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
+      const weightTotalResult = await this.fetchClimbWeightTotal()
+      if (weightTotalResult.code !== 200) {
+        this.$message.warning(weightTotalResult.message)
+      }
+      this.weightNumData = weightTotalResult.data.map((v) => { return v.total })
+      this.weightNumDataX = weightTotalResult.data.map((v) => { return v.showDate })
       this.activeRateOption.series[0].data = this.activeRateData
-      this.stepNumOption.series[0].data = this.stepNumData
+      this.stepsNumOption.series[0].data = this.stepsNumData
+      this.stepsNumOption.xAxis.data = this.stepsNumDataX
       this.bootNumOption.series[0].data = this.bootNumData
+      this.bootNumOption.xAxis.data = this.bootNumDataX
       this.weightNumOption.series[0].data = this.weightNumData
+      this.weightNumOption.xAxis.data = this.weightNumDataX
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.activeRateOption.xAxis.data = this.activeRateDataX
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchClimbDataList(param)
+      const result = await this.fetchClimbBootTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
     },
     async getData(param) {
-      return await this.fetchClimbDataList(param)
+      return await this.fetchClimbBootTotal(param)
     },
     activeRateClick(event) {
       this.$router.push({
@@ -287,14 +321,20 @@ export default {
         }
       })
     },
-    showWeekly() {
-
+    showDataByDays(val) {
+      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
+      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
+      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
+      this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
+      this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
+      this.weightNumOption.series[0].data = this.spliceData(this.weightNumData, 0, val)
+      this.weightNumOption.xAxis.data = this.spliceData(this.weightNumDataX, 0, val)
+      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
+      this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
     },
-    showHalfMonthly() {
-
-    },
-    showHMonthly() {
-
+    spliceData(data, index, length) {
+      const _data = _.cloneDeep(data)
+      return _data.splice(index, length)
     }
   }
 }

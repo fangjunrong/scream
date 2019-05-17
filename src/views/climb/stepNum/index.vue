@@ -36,9 +36,9 @@
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="15%">{{ item.deviceId }}</td>
-          <td width="20%">{{ item.model }}</td>
-          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.sn }}</div></td>
-          <td width="30%">{{ item.num }}</td>
+          <td width="20%">{{ item.climbDeviceModel.model }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.climbDeviceModel.sn }}</div></td>
+          <td width="30%">{{ item.stepsNum }}</td>
           <td width="20%">{{ item.createTime }}</td>
         </tr>
       </table>
@@ -66,7 +66,8 @@ export default {
       filter: {
         customer: '',
         department: '',
-        createTime: ''
+        searchDate: '',
+        sn: ''
       },
       tableData: [],
       info: {
@@ -85,33 +86,34 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.params.date
-    this.filter.createTime = date
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
     this.search()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbBootNum'
+      'fetchClimbStepsNum'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchClimbBootNum(param)
+      const result = await this.fetchClimbStepsNum(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
-      this.bootNum = result.data.result
+      this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchClimbBootNum(param)
+      return await this.fetchClimbStepsNum(param)
     },
     toDetail(item) {
       this.$router.push({
-        name: 'climbBootNumDetail',
+        name: 'climbStepNumDetail',
         query: {
-          date: this.filter.createTime,
-          deviceSN: item.sn
+          date: this.filter.searchDate,
+          sn: item.climbDeviceModel.sn,
+          model: item.climbDeviceModel.model
         }
       })
     },

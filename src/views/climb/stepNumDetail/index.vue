@@ -4,63 +4,24 @@
       <DetailTitle title="台阶数详情"/>
     </div>
     <div class="climbStepNumDetail-filter">
-      <el-form :inline="true">
-        <el-form-item label="日期">
-          <el-date-picker
-            v-model="filter.createTime"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            class="sinput"></el-date-picker>
-        </el-form-item>
-        <input type="button" class="s-button-primary climbStepNumDetail-filter-search" value="查询" @click="search()"/>
-      </el-form>
+      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
-    <div class="climbStepNumDetail-table">
-      <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="图表">
-          <div class="climbStepNumDetail-charts-container">
-            <div class="chart1">
-              <LittleTitle title="台阶数"/>
-              <v-chart
-                ref="online"
-                :options="brokeline"
-                :theme="themebrokeline"
-                style="height: 300px;width: 400px"/>
-            </div>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="列表">
-          <table class="selftable selftable-head">
-            <tr>
-              <th width="15%">ID</th>
-              <th width="20%">台阶数</th>
-              <th width="20%">使用时间</th>
-              <th width="30%">所属时段</th>
-            </tr>
-          </table>
-          <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
-            <tr>
-              <td width="15%">{{ item.id }}</td>
-              <td width="20%">{{ item.steps }}</td>
-              <td width="20%">{{ item.date }}</td>
-              <td width="20%">{{ item.time }}</td>
-            </tr>
-          </table>
-        </el-tab-pane>
+    <div class="climbStepNumDetail-charts">
+      <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
+        <el-tab-pane label="一周" name="7"></el-tab-pane>
+        <el-tab-pane label="半月" name="15"></el-tab-pane>
+        <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-    </div>
-    <div class="climbStepNumDetail-pagination">
-      <el-pagination
-        :current-page="pagination.currentPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange">
-      </el-pagination>
+      <div class="climbStepNumDetail-charts-container">
+        <div class="chart3">
+          <LittleTitle title="台阶数"/>
+          <v-chart
+            :options="stepsNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -102,15 +63,18 @@ export default {
         pageSize: 100,
         total: 100
       },
+      activeName: '30',
+      stepsNumData: [],
+      stepsNumDataX: [],
       themebrokeline: '',
-      brokeline: {
+      stepsNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -125,7 +89,7 @@ export default {
           }
         },
         series: [{
-          data: [320, 680, 280, 480, 1290, 500, 1320],
+          data: this.onlineData,
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -138,112 +102,46 @@ export default {
       }
     }
   },
+  watch: {
+    activeName(newValue, oldValue) {
+      this.showDataByDays(newValue)
+    }
+  },
   mounted() {
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
+    const model = this.$route.query.model
+    this.filter.model = model
     this.init()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchclimbStepNumDetailList',
-      'changeclimbStepNumDetail',
-      'deleteclimbStepNumDetail'
+      'fetchClimbStepsNumDetail'
     ]),
     async init() {
-      const date = this.$route.query.date
-      this.filter.createTime = date
-      // const result = await this.fetchclimbStepNumDetailList({
-      //   pageNumber: 1,
-      //   pageSize: 10
-      // })
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.tableData = result.data.result
-      // this.pagination.pageSize = result.data.pagination.pageSize
-      // this.pagination.total = result.data.pagination.totalCount
-      this.initCharts()
-    },
-    initCharts() {
       this.themebrokeline = brokeline
-      this.brokeline.xAxis.data = _.map(this.tableData, 'date')
-      this.brokeline.series[0].data = _.map(this.tableData, 'steps')
-    },
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchclimbStepNumDetailList(param)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
-    async getData(param) {
-      return await this.fetchclimbStepNumDetailList(param)
-    },
-    add() {
-      this.info.visible = true
-      this.info.typeText = '新增'
-      this.info.data = {}
-    },
-    change(item) {
-      this.info.visible = true
-      this.info.data = _.cloneDeep(item)
-      this.info.typeText = '修改'
-    },
-    async infoSubmit() {
-      const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeclimbStepNumDetail(this.info.data)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-        return false
-      }
-      if (id) {
-        this.$message.success('修改成功')
-      } else {
-        this.$message.success('添加成功')
-      }
-      this.info.visible = false
-      this.search()
-    },
-    async deleteItem(item) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async response => {
-        const result = await this.deleteclimbStepNumDetail({ id: item.id })
-        if (result.code !== 200) {
-          this.$message.warning(result.message)
-          return false
-        }
-        this.$message.success('删除成功')
-        this.search()
-      }).catch(() => {
-      })
-    },
-    async handleSizeChange(val) {
-      const result = await this.getData({
+      const date = this.$route.query.date
+      this.filter.searchDate = date
+      const result = await this.fetchClimbStepsNumDetail({
         pageNumber: 1,
-        pageSize: val
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-    },
-    async handleCurrentChange(val) {
-      const result = await this.getData({
-        pageNumber: val,
         pageSize: 10
       })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
+      this.stepsNumData = result.data.result.map((v) => { return v.stepsNum })
+      this.stepsNumDataX = result.data.result.map((v) => { return v.showDate })
+      this.stepsNumOption.series[0].data = this.stepsNumData
+      this.stepsNumOption.xAxis.data = this.stepsNumDataX
+    },
+    showDataByDays(val) {
+      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
+      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
+    },
+    spliceData(data, index, length) {
+      const _data = _.cloneDeep(data)
+      return _data.splice(index, length)
     }
   }
 }
@@ -270,17 +168,16 @@ export default {
       width: 125px;
     }
   }
-  &-table{
+  &-charts{
     background-color: #001432;
     border-radius: 8px;
     margin-top: 16px;
     padding: 30px 40px;
-    &-content{
-      background-color: #001432;
-      .el-table__body{
-        border-collapse:separate;
-        border-spacing:0px 10px;
-      }
+    &-container{
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
   }
   &-pagination{
@@ -297,5 +194,9 @@ export default {
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
+}
+.climbStepNumDetail .el-tabs__nav{
+  float: none;
+  text-align: center;
 }
 </style>

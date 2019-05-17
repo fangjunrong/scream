@@ -7,7 +7,7 @@
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -28,7 +28,7 @@
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="30%">{{ item.id }}</td>
-          <td width="30%">{{ item.date }}</td>
+          <td width="30%">{{ item.showDate }}</td>
           <td width="30%">{{ item.time }}</td>
         </tr>
       </table>
@@ -54,7 +54,8 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: ''
       },
       tableData: [{
         id: '0',
@@ -81,29 +82,26 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.params.date
-    this.filter.createTime = date
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
     this.search()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbDeviceList',
-      'changeClimbDevice',
-      'deleteClimbDevice'
+      'fetchClimbBootNumDetail'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      // const result = await this.fetchClimbDeviceList(param)
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.tableData = result.data.result
-      // this.pagination.pageSize = result.data.pagination.pageSize
-      // this.pagination.total = result.data.pagination.totalCount
-      console.log(param)
+      const result = await this.fetchClimbBootNumDetail(param)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchClimbDeviceList(param)
+      return await this.fetchClimbBootNumDetail(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({

@@ -7,7 +7,7 @@
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -35,17 +35,17 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">ID</th>
-              <th width="20%">台阶数</th>
+              <th width="20%">重量等级</th>
               <th width="20%">使用时间</th>
-              <th width="30%">所属时段</th>
+              <th width="20%">所属时段</th>
             </tr>
           </table>
-          <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+          <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ item.id }}</td>
-              <td width="20%">{{ item.steps }}</td>
-              <td width="20%">{{ item.date }}</td>
-              <td width="20%">{{ item.time }}</td>
+              <td width="15%">{{ index }}</td>
+              <td width="20%">{{ item.weightNum }}</td>
+              <td width="20%">{{ item.showDate }}</td>
+              <td width="20%">{{ item.showDate }}</td>
             </tr>
           </table>
         </el-tab-pane>
@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: ''
       },
       tableData: [{
         id: '0',
@@ -139,87 +139,47 @@ export default {
     }
   },
   mounted() {
+    const searchDate = this.$route.query.searchDate
+    this.filter.searchDate = searchDate
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
     this.init()
   },
   methods: {
     ...mapActions('climb', [
-      'fetchclimbWeightDetailList',
-      'changeclimbWeightDetail',
-      'deleteclimbWeightDetail'
+      'fetchClimbWeightNumDetail'
     ]),
     async init() {
-      const date = this.$route.query.date
-      this.filter.createTime = date
-      // const result = await this.fetchclimbWeightDetailList({
-      //   pageNumber: 1,
-      //   pageSize: 10
-      // })
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.tableData = result.data.result
-      // this.pagination.pageSize = result.data.pagination.pageSize
-      // this.pagination.total = result.data.pagination.totalCount
-      this.initCharts()
-    },
-    initCharts() {
-      this.themebrokeline = brokeline
-      this.brokeline.xAxis.data = _.map(this.tableData, 'date')
-      this.brokeline.series[0].data = _.map(this.tableData, 'steps')
-    },
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchclimbWeightDetailList(param)
+      const result = await this.fetchClimbWeightNumDetail({
+        pageNumber: 1,
+        pageSize: 10
+      })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
-    async getData(param) {
-      return await this.fetchclimbWeightDetailList(param)
+    initCharts() {
+      this.themebrokeline = brokeline
+      this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')
+      this.brokeline.series[0].data = _.map(this.tableData, 'weightNum')
     },
-    add() {
-      this.info.visible = true
-      this.info.typeText = '新增'
-      this.info.data = {}
-    },
-    change(item) {
-      this.info.visible = true
-      this.info.data = _.cloneDeep(item)
-      this.info.typeText = '修改'
-    },
-    async infoSubmit() {
-      const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeclimbWeightDetail(this.info.data)
+    async search() {
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
+      const result = await this.fetchClimbWeightNumDetail(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
-        return false
       }
-      if (id) {
-        this.$message.success('修改成功')
-      } else {
-        this.$message.success('添加成功')
-      }
-      this.info.visible = false
-      this.search()
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
-    async deleteItem(item) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async response => {
-        const result = await this.deleteclimbWeightDetail({ id: item.id })
-        if (result.code !== 200) {
-          this.$message.warning(result.message)
-          return false
-        }
-        this.$message.success('删除成功')
-        this.search()
-      }).catch(() => {
-      })
+    async getData(param) {
+      return await this.fetchClimbWeightNumDetail(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({
@@ -232,6 +192,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
     async handleCurrentChange(val) {
       const result = await this.getData({
@@ -244,6 +205,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     }
   }
 }
@@ -281,6 +243,18 @@ export default {
         border-collapse:separate;
         border-spacing:0px 10px;
       }
+    }
+  }
+  &-charts{
+    background-color: #001432;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 30px 40px;
+    &-container{
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
   }
   &-pagination{

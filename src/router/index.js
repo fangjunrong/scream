@@ -27,6 +27,11 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/climb/position/index')
           }, {
+            path: 'positionDetail',
+            name: 'climbPositionDetail',
+            component: () =>
+              import('@/views/climb/position/detail/index')
+          }, {
             path: 'device',
             name: 'climbDevice',
             component: () =>

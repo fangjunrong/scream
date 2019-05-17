@@ -29,17 +29,17 @@
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">重量等级</th>
+          <th width="10%">重量等级</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="15%">{{ item.id }}</td>
-          <td width="20%">{{ item.model }}</td>
-          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.sn }}</div></td>
-          <td width="30%">{{ item.steps }}</td>
-          <td width="20%">{{ item.date }}</td>
+          <td width="15%">{{ item.deviceId }}</td>
+          <td width="20%">{{ item.climbDeviceModel.model }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.climbDeviceModel.sn }}</div></td>
+          <td width="10%">{{ item.weightNum }}</td>
+          <td width="20%">{{ item.createTime }}</td>
         </tr>
       </table>
     </div>
@@ -66,21 +66,9 @@ export default {
       filter: {
         customer: '',
         department: '',
-        createTime: ''
+        searchDate: ''
       },
-      tableData: [{
-        id: '0',
-        steps: '1',
-        date: '2019-04-26 23:56:20',
-        sn: '869300035529696',
-        model: 'ZW7170ES(2238)-IOT/福建泉州嘉太物流园	'
-      }, {
-        id: '1',
-        steps: '2',
-        date: '2019-04-26 21:30:39',
-        sn: '869300035529696',
-        model: 'ZW7170ES(2238)-IOT/福建泉州嘉太物流园	'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -103,28 +91,27 @@ export default {
   },
   methods: {
     ...mapActions('climb', [
-      'fetchClimbBootNum'
+      'fetchClimbWeightNum'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      console.log(param)
-      // const result = await this.fetchClimbBootNum(param)
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.bootNum = result.data.result
-      // this.pagination.pageSize = result.data.pagination.pageSize
-      // this.pagination.total = result.data.pagination.totalCount
+      const result = await this.fetchClimbWeightNum(param)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchClimbBootNum(param)
+      return await this.fetchClimbWeightNum(param)
     },
     toDetail(item) {
       this.$router.push({
         name: 'climbWeightByDay',
         query: {
-          date: this.filter.createTime,
-          deviceSN: item.sn
+          sn: item.climbDeviceModel.sn,
+          model: item.climbDeviceModel.model
         }
       })
     },
