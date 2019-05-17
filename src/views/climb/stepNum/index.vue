@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -86,6 +86,8 @@ export default {
     }
   },
   mounted() {
+    const date = this.$route.query.date
+    this.filter.searchDate = date
     const sn = this.$route.query.sn
     this.filter.sn = sn
     this.search()

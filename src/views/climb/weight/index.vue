@@ -85,8 +85,8 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.params.date
-    this.filter.createTime = date
+    const date = this.$route.query.date
+    this.filter.searchDate = date
     this.search()
   },
   methods: {
