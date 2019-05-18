@@ -156,6 +156,11 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/skeleton/waist/health/index')
           }, {
+            path: 'healthDetail',
+            name: 'skeletonWaistHealthDetail',
+            component: () =>
+              import('@/views/skeleton/waist/healthDetail/index')
+          }, {
             path: 'person',
             name: 'skeletonWaistPerson',
             component: () =>
@@ -180,6 +185,21 @@ export const constantRouterMap = [
             name: 'skeletonWaistBootNumDetail',
             component: () =>
               import('@/views/skeleton/waist/bootNumDetail/index')
+          }, {
+            path: 'stepNum',
+            name: 'skeletonWaistStepNum',
+            component: () =>
+              import('@/views/skeleton/waist/stepNum/index')
+          }, {
+            path: 'stepNumDetail',
+            name: 'skeletonWaistStepNumDetail',
+            component: () =>
+              import('@/views/skeleton/waist/stepNumDetail/index')
+          }, {
+            path: 'stepByDay',
+            name: 'skeletonWaistStepByDay',
+            component: () =>
+              import('@/views/skeleton/waist/stepByDay/index')
           }]
         }, {
           path: 'buttock',

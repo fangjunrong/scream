@@ -1,18 +1,18 @@
 <template>
-  <div class="climbStepByDay">
-    <div class="climbStepByDay-title">
-      <DetailTitle title="重量等级"/>
+  <div class="skeletonWaistStepByDay">
+    <div class="skeletonWaistStepByDay-title">
+      <DetailTitle title="步数"/>
     </div>
-    <div class="climbStepByDay-filter">
+    <div class="skeletonWaistStepByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
-    <div class="climbStepByDay-charts">
+    <div class="skeletonWaistStepByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
         <el-tab-pane label="一周" name="7"></el-tab-pane>
         <el-tab-pane label="半月" name="15"></el-tab-pane>
         <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-      <div class="climbStepByDay-charts-container">
+      <div class="skeletonWaistStepByDay-charts-container">
         <div class="chart3">
           <LittleTitle title="重量等级"/>
           <v-chart
@@ -116,14 +116,14 @@ export default {
     this.init()
   },
   methods: {
-    ...mapActions('climb', [
-      'fetchClimbStepsTotal'
+    ...mapActions('skeletonWaist', [
+      'fetchSkeletonWaistStepsTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
       const date = this.$route.query.date
       this.filter.searchDate = date
-      const result = await this.fetchClimbStepsTotal({
+      const result = await this.fetchSkeletonWaistStepsTotal({
         pageNumber: 1,
         pageSize: 10
       })
@@ -138,7 +138,7 @@ export default {
     },
     stepClick(event) {
       this.$router.push({
-        name: 'climbStepNumDetail',
+        name: 'skeletonWaistStepNumDetail',
         query: {
           date: event.name,
           sn: this.filter.sn,
@@ -158,7 +158,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climbStepByDay{
+.skeletonWaistStepByDay{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -201,12 +201,12 @@ export default {
 
 </style>
 <style>
-.climbStepByDay .el-form-item__label{
+.skeletonWaistStepByDay .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
 }
-.climbStepByDay .el-tabs__nav{
+.skeletonWaistStepByDay .el-tabs__nav{
   float: none;
   text-align: center;
 }

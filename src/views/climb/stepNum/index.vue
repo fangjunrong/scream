@@ -1,7 +1,7 @@
 <template>
   <div class="climbStepNum">
     <div class="climbStepNum-title">
-      <DetailTitle title="台阶数"/>
+      <DetailTitle :sub-title="filter.searchDate" title="台阶数"/>
     </div>
     <div class="climbStepNum-filter">
       <el-form :inline="true">
@@ -111,7 +111,7 @@ export default {
     },
     toDetail(item) {
       this.$router.push({
-        name: 'climbStepNumDetail',
+        name: 'climbStepByDay',
         query: {
           date: this.filter.searchDate,
           sn: item.climbDeviceModel.sn,

@@ -1,7 +1,7 @@
 <template>
   <div class="climbDevice">
     <div class="climbDevice-title">
-      <DetailTitle title="开机次数"/>
+      <DetailTitle :sub-title="filter.searchDate" title="开机次数"/>
     </div>
     <div class="climbDevice-filter">
       <el-form :inline="true">

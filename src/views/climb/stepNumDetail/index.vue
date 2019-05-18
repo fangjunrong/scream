@@ -18,7 +18,7 @@
           <v-chart
             :options="stepsNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
           />
         </div>
       </div>

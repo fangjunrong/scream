@@ -1,25 +1,24 @@
 <template>
-  <div class="climbStepByDay">
-    <div class="climbStepByDay-title">
-      <DetailTitle title="重量等级"/>
+  <div class="skeletonWaistStepNumDetail">
+    <div class="skeletonWaistStepNumDetail-title">
+      <DetailTitle title="步数详情"/>
     </div>
-    <div class="climbStepByDay-filter">
+    <div class="skeletonWaistStepNumDetail-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
-    <div class="climbStepByDay-charts">
+    <div class="skeletonWaistStepNumDetail-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
         <el-tab-pane label="一周" name="7"></el-tab-pane>
         <el-tab-pane label="半月" name="15"></el-tab-pane>
         <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-      <div class="climbStepByDay-charts-container">
+      <div class="skeletonWaistStepNumDetail-charts-container">
         <div class="chart3">
-          <LittleTitle title="重量等级"/>
+          <LittleTitle title="台阶数"/>
           <v-chart
-            :options="stepNumOption"
+            :options="stepsNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
-            @click="stepClick"
           />
         </div>
       </div>
@@ -33,7 +32,7 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'ClimbStepByDay',
+  name: 'SkeletonWaistStepNumDetail',
   components: {
     'v-chart': ECharts
   },
@@ -65,10 +64,10 @@ export default {
         total: 100
       },
       activeName: '30',
-      stepNumData: [],
-      stepNumDataX: [],
+      stepsNumData: [],
+      stepsNumDataX: [],
       themebrokeline: '',
-      stepNumOption: {
+      stepsNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -116,14 +115,14 @@ export default {
     this.init()
   },
   methods: {
-    ...mapActions('climb', [
-      'fetchClimbStepsTotal'
+    ...mapActions('skeletonWaist', [
+      'fetchSkeletonWaistStepsNumDetail'
     ]),
     async init() {
       this.themebrokeline = brokeline
       const date = this.$route.query.date
       this.filter.searchDate = date
-      const result = await this.fetchClimbStepsTotal({
+      const result = await this.fetchSkeletonWaistStepsNumDetail({
         pageNumber: 1,
         pageSize: 10
       })
@@ -131,24 +130,14 @@ export default {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.stepNumData = result.data.map((v) => { return v.stepsNum })
-      this.stepNumDataX = result.data.map((v) => { return v.showDate })
-      this.stepNumOption.series[0].data = this.stepNumData
-      this.stepNumOption.xAxis.data = this.stepNumDataX
-    },
-    stepClick(event) {
-      this.$router.push({
-        name: 'climbStepNumDetail',
-        query: {
-          date: event.name,
-          sn: this.filter.sn,
-          model: this.filter.model
-        }
-      })
+      this.stepsNumData = result.data.result.map((v) => { return v.stepsNum })
+      this.stepsNumDataX = result.data.result.map((v) => { return v.showDate })
+      this.stepsNumOption.series[0].data = this.stepsNumData
+      this.stepsNumOption.xAxis.data = this.stepsNumDataX
     },
     showDataByDays(val) {
-      this.stepNumOption.series[0].data = this.spliceData(this.stepNumData, 0, val)
-      this.stepNumOption.xAxis.data = this.spliceData(this.stepNumDataX, 0, val)
+      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
+      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
     },
     spliceData(data, index, length) {
       const _data = _.cloneDeep(data)
@@ -158,7 +147,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.climbStepByDay{
+.skeletonWaistStepNumDetail{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -201,12 +190,12 @@ export default {
 
 </style>
 <style>
-.climbStepByDay .el-form-item__label{
+.skeletonWaistStepNumDetail .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
 }
-.climbStepByDay .el-tabs__nav{
+.skeletonWaistStepNumDetail .el-tabs__nav{
   float: none;
   text-align: center;
 }

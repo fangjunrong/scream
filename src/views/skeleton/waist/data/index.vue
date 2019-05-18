@@ -1,4 +1,4 @@
-<template>
+/bendTotal<template>
   <div class="skeletonWaistData">
     <div class="skeletonWaistData-title">
       <DetailTitle title="统计数据"/>
@@ -31,7 +31,7 @@
             ref="online"
             :options="activeRateOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="activeRateClick"/>
         </div>
         <div class="chart2">
@@ -39,7 +39,7 @@
           <v-chart
             :options="bootNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="bootNumClick"/>
         </div>
         <div class="chart3">
@@ -47,7 +47,7 @@
           <v-chart
             :options="stepsNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
@@ -55,7 +55,7 @@
           <v-chart
             :options="bendNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="bendClick"/>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default {
       bootNumData: [],
       bootNumdataX: [],
       bendNumData: [],
-      bendNumDataX: '',
+      bendNumDataX: [],
       activeRateOption: {
         tooltip: {
           trigger: 'item',
@@ -315,7 +315,7 @@ export default {
     },
     bendClick(event) {
       this.$router.push({
-        name: 'skeletonWaistBend',
+        name: 'skeletonWaistHealth',
         query: {
           date: event.name
         }
@@ -368,7 +368,7 @@ export default {
     padding: 30px 40px;
     &-container{
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       flex-direction: row;
       flex-wrap: wrap;
     }

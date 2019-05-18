@@ -1,6 +1,7 @@
 <template>
   <div :style="style" class="detailTitle">
     <span class="detailTitle-title">{{ title }}</span>
+    <span class="detailTitle-subTitle">{{ subTitle }}</span>
   </div>
 </template>
 <script>
@@ -11,6 +12,10 @@ export default {
     title: {
       type: String,
       default: 'title'
+    },
+    subTitle: {
+      type: String,
+      default: ''
     },
     src: {
       type: String,
@@ -40,6 +45,13 @@ export default {
     text-indent: 8px;
     color: #0df0f9;
     border-left: 2px solid #0df0f9;
+  }
+  &-subTitle{
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    text-indent: 8px;
+    color: #0df0f9;
   }
 }
 </style>

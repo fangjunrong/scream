@@ -1,7 +1,7 @@
 <template>
   <div class="climbWeightDetail">
     <div class="climbWeightDetail-title">
-      <DetailTitle title="重量等级详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="重量等级详情"/>
     </div>
     <div class="climbWeightDetail-filter">
       <el-form :inline="true">
@@ -27,7 +27,7 @@
                 ref="online"
                 :options="brokeline"
                 :theme="themebrokeline"
-                style="height: 300px;width: 400px"/>
+                style="height: 450px;width: 600px"/>
             </div>
           </div>
         </el-tab-pane>
@@ -139,7 +139,7 @@ export default {
     }
   },
   mounted() {
-    const searchDate = this.$route.query.searchDate
+    const searchDate = this.$route.query.date
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
     this.filter.sn = sn

@@ -5,7 +5,7 @@
     </div>
     <div class="skeletonWaistPosition-filter">
       <el-form :inline="true">
-        <el-form-item label="日期" style="width: 200px">
+        <el-form-item label="日期">
           <el-date-picker
             v-model="filter.createTime"
             type="date"

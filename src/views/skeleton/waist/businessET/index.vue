@@ -31,12 +31,15 @@
             ref="online"
             :options="brokeline"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="brokeClick"/>
         </div>
         <div class="chart2">
           <LittleTitle title="成本费用"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <v-chart
+            :options="brokeline"
+            :theme="themebrokeline"
+            style="height: 450px;width: 600px"/>
         </div>
       </div>
     </div>
@@ -172,7 +175,7 @@ export default {
     padding: 30px 40px;
     &-container{
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       flex-direction: row;
       flex-wrap: wrap;
     }

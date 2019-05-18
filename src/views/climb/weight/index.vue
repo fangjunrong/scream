@@ -1,7 +1,7 @@
 <template>
   <div class="climbWeight">
     <div class="climbWeight-title">
-      <DetailTitle title="重量等级"/>
+      <DetailTitle :sub-title="filter.searchDate" title="重量等级"/>
     </div>
     <div class="climbWeight-filter">
       <el-form :inline="true">

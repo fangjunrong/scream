@@ -18,7 +18,7 @@
           <v-chart
             :options="weightNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="weightClick"
           />
         </div>

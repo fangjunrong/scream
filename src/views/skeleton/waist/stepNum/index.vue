@@ -1,10 +1,16 @@
 <template>
-  <div class="skeletonWaistDevice">
-    <div class="skeletonWaistDevice-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="开机次数详情"/>
+  <div class="skeletonWaistStepNum">
+    <div class="skeletonWaistStepNum-title">
+      <DetailTitle :sub-title="filter.searchDate" title="步数"/>
     </div>
-    <div class="skeletonWaistDevice-filter">
+    <div class="skeletonWaistStepNum-filter">
       <el-form :inline="true">
+        <el-form-item label="客户">
+          <el-input v-model="filter.customer" class="sinput"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
+          <el-input v-model="filter.department" class="sinput"></el-input>
+        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             v-model="filter.searchDate"
@@ -14,26 +20,30 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary skeletonWaistDevice-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary skeletonWaistStepNum-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="skeletonWaistDevice-table">
+    <div class="skeletonWaistStepNum-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="30%">ID</th>
-          <th width="30%">使用时间</th>
-          <th width="30%">所属时段</th>
+          <th width="15%">设备ID</th>
+          <th width="20%">设备型号</th>
+          <th width="20%">设备序列号</th>
+          <th width="30%">步数</th>
+          <th width="20%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="30%">{{ item.id }}</td>
-          <td width="30%">{{ item.showDate }}</td>
-          <td width="30%">{{ item.time }}</td>
+          <td width="15%">{{ item.deviceId }}</td>
+          <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.sn : '' }}</div></td>
+          <td width="30%">{{ item.stepsNum }}</td>
+          <td width="20%">{{ item.createTime }}</td>
         </tr>
       </table>
     </div>
-    <div class="skeletonWaistDevice-pagination">
+    <div class="skeletonWaistStepNum-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -50,24 +60,16 @@
 import { mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'SkeletonWaistDevice',
+  name: 'SkeletonWaistStepNum',
   data() {
     return {
       filter: {
+        customer: '',
+        department: '',
         searchDate: '',
         sn: ''
       },
-      tableData: [{
-        id: '0',
-        steps: '197',
-        date: '2019-04-26 23:56:20',
-        time: '晚上'
-      }, {
-        id: '1',
-        steps: '208',
-        date: '2019-04-26 21:30:39',
-        time: '晚上'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -78,23 +80,25 @@ export default {
         currentPage: 1,
         pageSize: 100,
         total: 100
-      }
+      },
+      bootNum: {},
+      stepsNum: {}
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
     const date = this.$route.query.date
     this.filter.searchDate = date
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
     this.search()
   },
   methods: {
     ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistBootNumDetail'
+      'fetchSkeletonWaistStepsNum'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistBootNumDetail(param)
+      const result = await this.fetchSkeletonWaistStepsNum(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -103,7 +107,17 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonWaistBootNumDetail(param)
+      return await this.fetchSkeletonWaistStepsNum(param)
+    },
+    toDetail(item) {
+      this.$router.push({
+        name: 'skeletonWaistStepByDay',
+        query: {
+          date: this.filter.searchDate,
+          sn: item.deviceModel.sn,
+          model: item.deviceModel.model
+        }
+      })
     },
     async handleSizeChange(val) {
       const result = await this.getData({
@@ -133,7 +147,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.skeletonWaistDevice{
+.skeletonWaistStepNum{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -171,7 +185,7 @@ export default {
 }
 </style>
 <style>
-.skeletonWaistDevice .el-form-item__label{
+.skeletonWaistStepNum .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

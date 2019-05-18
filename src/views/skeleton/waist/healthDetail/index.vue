@@ -1,13 +1,10 @@
 <template>
-  <div class="waistHealth">
-    <div class="waistHealth-title">
+  <div class="skeletonWaistHealthDetail">
+    <div class="skeletonWaistHealthDetail-title">
       <DetailTitle title="健康管理"/>
     </div>
-    <div class="waistHealth-filter">
+    <div class="skeletonWaistHealthDetail-filter">
       <el-form :inline="true">
-        <el-form-item label="弯腰次数">
-          <el-input v-model="filter.num" class="sinput"></el-input>
-        </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
             v-model="filter.searchDate"
@@ -17,32 +14,41 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary waistHealth-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary skeletonWaistHealthDetail-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="waistHealth-table">
-      <table class="selftable selftable-head">
-        <tr>
-          <th width="10%">人员姓名</th>
-          <th width="10%">设备名称</th>
-          <!-- <th width="10%">搬运次数</th> -->
-          <th width="10%">弯腰次数	</th>
-          <th width="10%">疲劳度</th>
-          <th width="10%">最新更新时间</th>
-        </tr>
-      </table>
-      <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
-        <tr>
-          <td width="10%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.name : '' }}</div></td>
-          <td width="10%">{{ item.deviceModel? item.deviceModel.model : '' }}</td>
-          <!-- <td width="10%">{{ item.bendNum }}</td> -->
-          <td width="10%">{{ item.bendNum }}</td>
-          <td width="10%">{{ item.bendNum }}</td>
-          <td width="10%">{{ item.createTime }}</td>
-        </tr>
-      </table>
+    <div class="skeletonWaistHealthDetail-table">
+      <el-tabs tab-position="top" style="height: 200px;">
+        <el-tab-pane label="图表">
+          <div class="chart1">
+            <LittleTitle title="每件搬运的弯腰次数"/>
+            <v-chart
+              :options="bendNumOption"
+              :theme="themebrokeline"
+              style="height: 600px;width: 800px"/>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="列表">
+          <table class="selftable selftable-head">
+            <tr>
+              <th width="15%">序列号</th>
+              <th width="20%">弯腰次数</th>
+              <th width="20%">疲劳度</th>
+              <th width="20%">最新更新时间</th>
+            </tr>
+          </table>
+          <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
+            <tr>
+              <td width="15%">{{ index }}</td>
+              <td width="20%">{{ item.bendNum }}</td>
+              <td width="20%">{{ item.bendNum }}</td>
+              <td width="20%">{{ item.showDate }}</td>
+            </tr>
+          </table>
+        </el-tab-pane>
+      </el-tabs>
     </div>
-    <div class="waistHealth-pagination">
+    <div class="skeletonWaistHealthDetail-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -58,12 +64,18 @@
 <script>
 import { mapActions } from 'vuex'
 import _ from 'lodash'
+import ECharts from 'vue-echarts'
+import 'echarts'
+import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'WaistHealth',
+  name: 'SkeletonWaistHealthDetail',
+  components: {
+    'v-chart': ECharts
+  },
   data() {
     return {
       filter: {
-        bendNum: '',
+        sn: '',
         searchDate: ''
       },
       tableData: [],
@@ -72,51 +84,78 @@ export default {
         typeText: '新增',
         data: {}
       },
-      options: [{
-        value: '1',
-        label: '男'
-      }, {
-        value: '0',
-        label: '女'
-      }],
       formLabelWidth: '100px',
       pagination: {
         currentPage: 1,
         pageSize: 100,
         total: 100
+      },
+      themebrokeline: '',
+      bendNumData: [],
+      bendNumDataX: [],
+      bendNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
       }
     }
   },
   mounted() {
     const date = this.$route.query.date
     this.filter.searchDate = date
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
+    this.themebrokeline = brokeline
     this.search()
   },
   methods: {
     ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistBendNum'
+      'fetchSkeletonWaistBendNumDetail'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistBendNum(param)
+      const result = await this.fetchSkeletonWaistBendNumDetail(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
+      this.bendNumData = this.tableData.map((v) => { return v.bendNum })
+      this.bendNumDataX = this.tableData.map((v) => { return v.showDate })
+      this.bendNumOption.series[0].data = this.bendNumData
+      this.bendNumOption.xAxis.data = this.bendNumDataX
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonWaistBendNum(param)
-    },
-    toDetail(item) {
-      this.$router.push({
-        name: 'skeletonWaistHealthDetail',
-        query: {
-          date: this.filter.searchDate,
-          sn: item.deviceModel.sn
-        }
-      })
+      return await this.fetchSkeletonWaistBendNumDetail(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({
@@ -146,7 +185,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.waistHealth{
+.skeletonWaistHealthDetail{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -187,10 +226,14 @@ export default {
     }
   }
 }
+.chart1{
+    width: 800px;
+    margin: 0 auto;
+}
 
 </style>
 <style>
-.waistHealth .el-form-item__label{
+.skeletonWaistHealthDetail .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

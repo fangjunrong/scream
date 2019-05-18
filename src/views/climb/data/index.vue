@@ -31,7 +31,7 @@
             ref="online"
             :options="activeRateOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="activeRateClick"/>
         </div>
         <div class="chart2">
@@ -39,7 +39,7 @@
           <v-chart
             :options="bootNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="bootNumClick"/>
         </div>
         <div class="chart3">
@@ -47,7 +47,7 @@
           <v-chart
             :options="stepsNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
@@ -55,7 +55,7 @@
           <v-chart
             :options="weightNumOption"
             :theme="themebrokeline"
-            style="height: 300px;width: 400px"
+            style="height: 450px;width: 600px"
             @click="weightClick"/>
         </div>
       </div>
@@ -368,7 +368,7 @@ export default {
     padding: 30px 40px;
     &-container{
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       flex-direction: row;
       flex-wrap: wrap;
     }
