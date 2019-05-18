@@ -10,7 +10,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.date"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -23,21 +23,21 @@
     <div class="waistHealth-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="50">人员姓名</th>
+          <th width="10%">人员姓名</th>
           <th width="10%">设备名称</th>
-          <th width="10%">搬运次数</th>
-          <th width="8%">弯腰次数	</th>
+          <!-- <th width="10%">搬运次数</th> -->
+          <th width="10%">弯腰次数	</th>
           <th width="10%">疲劳度</th>
           <th width="10%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="50">{{ item.name }}</td>
-          <td width="10%">{{ item.name }}</td>
-          <td width="10%">{{ item.num }}</td>
-          <td width="8%">{{ item.num }}</td>
-          <td width="10%">{{ item.height }}</td>
+          <td width="10%">{{ item.deviceModel ? item.deviceModel.name : '' }}</td>
+          <td width="10%">{{ item.deviceModel? item.deviceModel.model : '' }}</td>
+          <!-- <td width="10%">{{ item.bendNum }}</td> -->
+          <td width="10%">{{ item.bendNum }}</td>
+          <td width="10%">{{ item.bendNum }}</td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
       </table>
@@ -96,8 +96,8 @@ export default {
   data() {
     return {
       filter: {
-        num: '',
-        date: ''
+        bendNum: '',
+        searchDate: ''
       },
       tableData: [],
       info: {
@@ -126,13 +126,10 @@ export default {
   },
   methods: {
     ...mapActions('skeletonWaist', [
-      'fetchSkeletonwaistHealthList',
-      'changeSkeletonwaistHealth',
-      'deleteSkeletonwaistHealth',
-      'fetchSkeletonwaistHealthList'
+      'fetchSkeletonWaistBendNum'
     ]),
     async init() {
-      const result = await this.fetchSkeletonwaistHealthList({
+      const result = await this.fetchSkeletonWaistBendNum({
         pageNumber: 1,
         pageSize: 10
       })
@@ -142,7 +139,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      const personList = await this.fetchSkeletonwaistHealthList({
+      const personList = await this.fetchSkeletonWaistBendNum({
         pageNumber: 1,
         pageSize: 100000
       })
@@ -153,7 +150,7 @@ export default {
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonwaistHealthList(param)
+      const result = await this.fetchSkeletonWaistBendNum(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -162,7 +159,7 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonwaistHealthList(param)
+      return await this.fetchSkeletonWaistBendNum(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({

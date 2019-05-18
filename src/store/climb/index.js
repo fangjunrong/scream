@@ -44,10 +44,6 @@ const user = {
       const result = await ajax.post(apiConstant.climbPositionDelete, data)
       return result
     },
-    async fetchClimbDataList({ commit }, data) {
-      const result = await ajax.post(apiConstant.climbDataList, data)
-      return result
-    },
     async fetchClimbActiveRate({ commit }, data) {
       const result = await ajax.post(apiConstant.climbDataActiveRate, data)
       return result

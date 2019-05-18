@@ -83,7 +83,7 @@
       </el-table> -->
       <table class="selftable selftable-head">
         <tr>
-          <th width="50">ID</th>
+          <th width="80">ID</th>
           <th width="10%">名称</th>
           <th width="15%">型号</th>
           <th width="10%">序列号</th>
@@ -97,7 +97,7 @@
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="50">{{ item.id }}</td>
+          <td width="80">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
           <td width="15%">{{ item.model }}</td>
           <td width="10%">{{ item.sn }}</td>

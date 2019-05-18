@@ -15,7 +15,7 @@
     <div class="waistPerson-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="50">ID</th>
+          <th width="80">ID</th>
           <th width="10%">姓名</th>
           <th width="10%">性别</th>
           <th width="8%">年龄</th>
@@ -29,14 +29,14 @@
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="50">{{ item.id }}</td>
+          <td width="80">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
           <td width="10%">{{ item.sex === 1 ? "男" : "女" }}</td>
           <td width="8%">{{ item.age }}</td>
           <td width="10%">{{ item.height }}</td>
           <td width="10%">{{ item.weight }}</td>
           <td width="8%">{{ item.education }}</td>
-          <td width="8%">{{ item.deviceModel }}</td>
+          <td width="8%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
           <td width="15%">{{ item.createTime }}</td>
           <td width="200">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>

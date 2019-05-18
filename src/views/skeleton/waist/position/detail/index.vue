@@ -1,24 +1,24 @@
 <template>
-  <div class="skeletonWaistPosition">
-    <div class="skeletonWaistPosition-title">
+  <div class="waistPositionDetail">
+    <div class="waistPositionDetail-title">
       <!-- //todo -->
       <DetailTitle title="轨迹路径"/>
     </div>
-    <div class="skeletonWaistPosition-filter">
+    <div class="waistPositionDetail-filter">
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary skeletonWaistPosition-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary waistPositionDetail-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="skeletonWaistPosition-table">
+    <div class="waistPositionDetail-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="地图">
           <div id="map" style="height:500px" tabindex="0"></div>
@@ -26,26 +26,24 @@
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="15%">设备ID</th>
-              <th width="20%">设备型号</th>
-              <th width="20%">设备序列号</th>
+              <th width="15%">ID</th>
               <th width="30%">定位信息(经度, 纬度)</th>
-              <th width="20%">更新时间</th>
+              <th width="20%">定位时间</th>
+              <th width="20%">所属时段</th>
             </tr>
           </table>
-          <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+          <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ item.deviceId }}</td>
-              <td width="20%">{{ item.id }}</td>
-              <td width="20%">{{ item.id }}</td>
+              <td width="15%">{{ index }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
+              <td width="20%">{{ item.id }}</td>
             </tr>
           </table>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="skeletonWaistPosition-pagination">
+    <div class="waistPositionDetail-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -64,14 +62,11 @@ import AMap from 'AMap'
 import _ from 'lodash'
 import coordtransform from 'coordtransform'
 export default {
-  name: 'SkeletonWaistPosition',
+  name: 'WaistPositionDetail',
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
-        customer: '',
-        department: ''
+        searchDate: ''
       },
       tableData: [],
       info: {
@@ -93,15 +88,14 @@ export default {
   },
   methods: {
     ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistPositionList',
-      'changeSkeletonWaistPosition',
-      'deleteSkeletonWaistPosition'
+      'fetchSkeletonWaistPositionDetail'
     ]),
     async init() {
       this.sn = this.$route.params.sn
-      const result = await this.fetchSkeletonWaistPositionList({
+      const result = await this.fetchSkeletonWaistPositionDetail({
         pageNumber: 1,
-        pageSize: 10
+        pageSize: 10,
+        sn: this.sn
       })
       if (result.code !== 200) {
         this.$message.warning(result.message)
@@ -113,23 +107,23 @@ export default {
     },
     initMap() {
       const _self = this
-      const _data = { 'company': 'XSTO', 'contacts': '', 'countTotal': 0, 'createTime': 1550545961000, 'currentPage': 0, 'customer': '日日顺-刘女士', 'department': '', 'enablePage': false, 'id': 28, 'isDelete': 0, 'maxRows': 5000, 'model': 'ZW7170ES(1769)/IOT/德聚顺(辽宁)物流有限公司', 'name': '电动载物爬楼机', 'pageSize': 20, 'pages': 0, 'sn': '866289038519734', 'start': 0, 'stepsModels': [{ 'bootNum': 0, 'bootRate': 0.0, 'boots': 0, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542169000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9185826', 'longitude': '121.5899748', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }, { 'bootNum': 0, 'bootRate': 0.0, 'boots': 1, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542260000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9194043', 'longitude': '121.5909837', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }] }
-      //   _self.tableData = tableData
+      // const _data = { 'company': 'XSTO', 'contacts': '', 'countTotal': 0, 'createTime': 1550545961000, 'currentPage': 0, 'customer': '日日顺-刘女士', 'department': '', 'enablePage': false, 'id': 28, 'isDelete': 0, 'maxRows': 5000, 'model': 'ZW7170ES(1769)/IOT/德聚顺(辽宁)物流有限公司', 'name': '电动载物爬楼机', 'pageSize': 20, 'pages': 0, 'sn': '866289038519734', 'start': 0, 'stepsModels': [{ 'bootNum': 0, 'bootRate': 0.0, 'boots': 0, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542169000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9185826', 'longitude': '121.5899748', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }, { 'bootNum': 0, 'bootRate': 0.0, 'boots': 1, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542260000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9194043', 'longitude': '121.5909837', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }] }
+      const _data = _self.tableData
       var map = new AMap.Map('map')
       var point
-      var pointsLen = _data.stepsModels.length
+      var pointsLen = _data.length
       if (pointsLen > 0) {
         var points = []
         var marker
         // convert wgs84 to cj02
-        var cj02 = coordtransform.wgs84togcj02(_data.stepsModels[0].longitude, _data.stepsModels[0].latitude)
+        var cj02 = coordtransform.wgs84togcj02(_data[0].longitude, _data[0].latitude)
         point = new AMap.LngLat(cj02[0], cj02[1])
         map.setCenter(point)// 中心点
         // map.setZoom(13)// 缩放比例
         map.addControl(new AMap.Scale({ visible: true })) // 比例尺
         for (var i = 0; i < pointsLen; i++) {
           // convert wgs84 to cj02
-          cj02 = coordtransform.wgs84togcj02(_data.stepsModels[i].longitude, _data.stepsModels[i].latitude)
+          cj02 = coordtransform.wgs84togcj02(_data[i].longitude, _data[i].latitude)
           point = new AMap.LngLat(cj02[0], cj02[1])
           if (i === (pointsLen - 1)) {
             marker = new AMap.Marker({
@@ -138,7 +132,7 @@ export default {
               title: '设备序列号：' + _self.sn,
               map: map
             })
-            cj02 = coordtransform.wgs84togcj02(_data.stepsModels[0].longitude, _data.stepsModels[0].latitude)
+            cj02 = coordtransform.wgs84togcj02(_data[0].longitude, _data[0].latitude)
             marker = new AMap.Marker({
               map: map,
               position: [cj02[0], cj02[1]],
@@ -177,17 +171,18 @@ export default {
       }
     },
     async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistPositionList(param)
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1, sn: this.sn })
+      const result = await this.fetchSkeletonWaistPositionDetail(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
     },
     async getData(param) {
-      return await this.fetchSkeletonWaistPositionList(param)
+      return await this.fetchSkeletonWaistPositionDetail(param)
     },
     add() {
       this.info.visible = true
@@ -201,7 +196,7 @@ export default {
     },
     async infoSubmit() {
       const id = this.info.data.id ? this.info.data.id : ''
-      const result = await this.changeSkeletonWaistPosition(this.info.data)
+      const result = await this.changeWaistPosition(this.info.data)
       if (result.code !== 200) {
         this.$message.warning(result.message)
         return false
@@ -220,7 +215,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async response => {
-        const result = await this.deleteSkeletonWaistPosition({ id: item.id })
+        const result = await this.deleteWaistPosition({ id: item.id })
         if (result.code !== 200) {
           this.$message.warning(result.message)
           return false
@@ -241,6 +236,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
     },
     async handleCurrentChange(val) {
       const result = await this.getData({
@@ -253,12 +249,13 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
     }
   }
 }
 </script>
 <style lang='scss' scoped>
-.skeletonWaistPosition{
+.waistPositionDetail{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -302,7 +299,7 @@ export default {
 
 </style>
 <style>
-.skeletonWaistPosition .el-form-item__label{
+.waistPositionDetail .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

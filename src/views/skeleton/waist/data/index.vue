@@ -1,50 +1,62 @@
 <template>
-  <div class="waistData">
-    <div class="waistData-title">
+  <div class="skeletonWaistData">
+    <div class="skeletonWaistData-title">
       <DetailTitle title="统计数据"/>
     </div>
-    <div class="waistData-filter">
-      <!-- <el-form :inline="true">
+    <div class="skeletonWaistData-filter">
+      <el-form :inline="true">
         <el-form-item label="客户">
           <el-input v-model="filter.customer" class="sinput"></el-input>
         </el-form-item>
         <el-form-item label="部门">
           <el-input v-model="filter.department" class="sinput"></el-input>
         </el-form-item>
-        <input type="button" class="s-button-primary waistData-filter-search" value="查询" @click="search()"/>
-      </el-form> -->
-      <ul class="waistData-filter-textShow">
+        <input type="button" class="s-button-primary skeletonWaistData-filter-search" value="查询" @click="search()"/>
+      </el-form>
+      <ul class="skeletonWaistData-filter-textShow">
         <li>所有设备（共17台）的使用信息：</li>
-        <li>开机率：5.88235294117647 % ； 台阶数：204 ；开机次数：1；重量等级：2。</li>
+        <li>在线活跃率 5.88235294117647% 弯腰次数：56  开机次数：204</li>
       </ul>
     </div>
-    <div class="waistData-charts">
-      <el-tabs tab-position="top" style="height: 200px;">
-        <el-tab-pane label="一周" @click="showWeekly()"></el-tab-pane>
-        <el-tab-pane label="半月" @click="showHalfMonthly()"></el-tab-pane>
-        <el-tab-pane label="一月" @click="showMonthly()"></el-tab-pane>
+    <div class="skeletonWaistData-charts">
+      <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
+        <el-tab-pane label="一周" name="7"></el-tab-pane>
+        <el-tab-pane label="半月" name="15"></el-tab-pane>
+        <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-      <div class="waistData-charts-container">
+      <div class="skeletonWaistData-charts-container">
         <div class="chart1">
           <LittleTitle title="在线活跃率"/>
           <v-chart
             ref="online"
-            :options="brokeline"
+            :options="activeRateOption"
             :theme="themebrokeline"
             style="height: 300px;width: 400px"
-            @click="brokeClick"/>
+            @click="activeRateClick"/>
         </div>
         <div class="chart2">
-          <LittleTitle title="台阶数"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <LittleTitle title="开机次数"/>
+          <v-chart
+            :options="bootNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="bootNumClick"/>
         </div>
         <div class="chart3">
-          <LittleTitle title="开机次数"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <LittleTitle title="步数"/>
+          <v-chart
+            :options="stepsNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="stepNumClick"/>
         </div>
         <div class="chart4">
-          <LittleTitle title="重量等级"/>
-          <v-chart :options="brokeline" :theme="themebrokeline" style="height: 300px;width: 400px"/>
+          <LittleTitle title="弯腰次数"/>
+          <v-chart
+            :options="bendNumOption"
+            :theme="themebrokeline"
+            style="height: 300px;width: 400px"
+            @click="bendClick"/>
         </div>
       </div>
     </div>
@@ -57,7 +69,7 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'WaistData',
+  name: 'SkeletonWaistData',
   components: {
     'v-chart': ECharts
   },
@@ -72,15 +84,122 @@ export default {
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      onlineData: [320, 680, 280, 480, 1290, 500, 1320],
-      brokeline: {
+      activeName: '30',
+      activeRateData: [],
+      activeRateDataX: [],
+      stepNumData: [],
+      stepNumDataX: [],
+      bootNumData: [],
+      bootNumdataX: [],
+      bendNumData: [],
+      bendNumDataX: '',
+      activeRateOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      stepsNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      bootNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      bendNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
           splitLine: { // 网格线
             'show': false
           },
@@ -108,63 +227,123 @@ export default {
       }
     }
   },
+  watch: {
+    activeName(newValue, oldValue) {
+      this.showDataByDays(newValue)
+    }
+  },
   mounted() {
     this.init()
-    this.themebrokeline = brokeline
-    this.brokeline.series[0].data = this.onlineData
-    // setTimeout(() => {
-    //   this.brokeline.series[0].data = [1, 2, 3, 4]
-    // }, 2000)
   },
   methods: {
-    ...mapActions('climb', [
-      'fetchWaistDataList',
-      'changeWaistData',
-      'deleteWaistData'
+    ...mapActions('skeletonWaist', [
+      'fetchSkeletonWaistActiveRate',
+      'fetchSkeletonWaistBootTotal',
+      'fetchSkeletonWaistStepsTotal',
+      'fetchSkeletonWaistBendTotal'
     ]),
     async init() {
-      // const result = await this.fetchwaistDataList()
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      // }
-      // this.tableData = result.data.result
+      this.themebrokeline = brokeline
+      const activeRateResult = await this.fetchSkeletonWaistBootTotal()
+      if (activeRateResult.code !== 200) {
+        this.$message.warning(activeRateResult.message)
+      }
+      this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
+      this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
+      const bootTotalResult = await this.fetchSkeletonWaistBootTotal()
+      if (bootTotalResult.code !== 200) {
+        this.$message.warning(bootTotalResult.message)
+      }
+      this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
+      this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
+      const stepsTotalResult = await this.fetchSkeletonWaistStepsTotal()
+      if (stepsTotalResult.code !== 200) {
+        this.$message.warning(stepsTotalResult.message)
+      }
+      this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
+      this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
+      const bendTotalResult = await this.fetchSkeletonWaistBendTotal()
+      if (bendTotalResult.code !== 200) {
+        this.$message.warning(bendTotalResult.message)
+      }
+      this.bendNumData = bendTotalResult.data.map((v) => { return v.total })
+      this.bendNumDataX = bendTotalResult.data.map((v) => { return v.showDate })
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.stepsNumOption.series[0].data = this.stepsNumData
+      this.stepsNumOption.xAxis.data = this.stepsNumDataX
+      this.bootNumOption.series[0].data = this.bootNumData
+      this.bootNumOption.xAxis.data = this.bootNumDataX
+      this.bendNumOption.series[0].data = this.bendNumData
+      this.bendNumOption.xAxis.data = this.bendNumDataX
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.activeRateOption.xAxis.data = this.activeRateDataX
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchwaistDataList(param)
+      const result = await this.fetchSkeletonWaistBootTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
     },
     async getData(param) {
-      return await this.fetchwaistDataList(param)
+      return await this.fetchSkeletonWaistBootTotal(param)
     },
-    brokeClick(event) {
+    activeRateClick(event) {
       this.$router.push({
-        name: 'climbBootNum',
+        name: 'skeletonWaistBootNum',
         query: {
           date: event.name
         }
       })
     },
-    showWeekly() {
-
+    bootNumClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistBootNum',
+        query: {
+          date: event.name
+        }
+      })
     },
-    showHalfMonthly() {
-
+    stepNumClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistStepNum',
+        query: {
+          date: event.name
+        }
+      })
     },
-    showHMonthly() {
-
+    bendClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistBend',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    showDataByDays(val) {
+      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
+      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
+      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
+      this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
+      this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
+      this.bendNumOption.series[0].data = this.spliceData(this.bendNumData, 0, val)
+      this.bendNumOption.xAxis.data = this.spliceData(this.bendNumDataX, 0, val)
+      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
+      this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
+    },
+    spliceData(data, index, length) {
+      const _data = _.cloneDeep(data)
+      return _data.splice(index, length)
     }
   }
 }
 </script>
 <style lang='scss' scoped>
-.waistData{
+.skeletonWaistData{
   &-filter{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding: 16px;
     background-color: #001432;
     border-radius: 8px;
@@ -204,12 +383,12 @@ export default {
 
 </style>
 <style>
-.waistData .el-form-item__label{
+.skeletonWaistData .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
 }
-.waistData .el-tabs__nav{
+.skeletonWaistData .el-tabs__nav{
   float: none;
   text-align: center;
 }

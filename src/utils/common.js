@@ -18,6 +18,9 @@ export const PathToChinese = {
 
 export const apiConstant = {
   login: '/login',
+  /*
+  爬楼机
+  */
   climbDeviceList: '/sys/climb/deviceList',
   climbDeviceEdit: '/sys/climb/deviceEdit',
   climbDeviceDelete: '/sys/climb/deviceDelete',
@@ -25,7 +28,6 @@ export const apiConstant = {
   climbPositionDetail: '/sys/climb/positionDetail',
   climbPositionEdit: '/sys/climb/positionEdit',
   climbPositionDelete: '/sys/climb/positionDelete',
-  climbDataList: '/sys/climb/stepList',
   climbDataActiveRate: '/sys/climb/activeRate',
   climbDataBootNum: '/sys/climb/bootNum',
   climbDataBootNumDetail: '/sys/climb/bootNumDetail',
@@ -38,15 +40,31 @@ export const apiConstant = {
   climbDataWeightTotal: '/sys/climb/weightTotal',
   // climbPositionEdit: '/sys/climb/positionEdit',
   // climbPositionDelete: '/sys/climb/positionDelete',
+  /*
+     腰部外骨骼
+   */
   skeletonWaistDeviceList: '/sys/carry/deviceList',
   skeletonWaistDeviceEdit: '/sys/carry/deviceEdit',
   skeletonWaistDeviceDelete: '/sys/carry/deviceDelete',
   skeletonWaistPositionList: '/sys/carry/position',
+  skeletonWaistPositionDetail: '/sys/carry/positionDetail',
   skeletonWaistPositionEdit: '/sys/carry/positionEdit',
   skeletonWaistPositionDelete: '/sys/carry/positionDelete',
   skeletonWaistPersonList: '/sys/carry/personList',
   skeletonWaistPersonEdit: '/sys/carry/personEdit',
   skeletonWaistPersonDelete: '/sys/carry/personDelete',
+  skeletonWaistBendNum: '/sys/carry/bendNum',
+  skeletonWaistDataActiveRate: '/sys/carry/activeRate',
+  skeletonWaistDataBootNum: '/sys/carry/bootNum',
+  skeletonWaistDataBootNumDetail: '/sys/carry/bootNumDetail',
+  skeletonWaistDataBootTotal: '/sys/carry/bootTotal',
+  skeletonWaistDataStepsNum: '/sys/carry/stepsNum',
+  skeletonWaistDataStepsNumDetail: '/sys/carry/stepsNumDetail',
+  skeletonWaistDataStepsTotal: '/sys/carry/stepsTotal',
+  skeletonWaistDataBendNum: '/sys/carry/bendNum',
+  skeletonWaistDataBendNumDetail: '/sys/carry/bendNumDetail',
+  skeletonWaistDataBendTotal: '/sys/carry/bendTotal',
+
   userList: '/sys/user/users',
   userEdit: '/sys/user/useredit',
   userDelete: '/sys/user/userdelete'

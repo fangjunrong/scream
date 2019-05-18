@@ -18,7 +18,7 @@
           <th width="50">ID</th>
           <th width="10%">名称</th>
           <th width="10%">型号</th>
-          <th width="8%">序列号</th>
+          <th width="15%">序列号</th>
           <th width="10%">所属厂商</th>
           <th width="10%">穿戴人员</th>
           <th width="8%">状态</th>
@@ -31,7 +31,7 @@
           <td width="50">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
           <td width="10%">{{ item.model }}</td>
-          <td width="8%">{{ item.sn }}</td>
+          <td width="15%">{{ item.sn }}</td>
           <td width="10%">{{ item.company }}</td>
           <td width="10%">{{ item.personName }}</td>
           <td width="8%">{{ item.status === 1 ? "已绑定" : "未绑定" }}</td>
@@ -268,7 +268,7 @@ export default {
     background-color: #001432;
     border-radius: 8px;
     .sinput{
-      width: 150px;
+      width: 200px;
     }
     .el-form-item{
       margin-bottom: 0;
