@@ -133,8 +133,7 @@ export default {
     ...mapActions('skeletonWaist', [
       'fetchSkeletonWaistPersonList',
       'changeSkeletonWaistPerson',
-      'deleteSkeletonWaistPerson',
-      'fetchSkeletonWaistPersonList'
+      'deleteSkeletonWaistPerson'
     ]),
     async init() {
       const result = await this.fetchSkeletonWaistPersonList({

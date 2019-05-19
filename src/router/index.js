@@ -100,10 +100,25 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/skeleton/arm/position/index')
           }, {
+            path: 'positionDetail',
+            name: 'skeletonArmPositionDetail',
+            component: () =>
+              import('@/views/skeleton/arm/position/detail/index')
+          }, {
             path: 'device',
             name: 'skeletonArmDevice',
             component: () =>
               import('@/views/skeleton/arm/device/index')
+          }, {
+            path: 'health',
+            name: 'skeletonArmHealth',
+            component: () =>
+              import('@/views/skeleton/arm/health/index')
+          }, {
+            path: 'healthDetail',
+            name: 'skeletonArmHealthDetail',
+            component: () =>
+              import('@/views/skeleton/arm/healthDetail/index')
           }, {
             path: 'person',
             name: 'skeletonArmPerson',
@@ -126,9 +141,24 @@ export const constantRouterMap = [
               import('@/views/skeleton/arm/bootNum/index')
           }, {
             path: 'bootNumDetail',
-            name: 'skeletonArm/BootNumDetail',
+            name: 'skeletonArmBootNumDetail',
             component: () =>
               import('@/views/skeleton/arm/bootNumDetail/index')
+          }, {
+            path: 'stepNum',
+            name: 'skeletonArmStepNum',
+            component: () =>
+              import('@/views/skeleton/arm/stepNum/index')
+          }, {
+            path: 'stepNumDetail',
+            name: 'skeletonArmStepNumDetail',
+            component: () =>
+              import('@/views/skeleton/arm/stepNumDetail/index')
+          }, {
+            path: 'stepByDay',
+            name: 'skeletonArmStepByDay',
+            component: () =>
+              import('@/views/skeleton/arm/stepByDay/index')
           }]
         }, {
           path: 'waist',
@@ -212,10 +242,25 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/skeleton/buttock/position/index')
           }, {
+            path: 'positionDetail',
+            name: 'skeletonButtockPositionDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/position/detail/index')
+          }, {
             path: 'device',
             name: 'skeletonButtockDevice',
             component: () =>
               import('@/views/skeleton/buttock/device/index')
+          }, {
+            path: 'health',
+            name: 'skeletonButtockHealth',
+            component: () =>
+              import('@/views/skeleton/buttock/health/index')
+          }, {
+            path: 'healthDetail',
+            name: 'skeletonButtockHealthDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/healthDetail/index')
           }, {
             path: 'person',
             name: 'skeletonButtockPerson',
@@ -241,6 +286,21 @@ export const constantRouterMap = [
             name: 'skeletonButtockBootNumDetail',
             component: () =>
               import('@/views/skeleton/buttock/bootNumDetail/index')
+          }, {
+            path: 'stepNum',
+            name: 'skeletonButtockStepNum',
+            component: () =>
+              import('@/views/skeleton/buttock/stepNum/index')
+          }, {
+            path: 'stepNumDetail',
+            name: 'skeletonButtockStepNumDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/stepNumDetail/index')
+          }, {
+            path: 'stepByDay',
+            name: 'skeletonButtockStepByDay',
+            component: () =>
+              import('@/views/skeleton/buttock/stepByDay/index')
           }]
         }]
       },

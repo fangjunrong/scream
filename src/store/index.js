@@ -4,6 +4,8 @@ import createPersistedState from 'vuex-persistedstate' // localStorage存储持�
 import user from './user/index'
 import climb from './climb/index'
 import skeletonWaist from './skeleton/waist/index'
+import skeletonArm from './skeleton/arm/index'
+import skeletonButtock from './skeleton/buttock/index'
 
 Vue.use(Vuex)
 
@@ -18,7 +20,9 @@ const store = new Vuex.Store({
   modules: {
     user,
     climb,
-    skeletonWaist
+    skeletonWaist,
+    skeletonArm,
+    skeletonButtock
   }
 })
 
