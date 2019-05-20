@@ -28,7 +28,7 @@
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="30%">{{ item.id }}</td>
-          <td width="30%">{{ item.showDate }}</td>
+          <td width="30%">{{ item.createTime }}</td>
           <td width="30%">{{ item.time }}</td>
         </tr>
       </table>

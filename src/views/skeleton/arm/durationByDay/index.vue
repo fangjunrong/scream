@@ -1,24 +1,25 @@
 <template>
-  <div class="skeletonArmStepNumDetail">
-    <div class="skeletonArmStepNumDetail-title">
-      <DetailTitle title="步数详情"/>
+  <div class="skeletonArmDurationByDay">
+    <div class="skeletonArmDurationByDay-title">
+      <DetailTitle title="托举时长"/>
     </div>
-    <div class="skeletonArmStepNumDetail-filter">
+    <div class="skeletonArmDurationByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
-    <div class="skeletonArmStepNumDetail-charts">
+    <div class="skeletonArmDurationByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
         <el-tab-pane label="一周" name="7"></el-tab-pane>
         <el-tab-pane label="半月" name="15"></el-tab-pane>
         <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-      <div class="skeletonArmStepNumDetail-charts-container">
+      <div class="skeletonArmDurationByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="台阶数"/>
+          <LittleTitle title="托举时长"/>
           <v-chart
-            :options="stepsNumOption"
+            :options="durationNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
+            @click="durationClick"
           />
         </div>
       </div>
@@ -32,7 +33,7 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'SkeletonArmStepNumDetail',
+  name: 'ClimbDurationByDay',
   components: {
     'v-chart': ECharts
   },
@@ -41,17 +42,7 @@ export default {
       filter: {
         createTime: ''
       },
-      tableData: [{
-        id: '0',
-        steps: '197',
-        date: '2019-04-26 23:56:20',
-        time: '晚上'
-      }, {
-        id: '1',
-        steps: '208',
-        date: '2019-04-26 21:30:39',
-        time: '晚上'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -64,10 +55,10 @@ export default {
         total: 100
       },
       activeName: '30',
-      stepsNumData: [],
-      stepsNumDataX: [],
+      durationNumData: [],
+      durationNumDataX: [],
       themebrokeline: '',
-      stepsNumOption: {
+      durationNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -116,13 +107,13 @@ export default {
   },
   methods: {
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmStepsNumDetail'
+      'fetchSkeletonArmDurationTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
       const date = this.$route.query.date
       this.filter.searchDate = date
-      const result = await this.fetchSkeletonArmStepsNumDetail({
+      const result = await this.fetchSkeletonArmDurationTotal({
         pageNumber: 1,
         pageSize: 10
       })
@@ -130,14 +121,24 @@ export default {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.stepsNumData = result.data.result.map((v) => { return v.stepsNum })
-      this.stepsNumDataX = result.data.result.map((v) => { return v.showDate })
-      this.stepsNumOption.series[0].data = this.stepsNumData
-      this.stepsNumOption.xAxis.data = this.stepsNumDataX
+      this.durationNumData = result.data.map((v) => { return v.durNum })
+      this.durationNumDataX = result.data.map((v) => { return v.showDate })
+      this.durationNumOption.series[0].data = this.durationNumData
+      this.durationNumOption.xAxis.data = this.durationNumDataX
+    },
+    durationClick(event) {
+      this.$router.push({
+        name: 'skeletonArmDurationNumDetail',
+        query: {
+          date: event.name,
+          sn: this.filter.sn,
+          model: this.filter.model
+        }
+      })
     },
     showDataByDays(val) {
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
+      this.durationNumOption.series[0].data = this.spliceData(this.durationNumData, 0, val)
+      this.durationNumOption.xAxis.data = this.spliceData(this.durationNumDataX, 0, val)
     },
     spliceData(data, index, length) {
       const _data = _.cloneDeep(data)
@@ -147,7 +148,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.skeletonArmStepNumDetail{
+.skeletonArmDurationByDay{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -190,12 +191,12 @@ export default {
 
 </style>
 <style>
-.skeletonArmStepNumDetail .el-form-item__label{
+.skeletonArmDurationByDay .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
 }
-.skeletonArmStepNumDetail .el-tabs__nav{
+.skeletonArmDurationByDay .el-tabs__nav{
   float: none;
   text-align: center;
 }

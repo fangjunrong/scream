@@ -1,4 +1,4 @@
-/bendTotal<template>
+/durationTotal<template>
   <div class="skeletonArmData">
     <div class="skeletonArmData-title">
       <DetailTitle title="统计数据"/>
@@ -14,8 +14,8 @@
         <input type="button" class="s-button-primary skeletonArmData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="skeletonArmData-filter-textShow">
-        <li>所有设备（共17台）的使用信息：</li>
-        <li>在线活跃率 5.88235294117647% 弯腰次数：56  开机次数：204</li>
+        <li>所有设备（共{{ activeRateData.length }}台）的使用信息：</li>
+        <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 托举时长：{{ liftNumData[liftNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonArmData-charts">
@@ -43,20 +43,20 @@
             @click="bootNumClick"/>
         </div>
         <div class="chart3">
-          <LittleTitle title="步数"/>
+          <LittleTitle title="托举次数"/>
           <v-chart
-            :options="stepsNumOption"
+            :options="liftNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
-          <LittleTitle title="弯腰次数"/>
+          <LittleTitle title="托举时长"/>
           <v-chart
-            :options="bendNumOption"
+            :options="durationNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
-            @click="bendClick"/>
+            @click="durationClick"/>
         </div>
       </div>
     </div>
@@ -87,12 +87,12 @@ export default {
       activeName: '30',
       activeRateData: [],
       activeRateDataX: [],
-      stepNumData: [],
-      stepNumDataX: [],
+      liftNumData: [],
+      liftNumDataX: [],
       bootNumData: [],
       bootNumdataX: [],
-      bendNumData: [],
-      bendNumDataX: [],
+      durationNumData: [],
+      durationNumDataX: [],
       activeRateOption: {
         tooltip: {
           trigger: 'item',
@@ -126,7 +126,7 @@ export default {
           }
         }]
       },
-      stepsNumOption: {
+      liftNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -192,7 +192,7 @@ export default {
           }
         }]
       },
-      bendNumOption: {
+      durationNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -239,12 +239,12 @@ export default {
     ...mapActions('skeletonArm', [
       'fetchSkeletonArmActiveRate',
       'fetchSkeletonArmBootTotal',
-      'fetchSkeletonArmStepsTotal',
-      'fetchSkeletonArmBendTotal'
+      'fetchSkeletonArmLiftTotal',
+      'fetchSkeletonArmDurationTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
-      const activeRateResult = await this.fetchSkeletonArmBootTotal()
+      const activeRateResult = await this.fetchSkeletonArmActiveRate()
       if (activeRateResult.code !== 200) {
         this.$message.warning(activeRateResult.message)
       }
@@ -256,25 +256,25 @@ export default {
       }
       this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
       this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
-      const stepsTotalResult = await this.fetchSkeletonArmStepsTotal()
-      if (stepsTotalResult.code !== 200) {
-        this.$message.warning(stepsTotalResult.message)
+      const liftTotalResult = await this.fetchSkeletonArmLiftTotal()
+      if (liftTotalResult.code !== 200) {
+        this.$message.warning(liftTotalResult.message)
       }
-      this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
-      this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
-      const bendTotalResult = await this.fetchSkeletonArmBendTotal()
-      if (bendTotalResult.code !== 200) {
-        this.$message.warning(bendTotalResult.message)
+      this.liftNumData = liftTotalResult.data.map((v) => { return v.total })
+      this.liftNumDataX = liftTotalResult.data.map((v) => { return v.showDate })
+      const durationTotalResult = await this.fetchSkeletonArmDurationTotal()
+      if (durationTotalResult.code !== 200) {
+        this.$message.warning(durationTotalResult.message)
       }
-      this.bendNumData = bendTotalResult.data.map((v) => { return v.total })
-      this.bendNumDataX = bendTotalResult.data.map((v) => { return v.showDate })
+      this.durationNumData = durationTotalResult.data.map((v) => { return v.total })
+      this.durationNumDataX = durationTotalResult.data.map((v) => { return v.showDate })
       this.activeRateOption.series[0].data = this.activeRateData
-      this.stepsNumOption.series[0].data = this.stepsNumData
-      this.stepsNumOption.xAxis.data = this.stepsNumDataX
+      this.liftNumOption.series[0].data = this.liftNumData
+      this.liftNumOption.xAxis.data = this.liftNumDataX
       this.bootNumOption.series[0].data = this.bootNumData
       this.bootNumOption.xAxis.data = this.bootNumDataX
-      this.bendNumOption.series[0].data = this.bendNumData
-      this.bendNumOption.xAxis.data = this.bendNumDataX
+      this.durationNumOption.series[0].data = this.durationNumData
+      this.durationNumOption.xAxis.data = this.durationNumDataX
       this.activeRateOption.series[0].data = this.activeRateData
       this.activeRateOption.xAxis.data = this.activeRateDataX
     },
@@ -307,15 +307,15 @@ export default {
     },
     stepNumClick(event) {
       this.$router.push({
-        name: 'skeletonArmStepNum',
+        name: 'skeletonArmLiftNum',
         query: {
           date: event.name
         }
       })
     },
-    bendClick(event) {
+    durationClick(event) {
       this.$router.push({
-        name: 'skeletonArmHealth',
+        name: 'skeletonArmDurationNum',
         query: {
           date: event.name
         }
@@ -323,12 +323,12 @@ export default {
     },
     showDataByDays(val) {
       this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
+      this.liftNumOption.series[0].data = this.spliceData(this.liftNumData, 0, val)
+      this.liftNumOption.xAxis.data = this.spliceData(this.liftNumDataX, 0, val)
       this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
       this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
-      this.bendNumOption.series[0].data = this.spliceData(this.bendNumData, 0, val)
-      this.bendNumOption.xAxis.data = this.spliceData(this.bendNumDataX, 0, val)
+      this.durationNumOption.series[0].data = this.spliceData(this.durationNumData, 0, val)
+      this.durationNumOption.xAxis.data = this.spliceData(this.durationNumDataX, 0, val)
       this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
       this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
     },

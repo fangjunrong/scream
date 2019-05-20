@@ -75,28 +75,28 @@ const skeletonArm = {
       const result = await ajax.post(apiConstant.skeletonArmDataBootTotal, data)
       return result
     },
-    async fetchSkeletonArmStepsNum({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataStepsNum, data)
+    async fetchSkeletonArmLiftNum({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataLiftNum, data)
       return result
     },
-    async fetchSkeletonArmStepsNumDetail({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataStepsNumDetail, data)
+    async fetchSkeletonArmLiftNumDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataLiftNumDetail, data)
       return result
     },
-    async fetchSkeletonArmStepsTotal({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataStepsTotal, data)
+    async fetchSkeletonArmLiftTotal({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataLiftTotal, data)
       return result
     },
-    async fetchSkeletonArmBendNum({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataBendNum, data)
+    async fetchSkeletonArmDurationNum({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataDurationNum, data)
       return result
     },
-    async fetchSkeletonArmBendNumDetail({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataBendNumDetail, data)
+    async fetchSkeletonArmDurationNumDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataDurationNumDetail, data)
       return result
     },
-    async fetchSkeletonArmBendTotal({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonArmDataBendTotal, data)
+    async fetchSkeletonArmDurationTotal({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataDurationTotal, data)
       return result
     }
   }

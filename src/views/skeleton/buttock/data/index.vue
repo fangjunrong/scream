@@ -1,4 +1,4 @@
-/bendTotal<template>
+<template>
   <div class="skeletonButtockData">
     <div class="skeletonButtockData-title">
       <DetailTitle title="统计数据"/>
@@ -14,8 +14,8 @@
         <input type="button" class="s-button-primary skeletonButtockData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="skeletonButtockData-filter-textShow">
-        <li>所有设备（共17台）的使用信息：</li>
-        <li>在线活跃率 5.88235294117647% 弯腰次数：56  开机次数：204</li>
+        <li>所有设备（共{{ activeRateData.length }}台）的使用信息：</li>
+        <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 支撑时长：{{ durationNumData[durationNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonButtockData-charts">
@@ -51,12 +51,20 @@
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
-          <LittleTitle title="弯腰次数"/>
+          <LittleTitle title="支撑时长"/>
           <v-chart
-            :options="bendNumOption"
+            :options="durationNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
-            @click="bendClick"/>
+            @click="durationClick"/>
+        </div>
+        <div class="chart5">
+          <LittleTitle title="坐下次数"/>
+          <v-chart
+            :options="sitNumOption"
+            :theme="themebrokeline"
+            style="height: 450px;width: 600px"
+            @click="sitClick"/>
         </div>
       </div>
     </div>
@@ -91,8 +99,10 @@ export default {
       stepNumDataX: [],
       bootNumData: [],
       bootNumdataX: [],
-      bendNumData: [],
-      bendNumDataX: [],
+      durationNumData: [],
+      durationNumDataX: [],
+      sitNumData: [],
+      sitNumDataX: [],
       activeRateOption: {
         tooltip: {
           trigger: 'item',
@@ -192,7 +202,40 @@ export default {
           }
         }]
       },
-      bendNumOption: {
+      durationNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      sitNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -240,7 +283,7 @@ export default {
       'fetchSkeletonButtockActiveRate',
       'fetchSkeletonButtockBootTotal',
       'fetchSkeletonButtockStepsTotal',
-      'fetchSkeletonButtockBendTotal'
+      'fetchSkeletonButtockDurationTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
@@ -262,21 +305,29 @@ export default {
       }
       this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
       this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
-      const bendTotalResult = await this.fetchSkeletonButtockBendTotal()
-      if (bendTotalResult.code !== 200) {
-        this.$message.warning(bendTotalResult.message)
+      const durationTotalResult = await this.fetchSkeletonButtockDurationTotal()
+      if (durationTotalResult.code !== 200) {
+        this.$message.warning(durationTotalResult.message)
       }
-      this.bendNumData = bendTotalResult.data.map((v) => { return v.total })
-      this.bendNumDataX = bendTotalResult.data.map((v) => { return v.showDate })
+      this.durationNumData = durationTotalResult.data.map((v) => { return v.total })
+      this.durationNumDataX = durationTotalResult.data.map((v) => { return v.showDate })
+      const sitTotalResult = await this.fetchSkeletonButtockDurationTotal()
+      if (durationTotalResult.code !== 200) {
+        this.$message.warning(durationTotalResult.message)
+      }
+      this.sitNumData = sitTotalResult.data.map((v) => { return v.total })
+      this.sitNumDataX = sitTotalResult.data.map((v) => { return v.showDate })
       this.activeRateOption.series[0].data = this.activeRateData
       this.stepsNumOption.series[0].data = this.stepsNumData
       this.stepsNumOption.xAxis.data = this.stepsNumDataX
       this.bootNumOption.series[0].data = this.bootNumData
       this.bootNumOption.xAxis.data = this.bootNumDataX
-      this.bendNumOption.series[0].data = this.bendNumData
-      this.bendNumOption.xAxis.data = this.bendNumDataX
+      this.durationNumOption.series[0].data = this.durationNumData
+      this.durationNumOption.xAxis.data = this.durationNumDataX
       this.activeRateOption.series[0].data = this.activeRateData
       this.activeRateOption.xAxis.data = this.activeRateDataX
+      this.sitNumOption.series[0].data = this.sitNumData
+      this.sitNumOption.xAxis.data = this.sitNumDataX
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
@@ -313,9 +364,17 @@ export default {
         }
       })
     },
-    bendClick(event) {
+    durationClick(event) {
       this.$router.push({
-        name: 'skeletonButtockHealth',
+        name: 'skeletonButtockDurationNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    sitClick(event) {
+      this.$router.push({
+        name: 'skeletonButtockSitNum',
         query: {
           date: event.name
         }
@@ -327,10 +386,12 @@ export default {
       this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
       this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
       this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
-      this.bendNumOption.series[0].data = this.spliceData(this.bendNumData, 0, val)
-      this.bendNumOption.xAxis.data = this.spliceData(this.bendNumDataX, 0, val)
+      this.durationNumOption.series[0].data = this.spliceData(this.durationNumData, 0, val)
+      this.durationNumOption.xAxis.data = this.spliceData(this.durationNumDataX, 0, val)
       this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
       this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
+      this.sitNumOption.series[0].data = this.spliceData(this.sitNumData, 0, val)
+      this.sitNumOption.xAxis.data = this.spliceData(this.sitNumDataX, 0, val)
     },
     spliceData(data, index, length) {
       const _data = _.cloneDeep(data)

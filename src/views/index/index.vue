@@ -7,11 +7,11 @@
           <div class="index__container-horizon-box1 box" @click="toClimbData">
             <div class="chart1">
               <LittleTitle title="在线活跃率"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="activeRateOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
             <div class="chart2">
               <LittleTitle title="台阶数"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="bootNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -24,10 +24,10 @@
           <div class="index__container-horizon-box3 box circle">
             <LittleTitle title="外骨骼数量 总数量"/>
             <div class="half">
-              <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+              <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px"/>
             </div>
             <div class="half">
-              <v-chart :options="circle" :theme="themeCircle" style="height: 350px;width: 220px"/>
+              <v-chart :options="allNumOption" :theme="themeCircle" style="height: 350px;width: 220px"/>
             </div>
           </div>
         </div>
@@ -35,11 +35,11 @@
           <div class="index__container-horizon-box1 box">
             <div class="chart3" @click="toClimbData">
               <LittleTitle title="开机次数"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="stepsNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
             <div class="chart4">
               <LittleTitle title="重量等级"/>
-              <v-chart :options="brokeline" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="weightNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -64,6 +64,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import ECharts from 'vue-echarts'
 import echarts from 'echarts'
 import circle from '@/utils/echartsTheme/circle.json'
@@ -81,7 +82,147 @@ export default {
   data() {
     return {
       textarea: '',
-      circle: {
+      activeRateData: [],
+      activeRateDataX: [],
+      stepsNumData: [],
+      stepsNumDataX: [],
+      bootNumData: [],
+      bootNumdataX: [],
+      weightNumData: [],
+      weightNumDataX: '',
+      activeRateOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      stepsNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      bootNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      weightNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      skeletonNumOption: {
         title: {
           text: '外骨骼数量',
           left: 'center',
@@ -98,11 +239,11 @@ export default {
           orient: 'vertical',
           show: false,
           x: 'left',
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          data: []
         },
         series: [
           {
-            name: '访问来源',
+            name: '外骨骼数量',
             type: 'pie',
             radius: ['50%', '80%'],
             center: ['50%', '50%'],
@@ -132,8 +273,8 @@ export default {
             },
             data: [
               {
-                value: 335,
-                name: '直接访问',
+                value: 1,
+                name: '手臂外骨骼',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -141,63 +282,155 @@ export default {
                     y: 0,
                     x2: 1,
                     y2: 1,
-                    colorStops: [// {
-                    //     offset: 0, color: 'red' // 0% 处的颜色
-                    // },
-                      { offset: 0.2, color: '#000' // 0% 处的颜色
-                      },
-                      //  {offset: 0.5, color: 'green' // 50% 处的颜色
-                      //  },
-                      {
-                        offset: 1, color: 'blue' // 100% 处的颜色
-                      }],
+                    colorStops: [{
+                      offset: 0, color: '#9fff17' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#ffbd00' // 100% 处的颜色
+                    }],
                     globalCoord: true // 缺省为 false
                   }
                 }
               },
-              { value: 310,
-                name: '邮件营销'
+              { value: 1,
+                name: '腰部外骨骼',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 0, color: '#45fbff' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#05496d' // 100% 处的颜色
+                    }],
+                    globalCoord: true // 缺省为 false
+                  }
+                }
               },
-              { value: 234, name: '联盟广告' },
-              { value: 135, name: '视频广告' },
-              { value: 1548, name: '搜索引擎' }
+              { value: 1,
+                name: '臀部外骨骼',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 0, color: '#ffe742' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#ff9f49' // 100% 处的颜色
+                    }],
+                    globalCoord: true // 缺省为 false
+                  }
+                }}
             ]
           }
         ]
       },
-      brokeline: {
+      allNumOption: {
+        title: {
+          text: '总数量',
+          left: 'center',
+          textStyle: {
+            fontSize: '16',
+            color: '#e1e1e1'
+          }
+        },
         tooltip: {
           trigger: 'item',
-          formatter: '{b}: {c}'
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          splitLine: { // 网格线
-            'show': false
-          },
-          axisTick: {
-            show: false
-          }
+        legend: {
+          orient: 'vertical',
+          show: false,
+          x: 'left',
+          data: []
         },
-        yAxis: {
-          type: 'value',
-          axisTick: {
-            show: false
+        series: [
+          {
+            name: '总数量',
+            type: 'pie',
+            radius: ['50%', '80%'],
+            center: ['50%', '50%'],
+            avoidLabelOverlap: false,
+            hoverAnimation: false,
+            itemStyle: {
+              borderWidth: 20, // 设置border的宽度有多大
+              borderColor: '#001430'
+            },
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {
+                value: 1,
+                name: '爬楼机数量',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 0, color: '#9fff17' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#ffbd00' // 100% 处的颜色
+                    }],
+                    globalCoord: true // 缺省为 false
+                  }
+                }
+              },
+              { value: 1,
+                name: '外骨骼数量',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 0, color: '#45fbff' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#05496d' // 100% 处的颜色
+                    }],
+                    globalCoord: true // 缺省为 false
+                  }
+                }
+              }
+            ]
           }
-        },
-        series: [{
-          data: [320, 680, 280, 480, 1290, 500, 1320],
-          type: 'line',
-          color: '#4ac9d6',
-          itemStyle: {
-            normal: {
-              color: '#4ac9d6',
-              borderColor: '#fff' // 拐点边框颜色
-            }
-          }
-        }]
+        ]
       },
+      skeletonArmNum: 1,
+      skeletonWaistNum: 1,
+      skeletonButtockNum: 1,
+      skeletonNum: 1,
+      climbNum: 1,
       arealine: {
         tooltip: {
           trigger: 'item',
@@ -248,7 +481,7 @@ export default {
           }
         },
         legend: {
-          data: ['2011年', '2012年']
+          data: ['开机次数', '弯腰次数']
         },
         grid: {
           left: '3%',
@@ -268,7 +501,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)'],
+          data: ['爬楼机', '手臂外骨骼', '腰部外骨骼', '臀部外骨骼'],
           splitLine: { // 网格线
             'show': false
           },
@@ -278,7 +511,7 @@ export default {
         },
         series: [
           {
-            name: '2011年',
+            name: '开机次数',
             type: 'bar',
             itemStyle: {
               normal: {
@@ -291,15 +524,19 @@ export default {
                 )
               }
             },
-            data: [18203, 23489, 29034, 104970, 131744, 630230]
+            data: [120, 40, 50, 30]
           },
           {
-            name: '2012年',
+            name: '弯腰次数',
             type: 'bar',
-            data: [19325, 23438, 31000, 121594, 134141, 681807]
+            data: [30, 50, 80, 59]
           }
         ]
       },
+      climbBootNum: 1,
+      skeletonArmBootNum: 1,
+      skeletonWaistBootNum: 1,
+      skeletonButtockBootNum: 1,
       themeCircle: '',
       themebrokeline: '',
       themearealine: '',
@@ -308,11 +545,88 @@ export default {
   },
   mounted() {
     this.themeCircle = circle
-    this.themebrokeline = brokeline
     this.themearealine = arealine
     this.themecolumnar = columnar
+    this.initBrokeLine()
+    this.initCircle()
   },
   methods: {
+    ...mapActions('climb', [
+      'fetchClimbActiveRate',
+      'fetchClimbBootTotal',
+      'fetchClimbStepsTotal',
+      'fetchClimbWeightTotal'
+    ]),
+    ...mapActions('skeletonArm', [
+      'fetchSkeletonArmActiveRate'
+    ]),
+    ...mapActions('skeletonWaist', [
+      'fetchSkeletonWaistActiveRate'
+    ]),
+    ...mapActions('skeletonButtock', [
+      'fetchSkeletonButtockActiveRate'
+    ]),
+    async initBrokeLine() {
+      this.themebrokeline = brokeline
+      const activeRateResult = await this.fetchClimbActiveRate()
+      if (activeRateResult.code !== 200) {
+        this.$message.warning(activeRateResult.message)
+      }
+      this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
+      this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
+      this.climbNum = this.activeRateData.length
+      const bootTotalResult = await this.fetchClimbBootTotal()
+      if (bootTotalResult.code !== 200) {
+        this.$message.warning(bootTotalResult.message)
+      }
+      this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
+      this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
+      const stepsTotalResult = await this.fetchClimbStepsTotal()
+      if (stepsTotalResult.code !== 200) {
+        this.$message.warning(stepsTotalResult.message)
+      }
+      this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
+      this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
+      const weightTotalResult = await this.fetchClimbWeightTotal()
+      if (weightTotalResult.code !== 200) {
+        this.$message.warning(weightTotalResult.message)
+      }
+      this.weightNumData = weightTotalResult.data.map((v) => { return v.total })
+      this.weightNumDataX = weightTotalResult.data.map((v) => { return v.showDate })
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.stepsNumOption.series[0].data = this.stepsNumData
+      this.stepsNumOption.xAxis.data = this.stepsNumDataX
+      this.bootNumOption.series[0].data = this.bootNumData
+      this.bootNumOption.xAxis.data = this.bootNumDataX
+      this.weightNumOption.series[0].data = this.weightNumData
+      this.weightNumOption.xAxis.data = this.weightNumDataX
+      this.activeRateOption.series[0].data = this.activeRateData
+      this.activeRateOption.xAxis.data = this.activeRateDataX
+    },
+    async initCircle() {
+      const armResult = await this.fetchSkeletonArmActiveRate()
+      if (armResult.code !== 200) {
+        this.$message.warning(armResult.message)
+      }
+      this.skeletonArmNum = armResult.data.length
+      const waistResult = await this.fetchSkeletonWaistActiveRate()
+      if (waistResult.code !== 200) {
+        this.$message.warning(waistResult.message)
+      }
+      this.skeletonWaistNum = waistResult.data.length
+      const buttockResult = await this.fetchSkeletonButtockActiveRate()
+      if (buttockResult.code !== 200) {
+        this.$message.warning(buttockResult.message)
+      }
+      this.skeletonButtockNum = buttockResult.data.length
+      this.skeletonNumOption.series[0].data[0].value = this.skeletonArmNum
+      this.skeletonNumOption.series[0].data[1].value = this.skeletonWaistNum
+      this.skeletonNumOption.series[0].data[2].value = this.skeletonButtockNum
+      this.skeletonNum = this.skeletonArmNum + this.skeletonWaistNum + this.skeletonButtockNum
+      this.allNum = this.climbNum + this.skeletonNum
+      this.allNumOption.series[0].data[0].value = this.climbNum
+      this.allNumOption.series[0].data[1].value = this.skeletonNum
+    },
     toClimbData() {
       this.$router.push({ name: 'climbData' })
     }

@@ -1,9 +1,9 @@
 <template>
-  <div class="skeletonWaistStepNum">
-    <div class="skeletonWaistStepNum-title">
-      <DetailTitle :sub-title="filter.searchDate" title="步数"/>
+  <div class="skeletonButtockSitNum">
+    <div class="skeletonButtockSitNum-title">
+      <DetailTitle :sub-title="filter.searchDate" title="坐下次数"/>
     </div>
-    <div class="skeletonWaistStepNum-filter">
+    <div class="skeletonButtockSitNum-filter">
       <el-form :inline="true">
         <el-form-item label="客户">
           <el-input v-model="filter.customer" class="sinput"></el-input>
@@ -20,16 +20,16 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary skeletonWaistStepNum-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary skeletonButtockSitNum-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="skeletonWaistStepNum-table">
+    <div class="skeletonButtockSitNum-table">
       <table class="selftable selftable-head">
         <tr>
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">步数</th>
+          <th width="30%">坐下次数</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
@@ -38,12 +38,12 @@
           <td width="15%">{{ item.deviceId }}</td>
           <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
           <td width="20%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.sn : '' }}</div></td>
-          <td width="30%">{{ item.stepsNum }}</td>
+          <td width="30%">{{ item.sitNum }}</td>
           <td width="20%">{{ item.createTime }}</td>
         </tr>
       </table>
     </div>
-    <div class="skeletonWaistStepNum-pagination">
+    <div class="skeletonButtockSitNum-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -60,7 +60,7 @@
 import { mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
-  name: 'SkeletonWaistStepNum',
+  name: 'SkeletonButtockSitNum',
   data() {
     return {
       filter: {
@@ -81,8 +81,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      bootNum: {},
-      stepsNum: {}
+      sitNum: {}
     }
   },
   mounted() {
@@ -93,12 +92,12 @@ export default {
     this.search()
   },
   methods: {
-    ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistStepsNum'
+    ...mapActions('skeletonButtock', [
+      'fetchSkeletonButtockSitNum'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistStepsNum(param)
+      const result = await this.fetchSkeletonButtockSitNum(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -107,11 +106,11 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonWaistStepsNum(param)
+      return await this.fetchSkeletonButtockSitNum(param)
     },
     toDetail(item) {
       this.$router.push({
-        name: 'skeletonWaistStepByDay',
+        name: 'skeletonButtockSitByDay',
         query: {
           date: item.showDate,
           sn: item.deviceModel.sn,
@@ -147,7 +146,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.skeletonWaistStepNum{
+.skeletonButtockSitNum{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -185,7 +184,7 @@ export default {
 }
 </style>
 <style>
-.skeletonWaistStepNum .el-form-item__label{
+.skeletonButtockSitNum .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

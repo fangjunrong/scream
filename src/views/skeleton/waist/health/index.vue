@@ -113,7 +113,7 @@ export default {
       this.$router.push({
         name: 'skeletonWaistHealthDetail',
         query: {
-          date: this.filter.searchDate,
+          date: item.showDate,
           sn: item.deviceModel.sn
         }
       })

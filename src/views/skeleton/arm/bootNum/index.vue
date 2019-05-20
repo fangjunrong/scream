@@ -110,7 +110,7 @@ export default {
       this.$router.push({
         name: 'skeletonArmBootNumDetail',
         query: {
-          date: this.filter.searchDate,
+          date: item.showDate,
           sn: item.deviceModel.sn
         }
       })

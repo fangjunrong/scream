@@ -110,7 +110,7 @@ export default {
       this.$router.push({
         name: 'skeletonWaistBootNumDetail',
         query: {
-          date: this.filter.searchDate,
+          date: item.showDate,
           sn: item.deviceModel.sn
         }
       })

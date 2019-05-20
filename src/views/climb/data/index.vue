@@ -14,8 +14,9 @@
         <input type="button" class="s-button-primary climbData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="climbData-filter-textShow">
-        <li>所有设备（共17台）的使用信息：</li>
-        <li>在线活跃率： 5.88235294117647 %  台阶数：204 开机次数： 1重量等级：2</li>
+        <li>所有设备（共 {{ activeRateData.length }} 台）的使用信息：</li>
+        <li>在线活跃率： {{ activeRateData[activeRateData.length - 1] }} %  台阶数：{{ stepsNumData[stepsNumData.length -1] }}
+          开机次数： {{ bootNumData[bootNumData.length - 1] }}重量等级：{{ weightNumData[weightNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="climbData-charts">
@@ -87,8 +88,8 @@ export default {
       activeName: '30',
       activeRateData: [],
       activeRateDataX: [],
-      stepNumData: [],
-      stepNumDataX: [],
+      stepsNumData: [],
+      stepsNumDataX: [],
       bootNumData: [],
       bootNumdataX: [],
       weightNumData: [],

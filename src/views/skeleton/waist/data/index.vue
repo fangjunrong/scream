@@ -14,8 +14,8 @@
         <input type="button" class="s-button-primary skeletonWaistData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="skeletonWaistData-filter-textShow">
-        <li>所有设备（共17台）的使用信息：</li>
-        <li>在线活跃率 5.88235294117647% 弯腰次数：56  开机次数：204</li>
+        <li>所有设备（共{{ activeRateData.length }}台）的使用信息：</li>
+        <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 弯腰次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonWaistData-charts">
@@ -87,8 +87,8 @@ export default {
       activeName: '30',
       activeRateData: [],
       activeRateDataX: [],
-      stepNumData: [],
-      stepNumDataX: [],
+      stepsNumData: [],
+      stepsNumDataX: [],
       bootNumData: [],
       bootNumdataX: [],
       bendNumData: [],

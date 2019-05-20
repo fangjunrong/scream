@@ -44,7 +44,7 @@
             <tr>
               <td width="15%">{{ index }}</td>
               <td width="20%">{{ item.weightNum }}</td>
-              <td width="20%">{{ item.showDate }}</td>
+              <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.showDate }}</td>
             </tr>
           </table>

@@ -113,7 +113,7 @@ export default {
       this.$router.push({
         name: 'skeletonButtockStepByDay',
         query: {
-          date: this.filter.searchDate,
+          date: item.showDate,
           sn: item.deviceModel.sn,
           model: item.deviceModel.model
         }

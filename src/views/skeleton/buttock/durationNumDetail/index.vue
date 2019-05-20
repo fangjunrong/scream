@@ -1,9 +1,9 @@
 <template>
-  <div class="skeletonArmHealthDetail">
-    <div class="skeletonArmHealthDetail-title">
-      <DetailTitle title="健康管理"/>
+  <div class="skeletonButtockDurationDetail">
+    <div class="skeletonButtockDurationDetail-title">
+      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="支撑时长详情"/>
     </div>
-    <div class="skeletonArmHealthDetail-filter">
+    <div class="skeletonButtockDurationDetail-filter">
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
@@ -14,41 +14,44 @@
             value-format="yyyy-MM-dd"
             class="sinput"></el-date-picker>
         </el-form-item>
-        <input type="button" class="s-button-primary skeletonArmHealthDetail-filter-search" value="查询" @click="search()"/>
+        <input type="button" class="s-button-primary skeletonButtockDurationDetail-filter-search" value="查询" @click="search()"/>
       </el-form>
     </div>
-    <div class="skeletonArmHealthDetail-table">
+    <div class="skeletonButtockDurationDetail-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="图表">
-          <div class="chart1">
-            <LittleTitle title="每件搬运的弯腰次数"/>
-            <v-chart
-              :options="bendNumOption"
-              :theme="themebrokeline"
-              style="height: 600px;width: 800px"/>
+          <div class="skeletonButtockDurationDetail-charts-container">
+            <div class="chart1">
+              <LittleTitle title="支撑时长"/>
+              <v-chart
+                ref="online"
+                :options="brokeline"
+                :theme="themebrokeline"
+                style="height: 450px;width: 600px"/>
+            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="15%">序列号</th>
-              <th width="20%">弯腰次数</th>
-              <th width="20%">疲劳度</th>
-              <th width="20%">最新更新时间</th>
+              <th width="15%">ID</th>
+              <th width="20%">支撑时长</th>
+              <th width="20%">使用时间</th>
+              <th width="20%">所属时段</th>
             </tr>
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ index }}</td>
-              <td width="20%">{{ item.bendNum }}</td>
-              <td width="20%">{{ item.bendNum }}</td>
+              <td width="20%">{{ item.durNum }}</td>
               <td width="20%">{{ item.createTime }}</td>
+              <td width="20%">{{ item.showDate }}</td>
             </tr>
           </table>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="skeletonArmHealthDetail-pagination">
+    <div class="skeletonButtockDurationDetail-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -68,14 +71,13 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'SkeletonArmHealthDetail',
+  name: 'SkeletonButtockDurationDetail',
   components: {
     'v-chart': ECharts
   },
   data() {
     return {
       filter: {
-        sn: '',
         searchDate: ''
       },
       tableData: [],
@@ -91,16 +93,14 @@ export default {
         total: 100
       },
       themebrokeline: '',
-      bendNumData: [],
-      bendNumDataX: [],
-      bendNumOption: {
+      brokeline: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: [],
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
           splitLine: { // 网格线
             'show': false
           },
@@ -115,7 +115,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [320, 680, 280, 480, 1290, 500, 1320],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -129,33 +129,47 @@ export default {
     }
   },
   mounted() {
-    const date = this.$route.query.date
-    this.filter.searchDate = date
+    const searchDate = this.$route.query.date
+    this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
     this.filter.sn = sn
-    this.themebrokeline = brokeline
-    this.search()
+    this.init()
   },
   methods: {
-    ...mapActions('skeletonArm', [
-      'fetchSkeletonArmBendNumDetail'
+    ...mapActions('skeletonButtock', [
+      'fetchSkeletonButtockDurationNumDetail'
     ]),
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonArmBendNumDetail(param)
+    async init() {
+      const result = await this.fetchSkeletonButtockDurationNumDetail({
+        pageNumber: 1,
+        pageSize: 10
+      })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.bendNumData = this.tableData.map((v) => { return v.bendNum })
-      this.bendNumDataX = this.tableData.map((v) => { return v.showDate })
-      this.bendNumOption.series[0].data = this.bendNumData
-      this.bendNumOption.xAxis.data = this.bendNumDataX
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
+    },
+    initCharts() {
+      this.themebrokeline = brokeline
+      this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')
+      this.brokeline.series[0].data = _.map(this.tableData, 'durNum')
+    },
+    async search() {
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
+      const result = await this.fetchSkeletonButtockDurationNumDetail(param)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
     async getData(param) {
-      return await this.fetchSkeletonArmBendNumDetail(param)
+      return await this.fetchSkeletonButtockDurationNumDetail(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({
@@ -168,6 +182,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     },
     async handleCurrentChange(val) {
       const result = await this.getData({
@@ -180,12 +195,13 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     }
   }
 }
 </script>
 <style lang='scss' scoped>
-.skeletonArmHealthDetail{
+.skeletonButtockDurationDetail{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -219,6 +235,18 @@ export default {
       }
     }
   }
+  &-charts{
+    background-color: #001432;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 30px 40px;
+    &-container{
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
   &-pagination{
     margin-top: 42px;
     .el-pagination{
@@ -226,14 +254,10 @@ export default {
     }
   }
 }
-.chart1{
-    width: 800px;
-    margin: 0 auto;
-}
 
 </style>
 <style>
-.skeletonArmHealthDetail .el-form-item__label{
+.skeletonButtockDurationDetail .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;

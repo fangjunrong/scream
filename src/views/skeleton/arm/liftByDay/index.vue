@@ -1,25 +1,25 @@
 <template>
-  <div class="skeletonArmStepByDay">
-    <div class="skeletonArmStepByDay-title">
-      <DetailTitle title="步数"/>
+  <div class="skeletonArmLiftByDay">
+    <div class="skeletonArmLiftByDay-title">
+      <DetailTitle title="托举次数"/>
     </div>
-    <div class="skeletonArmStepByDay-filter">
+    <div class="skeletonArmLiftByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
     </div>
-    <div class="skeletonArmStepByDay-charts">
+    <div class="skeletonArmLiftByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
         <el-tab-pane label="一周" name="7"></el-tab-pane>
         <el-tab-pane label="半月" name="15"></el-tab-pane>
         <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
-      <div class="skeletonArmStepByDay-charts-container">
+      <div class="skeletonArmLiftByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="重量等级"/>
+          <LittleTitle title="托举次数"/>
           <v-chart
-            :options="stepNumOption"
+            :options="liftNumOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
-            @click="stepClick"
+            @click="liftClick"
           />
         </div>
       </div>
@@ -33,7 +33,7 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'ClimbStepByDay',
+  name: 'ClimbLiftByDay',
   components: {
     'v-chart': ECharts
   },
@@ -44,12 +44,12 @@ export default {
       },
       tableData: [{
         id: '0',
-        steps: '197',
+        lifts: '197',
         date: '2019-04-26 23:56:20',
         time: '晚上'
       }, {
         id: '1',
-        steps: '208',
+        lifts: '208',
         date: '2019-04-26 21:30:39',
         time: '晚上'
       }],
@@ -65,10 +65,10 @@ export default {
         total: 100
       },
       activeName: '30',
-      stepNumData: [],
-      stepNumDataX: [],
+      liftNumData: [],
+      liftNumDataX: [],
       themebrokeline: '',
-      stepNumOption: {
+      liftNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -117,13 +117,13 @@ export default {
   },
   methods: {
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmStepsTotal'
+      'fetchSkeletonArmLiftTotal'
     ]),
     async init() {
       this.themebrokeline = brokeline
       const date = this.$route.query.date
       this.filter.searchDate = date
-      const result = await this.fetchSkeletonArmStepsTotal({
+      const result = await this.fetchSkeletonArmLiftTotal({
         pageNumber: 1,
         pageSize: 10
       })
@@ -131,24 +131,23 @@ export default {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.stepNumData = result.data.map((v) => { return v.stepsNum })
-      this.stepNumDataX = result.data.map((v) => { return v.showDate })
-      this.stepNumOption.series[0].data = this.stepNumData
-      this.stepNumOption.xAxis.data = this.stepNumDataX
+      this.liftNumData = result.data.map((v) => { return v.liftNum })
+      this.liftNumDataX = result.data.map((v) => { return v.showDate })
+      this.liftNumOption.series[0].data = this.liftNumData
+      this.liftNumOption.xAxis.data = this.liftNumDataX
     },
-    stepClick(event) {
+    liftClick(event) {
       this.$router.push({
-        name: 'skeletonArmStepNumDetail',
+        name: 'skeletonArmLiftNumDetail',
         query: {
           date: event.name,
-          sn: this.filter.sn,
-          model: this.filter.model
+          sn: this.filter.sn
         }
       })
     },
     showDataByDays(val) {
-      this.stepNumOption.series[0].data = this.spliceData(this.stepNumData, 0, val)
-      this.stepNumOption.xAxis.data = this.spliceData(this.stepNumDataX, 0, val)
+      this.liftNumOption.series[0].data = this.spliceData(this.liftNumData, 0, val)
+      this.liftNumOption.xAxis.data = this.spliceData(this.liftNumDataX, 0, val)
     },
     spliceData(data, index, length) {
       const _data = _.cloneDeep(data)
@@ -158,7 +157,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-.skeletonArmStepByDay{
+.skeletonArmLiftByDay{
   &-filter{
     padding: 16px;
     background-color: #001432;
@@ -201,12 +200,12 @@ export default {
 
 </style>
 <style>
-.skeletonArmStepByDay .el-form-item__label{
+.skeletonArmLiftByDay .el-form-item__label{
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
 }
-.skeletonArmStepByDay .el-tabs__nav{
+.skeletonArmLiftByDay .el-tabs__nav{
   float: none;
   text-align: center;
 }

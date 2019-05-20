@@ -145,20 +145,35 @@ export const constantRouterMap = [
             component: () =>
               import('@/views/skeleton/arm/bootNumDetail/index')
           }, {
-            path: 'stepNum',
-            name: 'skeletonArmStepNum',
+            path: 'liftNum',
+            name: 'skeletonArmLiftNum',
             component: () =>
-              import('@/views/skeleton/arm/stepNum/index')
+              import('@/views/skeleton/arm/liftNum/index')
           }, {
-            path: 'stepNumDetail',
-            name: 'skeletonArmStepNumDetail',
+            path: 'liftNumDetail',
+            name: 'skeletonArmLiftNumDetail',
             component: () =>
-              import('@/views/skeleton/arm/stepNumDetail/index')
+              import('@/views/skeleton/arm/liftNumDetail/index')
           }, {
-            path: 'stepByDay',
-            name: 'skeletonArmStepByDay',
+            path: 'liftByDay',
+            name: 'skeletonArmLiftByDay',
             component: () =>
-              import('@/views/skeleton/arm/stepByDay/index')
+              import('@/views/skeleton/arm/liftByDay/index')
+          }, {
+            path: 'durationNum',
+            name: 'skeletonArmDurationNum',
+            component: () =>
+              import('@/views/skeleton/arm/durationNum/index')
+          }, {
+            path: 'durationNumDetail',
+            name: 'skeletonArmDurationNumDetail',
+            component: () =>
+              import('@/views/skeleton/arm/durationNumDetail/index')
+          }, {
+            path: 'durationByDay',
+            name: 'skeletonArmDurationByDay',
+            component: () =>
+              import('@/views/skeleton/arm/durationByDay/index')
           }]
         }, {
           path: 'waist',
@@ -301,6 +316,36 @@ export const constantRouterMap = [
             name: 'skeletonButtockStepByDay',
             component: () =>
               import('@/views/skeleton/buttock/stepByDay/index')
+          }, {
+            path: 'durationNum',
+            name: 'skeletonButtockDurationNum',
+            component: () =>
+              import('@/views/skeleton/buttock/durationNum/index')
+          }, {
+            path: 'durationNumDetail',
+            name: 'skeletonButtockDurationNumDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/durationNumDetail/index')
+          }, {
+            path: 'durationByDay',
+            name: 'skeletonButtockDurationByDay',
+            component: () =>
+              import('@/views/skeleton/buttock/durationByDay/index')
+          }, {
+            path: 'sitNum',
+            name: 'skeletonButtockSitNum',
+            component: () =>
+              import('@/views/skeleton/buttock/sitNum/index')
+          }, {
+            path: 'sitNumDetail',
+            name: 'skeletonButtockSitNumDetail',
+            component: () =>
+              import('@/views/skeleton/buttock/sitNumDetail/index')
+          }, {
+            path: 'sitByDay',
+            name: 'skeletonButtockSitByDay',
+            component: () =>
+              import('@/views/skeleton/buttock/sitByDay/index')
           }]
         }]
       },

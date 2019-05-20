@@ -87,16 +87,28 @@ const skeletonButtock = {
       const result = await ajax.post(apiConstant.skeletonButtockDataStepsTotal, data)
       return result
     },
-    async fetchSkeletonButtockBendNum({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonButtockDataBendNum, data)
+    async fetchSkeletonButtockSitNum({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataSitNum, data)
       return result
     },
-    async fetchSkeletonButtockBendNumDetail({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonButtockDataBendNumDetail, data)
+    async fetchSkeletonButtockSitNumDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataSitNumDetail, data)
       return result
     },
-    async fetchSkeletonButtockBendTotal({ commit }, data) {
-      const result = await ajax.post(apiConstant.skeletonButtockDataBendTotal, data)
+    async fetchSkeletonButtockSitTotal({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataSitTotal, data)
+      return result
+    },
+    async fetchSkeletonButtockDurationNum({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataDurationNum, data)
+      return result
+    },
+    async fetchSkeletonButtockDurationNumDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataDurationNumDetail, data)
+      return result
+    },
+    async fetchSkeletonButtockDurationTotal({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataDurationTotal, data)
       return result
     }
   }

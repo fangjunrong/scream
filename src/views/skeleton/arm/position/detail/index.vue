@@ -37,7 +37,7 @@
               <td width="15%">{{ index }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
-              <td width="20%">{{ item.id }}</td>
+              <td width="20%">{{ item.time }}</td>
             </tr>
           </table>
         </el-tab-pane>
