@@ -35,8 +35,8 @@
           <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ item.deviceId }}</td>
-              <td width="20%">{{ item.deviceModel.model }}</td>
-              <td width="20%">{{ item.deviceModel.sn }}</td>
+              <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
+              <td width="20%">{{ item.deviceModel ? item.deviceModel.sn : '' }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>

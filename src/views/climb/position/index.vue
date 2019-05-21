@@ -41,8 +41,8 @@
           <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ item.deviceId }}</td>
-              <td width="20%">{{ item.climbDeviceModel.model }}</td>
-              <td width="20%">{{ item.climbDeviceModel.sn }}</td>
+              <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
+              <td width="20%">{{ item.deviceModel ? item.deviceModel.sn : '' }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>
@@ -126,7 +126,7 @@ export default {
         var marker = new AMap.Marker({
           position: point,
           // offset: new AMap.Pixel(-12,-12),
-          title: _self.tableData[0].climbDeviceModel.model + ' : ' + _self.tableData[0].id,
+          title: _self.tableData[0].deviceModel.model + ' : ' + _self.tableData[0].id,
           map: map
         })
         marker.on('click', function() { _self.jumpToDetail(_self.tableData[0].id) }, _self.tableData[0].id)
@@ -137,7 +137,7 @@ export default {
           marker = new AMap.Marker({
             position: point,
             // offset: new AMap.Pixel(-12,-12),
-            title: _self.tableData[i].climbDeviceModel.model + ' : ' + _self.tableData[i].id,
+            title: _self.tableData[i].deviceModel.model + ' : ' + _self.tableData[i].id,
             map: map
           })
           marker.on('click', function() { _self.jumpToDetail(_self.tableData[i].id) }, _self.tableData[i].id)

@@ -3,7 +3,7 @@
     <el-menu
       :unique-opened="true"
       :router="true"
-      default-active="1"
+      :default-active="$route.path"
       class="el-menu-vertical-demo"
       background-color="#545c64"
       text-color="#fff"

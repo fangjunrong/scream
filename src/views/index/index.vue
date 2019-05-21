@@ -4,14 +4,14 @@
     <transition name="el-zoom-in-top">
       <div class="index__container">
         <div class="index__container-top boxs">
-          <div class="index__container-horizon-box1 box" @click="toClimbData">
+          <div class="index__container-horizon-box1 box">
             <div class="chart1">
               <LittleTitle title="在线活跃率"/>
-              <v-chart :options="activeRateOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="activeRateOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbActiveRateClick"/>
             </div>
             <div class="chart2">
-              <LittleTitle title="台阶数"/>
-              <v-chart :options="bootNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <LittleTitle title="开机次数"/>
+              <v-chart :options="stepsNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbBootNumClick"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -24,33 +24,33 @@
           <div class="index__container-horizon-box3 box circle">
             <LittleTitle title="外骨骼数量 总数量"/>
             <div class="half">
-              <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px"/>
+              <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
             </div>
             <div class="half">
-              <v-chart :options="allNumOption" :theme="themeCircle" style="height: 350px;width: 220px"/>
+              <v-chart :options="allNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
             </div>
           </div>
         </div>
         <div class="index__container-bottom boxs">
           <div class="index__container-horizon-box1 box">
-            <div class="chart3" @click="toClimbData">
-              <LittleTitle title="开机次数"/>
-              <v-chart :options="stepsNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+            <div class="chart3">
+              <LittleTitle title="台阶数"/>
+              <v-chart :options="bootNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbStepNumClick"/>
             </div>
             <div class="chart4">
               <LittleTitle title="重量等级"/>
-              <v-chart :options="weightNumOption" :theme="themebrokeline" style="height: 194px;width: 268px"/>
+              <v-chart :options="weightNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbWeightClick"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
             <div class="half">
               <LittleTitle title="工作效率"/>
-              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px" @click="workEfficiency"/>
               <div class="summary">工作效率（按月）：同比增长 <span class="num">20%</span> ，环比增长 <span class="num">30%</span></div>
             </div>
             <div class="half">
               <LittleTitle title="成本费用"/>
-              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px"/>
+              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px" @click="workEfficiency"/>
               <div class="summary">成本费用（按月）：同比减少 <span class="num">30%</span> ，环比减少 <span class="num">40%</span></div>
             </div>
           </div>
@@ -629,6 +629,66 @@ export default {
     },
     toClimbData() {
       this.$router.push({ name: 'climbData' })
+    },
+    numClick(event) {
+      if (event.name === '臀部外骨骼') {
+        this.$router.push({
+          name: 'skeletonButtock'
+        })
+      } else if (event.name === '腰部外骨骼') {
+        this.$router.push({
+          name: 'skeletonWaist'
+        })
+      } else if (event.name === '手臂外骨骼') {
+        this.$router.push({
+          name: 'skeletonArm'
+        })
+      } else if (event.name === '外骨骼数量') {
+        this.$router.push({
+          name: 'skeletonArm'
+        })
+      } else if (event.name === '爬楼机数量') {
+        this.$router.push({
+          name: 'climb'
+        })
+      }
+    },
+    climbActiveRateClick(event) {
+      this.$router.push({
+        name: 'climbBootNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    climbBootNumClick(event) {
+      this.$router.push({
+        name: 'climbBootNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    climbStepNumClick(event) {
+      this.$router.push({
+        name: 'climbStepNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    climbWeightClick(event) {
+      this.$router.push({
+        name: 'climbWeight',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    workEfficiency(event) {
+      this.$router.push({
+        name: 'skeletonArmBusinessET'
+      })
     }
   }
 }
