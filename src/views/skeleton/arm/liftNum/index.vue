@@ -113,8 +113,11 @@ export default {
       this.$router.push({
         name: 'skeletonArmLiftByDay',
         query: {
+          date: item.showDate,
           sn: item.deviceModel.sn,
-          model: item.deviceModel.model
+          model: item.deviceModel.model,
+          customer: this.filter.customer,
+          department: this.filter.department
         }
       })
     },

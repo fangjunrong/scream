@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockDurationNum">
     <div class="skeletonButtockDurationNum-title">
-      <DetailTitle :sub-title="filter.searchDate" title="托举时长"/>
+      <DetailTitle :sub-title="filter.searchDate" title="支撑时长"/>
     </div>
     <div class="skeletonButtockDurationNum-filter">
       <el-form :inline="true">
@@ -29,7 +29,7 @@
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">托举时长</th>
+          <th width="30%">支撑时长</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>

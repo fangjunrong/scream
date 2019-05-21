@@ -40,19 +40,14 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
-      tableData: [{
-        id: '0',
-        lifts: '197',
-        date: '2019-04-26 23:56:20',
-        time: '晚上'
-      }, {
-        id: '1',
-        lifts: '208',
-        date: '2019-04-26 21:30:39',
-        time: '晚上'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -64,7 +59,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '30',
+      activeName: '7',
       liftNumData: [],
       liftNumDataX: [],
       themebrokeline: '',
@@ -109,29 +104,26 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
-    this.init()
+    this.themebrokeline = brokeline
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
+    this.search()
   },
   methods: {
     ...mapActions('skeletonArm', [
       'fetchSkeletonArmLiftTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchSkeletonArmLiftTotal({
-        pageNumber: 1,
-        pageSize: 10
-      })
+    async search() {
+      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const result = await this.fetchSkeletonArmLiftTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.liftNumData = result.data.map((v) => { return v.liftNum })
+      this.liftNumData = result.data.map((v) => { return v.total })
       this.liftNumDataX = result.data.map((v) => { return v.showDate })
       this.liftNumOption.series[0].data = this.liftNumData
       this.liftNumOption.xAxis.data = this.liftNumDataX
@@ -141,17 +133,16 @@ export default {
         name: 'skeletonArmLiftNumDetail',
         query: {
           date: event.name,
-          sn: this.filter.sn
+          sn: this.filter.sn,
+          model: this.filter.model,
+          customer: this.filter.customer,
+          department: this.filter.department
         }
       })
     },
     showDataByDays(val) {
-      this.liftNumOption.series[0].data = this.spliceData(this.liftNumData, 0, val)
-      this.liftNumOption.xAxis.data = this.spliceData(this.liftNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

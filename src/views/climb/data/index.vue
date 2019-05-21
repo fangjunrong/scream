@@ -14,7 +14,7 @@
         <input type="button" class="s-button-primary climbData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="climbData-filter-textShow">
-        <li>所有设备（共 {{ activeRateData.length }} 台）的使用信息：</li>
+        <li>所有设备（共 {{ deviceNum }} 台）的使用信息：</li>
         <li>在线活跃率： {{ activeRateData[activeRateData.length - 1] }} %  台阶数：{{ stepsNumData[stepsNumData.length -1] }}
           开机次数： {{ bootNumData[bootNumData.length - 1] }}重量等级：{{ weightNumData[weightNumData.length - 1] }}</li>
       </ul>
@@ -65,7 +65,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import _ from 'lodash'
 import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
@@ -77,15 +76,15 @@ export default {
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
+        days: '7',
         customer: '',
         department: ''
       },
+      deviceNum: '',
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      activeName: '30',
+      activeName: '7',
       activeRateData: [],
       activeRateDataX: [],
       stepsNumData: [],
@@ -234,36 +233,46 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.themebrokeline = brokeline
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
+      'fetchClimbDeviceList',
       'fetchClimbActiveRate',
       'fetchClimbBootTotal',
       'fetchClimbStepsTotal',
       'fetchClimbWeightTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const activeRateResult = await this.fetchClimbBootTotal()
+    async search() {
+      const param = this.filter
+      const deviceResult = await this.fetchClimbDeviceList({
+        pageNumber: 1,
+        pageSize: 10
+      })
+      if (deviceResult.code !== 200) {
+        this.$message.warning(deviceResult.message)
+      }
+      this.deviceNum = deviceResult.data.pagination.totalCount
+      const activeRateResult = await this.fetchClimbActiveRate(param)
       if (activeRateResult.code !== 200) {
         this.$message.warning(activeRateResult.message)
       }
       this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
       this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
-      const bootTotalResult = await this.fetchClimbBootTotal()
+      const bootTotalResult = await this.fetchClimbBootTotal(param)
       if (bootTotalResult.code !== 200) {
         this.$message.warning(bootTotalResult.message)
       }
       this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
       this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
-      const stepsTotalResult = await this.fetchClimbStepsTotal()
+      const stepsTotalResult = await this.fetchClimbStepsTotal(param)
       if (stepsTotalResult.code !== 200) {
         this.$message.warning(stepsTotalResult.message)
       }
       this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
       this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
-      const weightTotalResult = await this.fetchClimbWeightTotal()
+      const weightTotalResult = await this.fetchClimbWeightTotal(param)
       if (weightTotalResult.code !== 200) {
         this.$message.warning(weightTotalResult.message)
       }
@@ -278,14 +287,6 @@ export default {
       this.weightNumOption.xAxis.data = this.weightNumDataX
       this.activeRateOption.series[0].data = this.activeRateData
       this.activeRateOption.xAxis.data = this.activeRateDataX
-    },
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchClimbBootTotal(param)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
     },
     async getData(param) {
       return await this.fetchClimbBootTotal(param)
@@ -323,19 +324,8 @@ export default {
       })
     },
     showDataByDays(val) {
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
-      this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
-      this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
-      this.weightNumOption.series[0].data = this.spliceData(this.weightNumData, 0, val)
-      this.weightNumOption.xAxis.data = this.spliceData(this.weightNumDataX, 0, val)
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

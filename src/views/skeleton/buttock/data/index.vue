@@ -14,7 +14,7 @@
         <input type="button" class="s-button-primary skeletonButtockData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="skeletonButtockData-filter-textShow">
-        <li>所有设备（共{{ activeRateData.length }}台）的使用信息：</li>
+        <li>所有设备（共{{ deviceNum }}台）的使用信息：</li>
         <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 支撑时长：{{ durationNumData[durationNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
@@ -72,7 +72,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import _ from 'lodash'
 import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
@@ -84,15 +83,15 @@ export default {
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
+        days: '7',
         customer: '',
         department: ''
       },
+      deviceNum: '',
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      activeName: '30',
+      activeName: '7',
       activeRateData: [],
       activeRateDataX: [],
       stepNumData: [],
@@ -276,42 +275,52 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.themebrokeline = brokeline
+    this.search()
   },
   methods: {
     ...mapActions('skeletonButtock', [
+      'fetchSkeletonButtockDeviceList',
       'fetchSkeletonButtockActiveRate',
       'fetchSkeletonButtockBootTotal',
       'fetchSkeletonButtockStepsTotal',
       'fetchSkeletonButtockDurationTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const activeRateResult = await this.fetchSkeletonButtockBootTotal()
+    async search() {
+      const param = this.filter
+      const deviceResult = await this.fetchSkeletonButtockDeviceList({
+        pageNumber: 1,
+        pageSize: 10
+      })
+      if (deviceResult.code !== 200) {
+        this.$message.warning(deviceResult.message)
+      }
+      this.deviceNum = deviceResult.data.pagination.totalCount
+      const activeRateResult = await this.fetchSkeletonButtockActiveRate(param)
       if (activeRateResult.code !== 200) {
         this.$message.warning(activeRateResult.message)
       }
       this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
       this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
-      const bootTotalResult = await this.fetchSkeletonButtockBootTotal()
+      const bootTotalResult = await this.fetchSkeletonButtockBootTotal(param)
       if (bootTotalResult.code !== 200) {
         this.$message.warning(bootTotalResult.message)
       }
       this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
       this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
-      const stepsTotalResult = await this.fetchSkeletonButtockStepsTotal()
+      const stepsTotalResult = await this.fetchSkeletonButtockStepsTotal(param)
       if (stepsTotalResult.code !== 200) {
         this.$message.warning(stepsTotalResult.message)
       }
       this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
       this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
-      const durationTotalResult = await this.fetchSkeletonButtockDurationTotal()
+      const durationTotalResult = await this.fetchSkeletonButtockDurationTotal(param)
       if (durationTotalResult.code !== 200) {
         this.$message.warning(durationTotalResult.message)
       }
       this.durationNumData = durationTotalResult.data.map((v) => { return v.total })
       this.durationNumDataX = durationTotalResult.data.map((v) => { return v.showDate })
-      const sitTotalResult = await this.fetchSkeletonButtockDurationTotal()
+      const sitTotalResult = await this.fetchSkeletonButtockDurationTotal(param)
       if (durationTotalResult.code !== 200) {
         this.$message.warning(durationTotalResult.message)
       }
@@ -328,14 +337,6 @@ export default {
       this.activeRateOption.xAxis.data = this.activeRateDataX
       this.sitNumOption.series[0].data = this.sitNumData
       this.sitNumOption.xAxis.data = this.sitNumDataX
-    },
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonButtockBootTotal(param)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
     },
     async getData(param) {
       return await this.fetchSkeletonButtockBootTotal(param)
@@ -381,21 +382,8 @@ export default {
       })
     },
     showDataByDays(val) {
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
-      this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
-      this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
-      this.durationNumOption.series[0].data = this.spliceData(this.durationNumData, 0, val)
-      this.durationNumOption.xAxis.data = this.spliceData(this.durationNumDataX, 0, val)
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
-      this.sitNumOption.series[0].data = this.spliceData(this.sitNumData, 0, val)
-      this.sitNumOption.xAxis.data = this.spliceData(this.sitNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

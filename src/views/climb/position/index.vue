@@ -1,13 +1,13 @@
 <template>
   <div class="climbPosition">
     <div class="climbPosition-title">
-      <DetailTitle title="设备信息"/>
+      <DetailTitle :sub-title="filter.searchDate" title="定位信息"/>
     </div>
     <div class="climbPosition-filter">
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.searchTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -26,7 +26,7 @@
     <div class="climbPosition-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="地图">
-          <div id="map" style="height:500px" tabindex="0"></div>
+          <div id="map" style="height:500px; width: 600px;"></div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
@@ -41,8 +41,8 @@
           <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ item.deviceId }}</td>
-              <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
-              <td width="20%">{{ item.deviceModel ? item.deviceModel.sn : '' }}</td>
+              <td width="20%">{{ item.climbDeviceModel ? item.climbDeviceModel.model : '' }}</td>
+              <td width="20%">{{ item.climbDeviceModel ? item.climbDeviceModel.sn : '' }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>
@@ -68,6 +68,7 @@ import { mapActions } from 'vuex'
 import AMap from 'AMap'
 import coordtransform from 'coordtransform'
 import _ from 'lodash'
+import { getNowFormatDate } from '@/utils/common'
 export default {
   name: 'ClimbPosition',
   data() {
@@ -75,7 +76,7 @@ export default {
       filter: {
         customer: '',
         department: '',
-        searchTime: ''
+        searchDate: ''
       },
       tableData: [],
       info: {
@@ -92,7 +93,11 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.filter.searchDate = getNowFormatDate()
+    this.search()
+  },
+  activated: function() {
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
@@ -100,19 +105,6 @@ export default {
       'changeClimbPosition',
       'deleteClimbPosition'
     ]),
-    async init() {
-      const result = await this.fetchClimbPositionList({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
-    },
     initMap() {
       const _self = this
       const map = new AMap.Map('map')
@@ -126,10 +118,10 @@ export default {
         var marker = new AMap.Marker({
           position: point,
           // offset: new AMap.Pixel(-12,-12),
-          title: _self.tableData[0].deviceModel.model + ' : ' + _self.tableData[0].id,
+          title: _self.tableData[0].climbDeviceModel.model + ' : ' + _self.tableData[0].id,
           map: map
         })
-        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0].id) }, _self.tableData[0].id)
+        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0]) }, _self.tableData[0].id)
         for (let i = 1; i < _self.tableData.length; i += 1) {
           // convert wgs84 to cj02
           cj02 = coordtransform.wgs84togcj02(_self.tableData[i].longitude, _self.tableData[i].latitude)
@@ -137,10 +129,10 @@ export default {
           marker = new AMap.Marker({
             position: point,
             // offset: new AMap.Pixel(-12,-12),
-            title: _self.tableData[i].deviceModel.model + ' : ' + _self.tableData[i].id,
+            title: _self.tableData[i].climbDeviceModel.model + ' : ' + _self.tableData[i].id,
             map: map
           })
-          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i].id) }, _self.tableData[i].id)
+          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i]) }, _self.tableData[i].id)
         }
         map.setFitView()
       } else {
@@ -154,10 +146,13 @@ export default {
         map.addControl(new AMap.Scale())
       })
     },
-    jumpToDetail(id) {
+    jumpToDetail(item) {
       this.$router.push({
         name: 'climbPositionDetail',
-        params: { sn: id }
+        query: {
+          date: item.showDate,
+          sn: item.climbDeviceModel.sn
+        }
       })
     },
     async search() {
@@ -169,7 +164,9 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => {
+        this.initMap()
+      }, 100)
     },
     async getData(param) {
       return await this.fetchClimbPositionList(param)

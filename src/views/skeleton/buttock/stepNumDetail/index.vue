@@ -63,7 +63,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '30',
+      activeName: '7',
       stepsNumData: [],
       stepsNumDataX: [],
       themebrokeline: '',

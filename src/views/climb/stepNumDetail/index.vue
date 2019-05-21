@@ -39,7 +39,11 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
       tableData: [{
         id: '0',
@@ -63,7 +67,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '30',
+      activeName: '7',
       stepsNumData: [],
       stepsNumDataX: [],
       themebrokeline: '',
@@ -108,10 +112,11 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
     this.init()
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div class="climbStepByDay">
     <div class="climbStepByDay-title">
-      <DetailTitle title="重量等级"/>
+      <DetailTitle title="台阶数"/>
     </div>
     <div class="climbStepByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="climbStepByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="重量等级"/>
+          <LittleTitle title="台阶数"/>
           <v-chart
             :options="stepNumOption"
             :theme="themebrokeline"
@@ -40,19 +40,14 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
-      tableData: [{
-        id: '0',
-        steps: '197',
-        date: '2019-04-26 23:56:20',
-        time: '晚上'
-      }, {
-        id: '1',
-        steps: '208',
-        date: '2019-04-26 21:30:39',
-        time: '晚上'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -64,7 +59,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '30',
+      activeName: '7',
       stepNumData: [],
       stepNumDataX: [],
       themebrokeline: '',
@@ -109,29 +104,26 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
-    this.init()
+    this.themebrokeline = brokeline
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
       'fetchClimbStepsTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchClimbStepsTotal({
-        pageNumber: 1,
-        pageSize: 10
-      })
+    async search() {
+      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const result = await this.fetchClimbStepsTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.stepNumData = result.data.map((v) => { return v.stepsNum })
+      this.stepNumData = result.data.map((v) => { return v.total })
       this.stepNumDataX = result.data.map((v) => { return v.showDate })
       this.stepNumOption.series[0].data = this.stepNumData
       this.stepNumOption.xAxis.data = this.stepNumDataX
@@ -142,17 +134,15 @@ export default {
         query: {
           date: event.name,
           sn: this.filter.sn,
-          model: this.filter.model
+          model: this.filter.model,
+          customer: this.filter.customer,
+          department: this.filter.department
         }
       })
     },
     showDataByDays(val) {
-      this.stepNumOption.series[0].data = this.spliceData(this.stepNumData, 0, val)
-      this.stepNumOption.xAxis.data = this.spliceData(this.stepNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

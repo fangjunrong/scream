@@ -36,8 +36,8 @@
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="15%">{{ item.deviceId }}</td>
-          <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
-          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.sn : '' }}</div></td>
+          <td width="20%">{{ item.climbDeviceModel ? item.climbDeviceModel.model : '' }}</td>
+          <td width="20%"><div class="link" @click="toDetail(item)">{{ item.climbDeviceModel ? item.climbDeviceModel.sn : '' }}</div></td>
           <td width="10%">{{ item.weightNum }}</td>
           <td width="20%">{{ item.createTime }}</td>
         </tr>
@@ -110,8 +110,8 @@ export default {
       this.$router.push({
         name: 'climbWeightByDay',
         query: {
-          sn: item.deviceModel.sn,
-          model: item.deviceModel.model
+          sn: item.climbDeviceModel.sn,
+          model: item.climbDeviceModel.model
         }
       })
     },

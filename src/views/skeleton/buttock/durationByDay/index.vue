@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockDurationByDay">
     <div class="skeletonButtockDurationByDay-title">
-      <DetailTitle title="托举时长"/>
+      <DetailTitle title="支撑时长"/>
     </div>
     <div class="skeletonButtockDurationByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="skeletonButtockDurationByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="托举时长"/>
+          <LittleTitle title="支撑时长"/>
           <v-chart
             :options="durationNumOption"
             :theme="themebrokeline"
@@ -54,7 +54,7 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '30',
+      activeName: '7',
       durationNumData: [],
       durationNumDataX: [],
       themebrokeline: '',

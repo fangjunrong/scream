@@ -1,13 +1,13 @@
 <template>
   <div class="skeletonArmPosition">
     <div class="skeletonArmPosition-title">
-      <DetailTitle title="定位信息"/>
+      <DetailTitle :sub-title="filter.searchDate" title="定位信息"/>
     </div>
     <div class="skeletonArmPosition-filter">
       <el-form :inline="true">
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -62,15 +62,15 @@ import { mapActions } from 'vuex'
 import AMap from 'AMap'
 import _ from 'lodash'
 import coordtransform from 'coordtransform'
+import { getNowFormatDate } from '@/utils/common'
 export default {
   name: 'SkeletonArmPosition',
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
         customer: '',
-        department: ''
+        department: '',
+        searchDate: ''
       },
       tableData: [],
       info: {
@@ -87,7 +87,8 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.filter.searchDate = getNowFormatDate()
+    this.search()
   },
   methods: {
     ...mapActions('skeletonArm', [
@@ -95,19 +96,6 @@ export default {
       'changeSkeletonArmPosition',
       'deleteSkeletonArmPosition'
     ]),
-    async init() {
-      const result = await this.fetchSkeletonArmPositionList({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
-    },
     initMap() {
       const _self = this
       const map = new AMap.Map('map')
@@ -124,7 +112,7 @@ export default {
           title: _self.tableData[0].model + ' : ' + _self.tableData[0].id,
           map: map
         })
-        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0].id) }, _self.tableData[0].id)
+        marker.on('click', function() { _self.jumpToDetail(_self.tableData[0]) }, _self.tableData[0].id)
         for (let i = 1; i < _self.tableData.length; i += 1) {
           // convert wgs84 to cj02
           cj02 = coordtransform.wgs84togcj02(_self.tableData[i].longitude, _self.tableData[i].latitude)
@@ -135,7 +123,7 @@ export default {
             title: _self.tableData[i].model + ' : ' + _self.tableData[i].id,
             map: map
           })
-          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i].id) }, _self.tableData[i].id)
+          marker.on('click', function() { _self.jumpToDetail(_self.tableData[i]) }, _self.tableData[i].id)
         }
         map.setFitView()
       } else {
@@ -149,10 +137,13 @@ export default {
         map.addControl(new AMap.Scale())
       })
     },
-    jumpToDetail(id) {
+    jumpToDetail(item) {
       this.$router.push({
         name: 'skeletonArmPositionDetail',
-        params: { sn: id }
+        query: {
+          date: item.showDate,
+          sn: item.deviceModel.sn
+        }
       })
     },
     async search() {
@@ -164,6 +155,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+      this.initMap()
     },
     async getData(param) {
       return await this.fetchSkeletonArmPositionList(param)

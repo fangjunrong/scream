@@ -21,7 +21,7 @@
     <div class="climbPositionDetail-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="地图">
-          <div id="map" style="height:500px" tabindex="0"></div>
+          <div id="map" style="height:500px; width: 600px" tabindex="0"></div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
@@ -66,7 +66,8 @@ export default {
   data() {
     return {
       filter: {
-        searchDate: ''
+        searchDate: '',
+        sn: ''
       },
       tableData: [],
       info: {
@@ -79,32 +80,20 @@ export default {
         currentPage: 1,
         pageSize: 100,
         total: 100
-      },
-      sn: ''
+      }
     }
   },
   mounted() {
-    this.init()
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
+    const date = this.$route.query.date
+    this.filter.searchDate = date
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
       'fetchClimbPositionDetail'
     ]),
-    async init() {
-      this.sn = this.$route.params.sn
-      const result = await this.fetchClimbPositionDetail({
-        pageNumber: 1,
-        pageSize: 10,
-        sn: this.sn
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
-    },
     initMap() {
       const _self = this
       // const _data = { 'company': 'XSTO', 'contacts': '', 'countTotal': 0, 'createTime': 1550545961000, 'currentPage': 0, 'customer': '日日顺-刘女士', 'department': '', 'enablePage': false, 'id': 28, 'isDelete': 0, 'maxRows': 5000, 'model': 'ZW7170ES(1769)/IOT/德聚顺(辽宁)物流有限公司', 'name': '电动载物爬楼机', 'pageSize': 20, 'pages': 0, 'sn': '866289038519734', 'start': 0, 'stepsModels': [{ 'bootNum': 0, 'bootRate': 0.0, 'boots': 0, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542169000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9185826', 'longitude': '121.5899748', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }, { 'bootNum': 0, 'bootRate': 0.0, 'boots': 1, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542260000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9194043', 'longitude': '121.5909837', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }] }
@@ -171,7 +160,7 @@ export default {
       }
     },
     async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1, sn: this.sn })
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
       const result = await this.fetchClimbPositionDetail(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)

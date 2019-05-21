@@ -14,7 +14,7 @@
         <input type="button" class="s-button-primary skeletonWaistData-filter-search" value="查询" @click="search()"/>
       </el-form>
       <ul class="skeletonWaistData-filter-textShow">
-        <li>所有设备（共{{ activeRateData.length }}台）的使用信息：</li>
+        <li>所有设备（共{{ deviceNum }}台）的使用信息：</li>
         <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 弯腰次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
@@ -64,7 +64,6 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import _ from 'lodash'
 import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
@@ -76,15 +75,15 @@ export default {
   data() {
     return {
       filter: {
-        name: '',
-        sn: '',
+        days: '7',
         customer: '',
         department: ''
       },
+      deviceNum: '',
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      activeName: '30',
+      activeName: '7',
       activeRateData: [],
       activeRateDataX: [],
       stepsNumData: [],
@@ -233,36 +232,46 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.themebrokeline = brokeline
+    this.search()
   },
   methods: {
     ...mapActions('skeletonWaist', [
+      'fetchSkeletonWaistDeviceList',
       'fetchSkeletonWaistActiveRate',
       'fetchSkeletonWaistBootTotal',
       'fetchSkeletonWaistStepsTotal',
       'fetchSkeletonWaistBendTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const activeRateResult = await this.fetchSkeletonWaistBootTotal()
+    async search() {
+      const param = this.filter
+      const deviceResult = await this.fetchSkeletonWaistDeviceList({
+        pageNumber: 1,
+        pageSize: 10
+      })
+      if (deviceResult.code !== 200) {
+        this.$message.warning(deviceResult.message)
+      }
+      this.deviceNum = deviceResult.data.pagination.totalCount
+      const activeRateResult = await this.fetchSkeletonWaistActiveRate(param)
       if (activeRateResult.code !== 200) {
         this.$message.warning(activeRateResult.message)
       }
       this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
       this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
-      const bootTotalResult = await this.fetchSkeletonWaistBootTotal()
+      const bootTotalResult = await this.fetchSkeletonWaistBootTotal(param)
       if (bootTotalResult.code !== 200) {
         this.$message.warning(bootTotalResult.message)
       }
       this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
       this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
-      const stepsTotalResult = await this.fetchSkeletonWaistStepsTotal()
+      const stepsTotalResult = await this.fetchSkeletonWaistStepsTotal(param)
       if (stepsTotalResult.code !== 200) {
         this.$message.warning(stepsTotalResult.message)
       }
       this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
       this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
-      const bendTotalResult = await this.fetchSkeletonWaistBendTotal()
+      const bendTotalResult = await this.fetchSkeletonWaistBendTotal(param)
       if (bendTotalResult.code !== 200) {
         this.$message.warning(bendTotalResult.message)
       }
@@ -277,14 +286,6 @@ export default {
       this.bendNumOption.xAxis.data = this.bendNumDataX
       this.activeRateOption.series[0].data = this.activeRateData
       this.activeRateOption.xAxis.data = this.activeRateDataX
-    },
-    async search() {
-      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonWaistBootTotal(param)
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
     },
     async getData(param) {
       return await this.fetchSkeletonWaistBootTotal(param)
@@ -322,19 +323,8 @@ export default {
       })
     },
     showDataByDays(val) {
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
-      this.bootNumOption.series[0].data = this.spliceData(this.bootNumData, 0, val)
-      this.bootNumOption.xAxis.data = this.spliceData(this.bootNumDataX, 0, val)
-      this.bendNumOption.series[0].data = this.spliceData(this.bendNumData, 0, val)
-      this.bendNumOption.xAxis.data = this.spliceData(this.bendNumDataX, 0, val)
-      this.activeRateOption.series[0].data = this.spliceData(this.activeRateData, 0, val)
-      this.activeRateOption.xAxis.data = this.spliceData(this.activeRateDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }
