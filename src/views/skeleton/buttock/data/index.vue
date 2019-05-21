@@ -31,7 +31,7 @@
             ref="online"
             :options="activeRateOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="activeRateClick"/>
         </div>
         <div class="chart2">
@@ -39,7 +39,7 @@
           <v-chart
             :options="bootNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="bootNumClick"/>
         </div>
         <div class="chart3">
@@ -47,7 +47,7 @@
           <v-chart
             :options="stepsNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
@@ -55,7 +55,7 @@
           <v-chart
             :options="durationNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="durationClick"/>
         </div>
         <div class="chart5">
@@ -63,7 +63,7 @@
           <v-chart
             :options="sitNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="sitClick"/>
         </div>
       </div>

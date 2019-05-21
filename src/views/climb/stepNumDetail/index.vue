@@ -151,7 +151,7 @@ export default {
     ]),
     initCharts() {
       this.themebrokeline = brokeline
-      this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')
+      this.brokeline.xAxis.data = _.map(this.tableData, 'createTime')
       this.brokeline.series[0].data = _.map(this.tableData, 'stepsNum')
     },
     async search() {

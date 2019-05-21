@@ -25,13 +25,13 @@
         <el-tab-pane label="一月" name="30"></el-tab-pane>
       </el-tabs>
       <div class="skeletonWaistData-charts-container">
-        <div class="chart1">
+        <div class="chart1 chart">
           <LittleTitle title="在线活跃率"/>
           <v-chart
             ref="online"
             :options="activeRateOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="activeRateClick"/>
         </div>
         <div class="chart2">
@@ -39,7 +39,7 @@
           <v-chart
             :options="bootNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="bootNumClick"/>
         </div>
         <div class="chart3">
@@ -47,7 +47,7 @@
           <v-chart
             :options="stepsNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
@@ -55,7 +55,7 @@
           <v-chart
             :options="bendNumOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
+            style="height: 320px;width:600px"
             @click="bendClick"/>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonWaistStepByDay">
     <div class="skeletonWaistStepByDay-title">
-      <DetailTitle title="托举次数"/>
+      <DetailTitle title="步数"/>
     </div>
     <div class="skeletonWaistStepByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="skeletonWaistStepByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="托举次数"/>
+          <LittleTitle title="步数"/>
           <v-chart
             :options="stepNumOption"
             :theme="themebrokeline"

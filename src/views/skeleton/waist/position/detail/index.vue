@@ -2,7 +2,7 @@
   <div class="waistPositionDetail">
     <div class="waistPositionDetail-title">
       <!-- //todo -->
-      <DetailTitle title="轨迹路径"/>
+      <DetailTitle :sub-title="'设备序列号：'+filter.sn" title="轨迹路径"/>
     </div>
     <div class="waistPositionDetail-filter">
       <el-form :inline="true">

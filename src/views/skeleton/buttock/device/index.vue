@@ -15,7 +15,7 @@
     <div class="buttockDevice-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="50">ID</th>
+          <th width="80">ID</th>
           <th width="10%">名称</th>
           <th width="10%">型号</th>
           <th width="15%">序列号</th>
@@ -28,7 +28,7 @@
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="50">{{ item.id }}</td>
+          <td width="80">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
           <td width="10%">{{ item.model }}</td>
           <td width="15%">{{ item.sn }}</td>
@@ -66,6 +66,15 @@
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="序列号">
           <el-input v-model="info.data.sn"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="客户">
+          <el-input v-model="info.data.customer"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="部门">
+          <el-input v-model="info.data.department"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="动力">
+          <el-input v-model="info.data.department"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

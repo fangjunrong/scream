@@ -2,7 +2,7 @@
   <div class="armPositionDetail">
     <div class="armPositionDetail-title">
       <!-- //todo -->
-      <DetailTitle title="轨迹路径"/>
+      <DetailTitle :sub-title="'设备序列号：'+filter.sn" title="轨迹路径"/>
     </div>
     <div class="armPositionDetail-filter">
       <el-form :inline="true">

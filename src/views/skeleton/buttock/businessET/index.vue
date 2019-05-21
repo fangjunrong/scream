@@ -31,8 +31,7 @@
             ref="online"
             :options="brokeline"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"
-            @click="brokeClick"/>
+            style="height: 450px;width: 600px"/>
         </div>
         <div class="chart2">
           <LittleTitle title="成本费用"/>
