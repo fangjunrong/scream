@@ -16,7 +16,7 @@
         <div class="chart3">
           <LittleTitle title="重量等级"/>
           <v-chart
-            :options="weightNumOption"
+            :options="weightOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"
             @click="weightClick"
@@ -40,19 +40,14 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
-      tableData: [{
-        id: '0',
-        steps: '197',
-        date: '2019-04-26 23:56:20',
-        time: '晚上'
-      }, {
-        id: '1',
-        steps: '208',
-        date: '2019-04-26 21:30:39',
-        time: '晚上'
-      }],
+      tableData: [],
       info: {
         visible: false,
         typeText: '新增',
@@ -65,10 +60,10 @@ export default {
         total: 100
       },
       activeName: '7',
-      weightNumData: [],
-      weightNumDataX: [],
+      weightData: [],
+      weightDataX: [],
       themebrokeline: '',
-      weightNumOption: {
+      weightOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -109,32 +104,29 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
-    this.init()
+    this.themebrokeline = brokeline
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
       'fetchClimbWeightTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchClimbWeightTotal({
-        pageNumber: 1,
-        pageSize: 10
-      })
+    async search() {
+      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const result = await this.fetchClimbWeightTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.weightNumData = result.data.map((v) => { return v.weightNum })
-      this.weightNumDataX = result.data.map((v) => { return v.showDate })
-      this.weightNumOption.series[0].data = this.weightNumData
-      this.weightNumOption.xAxis.data = this.weightNumDataX
+      this.weightData = result.data.map((v) => { return v.total })
+      this.weightDataX = result.data.map((v) => { return v.showDate })
+      this.weightOption.series[0].data = this.weightData
+      this.weightOption.xAxis.data = this.weightDataX
     },
     weightClick(event) {
       this.$router.push({
@@ -142,17 +134,15 @@ export default {
         query: {
           date: event.name,
           sn: this.filter.sn,
-          model: this.filter.model
+          model: this.filter.model,
+          customer: this.filter.customer,
+          department: this.filter.department
         }
       })
     },
     showDataByDays(val) {
-      this.weightNumOption.series[0].data = this.spliceData(this.weightNumData, 0, val)
-      this.weightNumOption.xAxis.data = this.spliceData(this.weightNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitByDay">
     <div class="skeletonButtockSitByDay-title">
-      <DetailTitle title="坐下次数"/>
+      <DetailTitle title="坐下时长"/>
     </div>
     <div class="skeletonButtockSitByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="skeletonButtockSitByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="坐下次数"/>
+          <LittleTitle title="坐下时长"/>
           <v-chart
             :options="sitNumOption"
             :theme="themebrokeline"
@@ -40,7 +40,12 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
       tableData: [],
       info: {
@@ -99,29 +104,26 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
-    this.init()
+    this.themebrokeline = brokeline
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
+    this.search()
   },
   methods: {
     ...mapActions('skeletonButtock', [
       'fetchSkeletonButtockSitTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchSkeletonButtockSitTotal({
-        pageNumber: 1,
-        pageSize: 10
-      })
+    async search() {
+      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const result = await this.fetchSkeletonButtockSitTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.sitNumData = result.data.map((v) => { return v.durNum })
+      this.sitNumData = result.data.map((v) => { return v.total })
       this.sitNumDataX = result.data.map((v) => { return v.showDate })
       this.sitNumOption.series[0].data = this.sitNumData
       this.sitNumOption.xAxis.data = this.sitNumDataX
@@ -137,12 +139,8 @@ export default {
       })
     },
     showDataByDays(val) {
-      this.sitNumOption.series[0].data = this.spliceData(this.sitNumData, 0, val)
-      this.sitNumOption.xAxis.data = this.spliceData(this.sitNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

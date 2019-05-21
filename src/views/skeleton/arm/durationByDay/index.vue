@@ -40,7 +40,12 @@ export default {
   data() {
     return {
       filter: {
-        createTime: ''
+        searchDate: '',
+        sn: '',
+        customer: '',
+        department: '',
+        moedel: '',
+        days: '7'
       },
       tableData: [],
       info: {
@@ -99,29 +104,26 @@ export default {
     }
   },
   mounted() {
-    const sn = this.$route.query.sn
-    this.filter.sn = sn
-    const model = this.$route.query.model
-    this.filter.model = model
-    this.init()
+    this.themebrokeline = brokeline
+    this.filter.sn = this.$route.query.sn
+    this.filter.model = this.$route.query.model
+    this.filter.searchDate = this.$route.query.date
+    this.filter.customer = this.$route.query.customer
+    this.filter.department = this.$route.query.department
+    this.search()
   },
   methods: {
     ...mapActions('skeletonArm', [
       'fetchSkeletonArmDurationTotal'
     ]),
-    async init() {
-      this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchSkeletonArmDurationTotal({
-        pageNumber: 1,
-        pageSize: 10
-      })
+    async search() {
+      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const result = await this.fetchSkeletonArmDurationTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.durationNumData = result.data.map((v) => { return v.durNum })
+      this.durationNumData = result.data.map((v) => { return v.total })
       this.durationNumDataX = result.data.map((v) => { return v.showDate })
       this.durationNumOption.series[0].data = this.durationNumData
       this.durationNumOption.xAxis.data = this.durationNumDataX
@@ -137,12 +139,8 @@ export default {
       })
     },
     showDataByDays(val) {
-      this.durationNumOption.series[0].data = this.spliceData(this.durationNumData, 0, val)
-      this.durationNumOption.xAxis.data = this.spliceData(this.durationNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.filter.days = val
+      this.search()
     }
   }
 }

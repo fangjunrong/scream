@@ -133,25 +133,12 @@ export default {
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
     this.filter.sn = sn
-    this.init()
+    this.search()
   },
   methods: {
     ...mapActions('skeletonButtock', [
       'fetchSkeletonButtockDurationNumDetail'
     ]),
-    async init() {
-      const result = await this.fetchSkeletonButtockDurationNumDetail({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initCharts()
-    },
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')

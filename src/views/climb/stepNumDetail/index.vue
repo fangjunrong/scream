@@ -1,27 +1,66 @@
 <template>
   <div class="climbStepNumDetail">
     <div class="climbStepNumDetail-title">
-      <DetailTitle title="台阶数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="台阶数详情"/>
     </div>
     <div class="climbStepNumDetail-filter">
-      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
+      <el-form :inline="true">
+        <el-form-item label="日期">
+          <el-date-picker
+            v-model="filter.searchDate"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            class="sinput"></el-date-picker>
+        </el-form-item>
+        <input type="button" class="s-button-primary climbStepNumDetail-filter-search" value="查询" @click="search()"/>
+      </el-form>
     </div>
-    <div class="climbStepNumDetail-charts">
-      <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
-        <el-tab-pane label="一周" name="7"></el-tab-pane>
-        <el-tab-pane label="半月" name="15"></el-tab-pane>
-        <el-tab-pane label="一月" name="30"></el-tab-pane>
+    <div class="climbStepNumDetail-table">
+      <el-tabs tab-position="top" style="height: 200px;">
+        <el-tab-pane label="图表">
+          <div class="climbStepNumDetail-charts-container">
+            <div class="chart1">
+              <LittleTitle title="台阶数"/>
+              <v-chart
+                ref="online"
+                :options="brokeline"
+                :theme="themebrokeline"
+                style="height: 450px;width: 600px"/>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="列表">
+          <table class="selftable selftable-head">
+            <tr>
+              <th width="15%">ID</th>
+              <th width="20%">台阶数</th>
+              <th width="20%">使用时间</th>
+              <th width="20%">所属时段</th>
+            </tr>
+          </table>
+          <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
+            <tr>
+              <td width="15%">{{ index }}</td>
+              <td width="20%">{{ item.stepsNum }}</td>
+              <td width="20%">{{ item.createTime }}</td>
+              <td width="20%">{{ item.showDate }}</td>
+            </tr>
+          </table>
+        </el-tab-pane>
       </el-tabs>
-      <div class="climbStepNumDetail-charts-container">
-        <div class="chart3">
-          <LittleTitle title="台阶数"/>
-          <v-chart
-            :options="stepsNumOption"
-            :theme="themebrokeline"
-            style="height: 450px;width: 600px"
-          />
-        </div>
-      </div>
+    </div>
+    <div class="climbStepNumDetail-pagination">
+      <el-pagination
+        :current-page="pagination.currentPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -32,18 +71,14 @@ import ECharts from 'vue-echarts'
 import 'echarts'
 import brokeline from '@/utils/echartsTheme/brokeline.json'
 export default {
-  name: 'ClimbStepNumDetail',
+  name: 'ClimbStepsDetail',
   components: {
     'v-chart': ECharts
   },
   data() {
     return {
       filter: {
-        searchDate: '',
-        customer: '',
-        department: '',
-        moedel: '',
-        days: '7'
+        searchDate: ''
       },
       tableData: [{
         id: '0',
@@ -67,18 +102,15 @@ export default {
         pageSize: 100,
         total: 100
       },
-      activeName: '7',
-      stepsNumData: [],
-      stepsNumDataX: [],
       themebrokeline: '',
-      stepsNumOption: {
+      brokeline: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: [],
+          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
           splitLine: { // 网格线
             'show': false
           },
@@ -93,7 +125,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [320, 680, 280, 480, 1290, 500, 1320],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -106,47 +138,61 @@ export default {
       }
     }
   },
-  watch: {
-    activeName(newValue, oldValue) {
-      this.showDataByDays(newValue)
-    }
-  },
   mounted() {
-    this.filter.sn = this.$route.query.sn
-    this.filter.model = this.$route.query.model
-    this.filter.searchDate = this.$route.query.date
-    this.filter.customer = this.$route.query.customer
-    this.filter.department = this.$route.query.department
-    this.init()
+    const searchDate = this.$route.query.date
+    this.filter.searchDate = searchDate
+    const sn = this.$route.query.sn
+    this.filter.sn = sn
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
       'fetchClimbStepsNumDetail'
     ]),
-    async init() {
+    initCharts() {
       this.themebrokeline = brokeline
-      const date = this.$route.query.date
-      this.filter.searchDate = date
-      const result = await this.fetchClimbStepsNumDetail({
+      this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')
+      this.brokeline.series[0].data = _.map(this.tableData, 'stepsNum')
+    },
+    async search() {
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
+      const result = await this.fetchClimbStepsNumDetail(param)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
+    },
+    async getData(param) {
+      return await this.fetchClimbStepsNumDetail(param)
+    },
+    async handleSizeChange(val) {
+      const result = await this.getData({
         pageNumber: 1,
+        pageSize: val
+      })
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+      }
+      this.tableData = result.data.result
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
+    },
+    async handleCurrentChange(val) {
+      const result = await this.getData({
+        pageNumber: val,
         pageSize: 10
       })
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.stepsNumData = result.data.result.map((v) => { return v.stepsNum })
-      this.stepsNumDataX = result.data.result.map((v) => { return v.showDate })
-      this.stepsNumOption.series[0].data = this.stepsNumData
-      this.stepsNumOption.xAxis.data = this.stepsNumDataX
-    },
-    showDataByDays(val) {
-      this.stepsNumOption.series[0].data = this.spliceData(this.stepsNumData, 0, val)
-      this.stepsNumOption.xAxis.data = this.spliceData(this.stepsNumDataX, 0, val)
-    },
-    spliceData(data, index, length) {
-      const _data = _.cloneDeep(data)
-      return _data.splice(index, length)
+      this.pagination.pageSize = result.data.pagination.pageSize
+      this.pagination.total = result.data.pagination.totalCount
+      this.initCharts()
     }
   }
 }
@@ -171,6 +217,19 @@ export default {
       float: right;
       margin-right: 30px;
       width: 125px;
+    }
+  }
+  &-table{
+    background-color: #001432;
+    border-radius: 8px;
+    margin-top: 16px;
+    padding: 30px 40px;
+    &-content{
+      background-color: #001432;
+      .el-table__body{
+        border-collapse:separate;
+        border-spacing:0px 10px;
+      }
     }
   }
   &-charts{
@@ -199,9 +258,5 @@ export default {
   font-weight: bold;
   font-size: 14px;
   color: #00F0FA;
-}
-.climbStepNumDetail .el-tabs__nav{
-  float: none;
-  text-align: center;
 }
 </style>

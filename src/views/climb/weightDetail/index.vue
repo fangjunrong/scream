@@ -22,7 +22,7 @@
         <el-tab-pane label="图表">
           <div class="climbWeightDetail-charts-container">
             <div class="chart1">
-              <LittleTitle title="台阶数"/>
+              <LittleTitle title="重量等级"/>
               <v-chart
                 ref="online"
                 :options="brokeline"
@@ -143,25 +143,12 @@ export default {
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
     this.filter.sn = sn
-    this.init()
+    this.search()
   },
   methods: {
     ...mapActions('climb', [
       'fetchClimbWeightNumDetail'
     ]),
-    async init() {
-      const result = await this.fetchClimbWeightNumDetail({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initCharts()
-    },
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')

@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitDetail">
     <div class="skeletonButtockSitDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="坐下次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="坐下时长详情"/>
     </div>
     <div class="skeletonButtockSitDetail-filter">
       <el-form :inline="true">
@@ -22,7 +22,7 @@
         <el-tab-pane label="图表">
           <div class="skeletonButtockSitDetail-charts-container">
             <div class="chart1">
-              <LittleTitle title="坐下次数"/>
+              <LittleTitle title="坐下时长"/>
               <v-chart
                 ref="online"
                 :options="brokeline"
@@ -35,7 +35,7 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">ID</th>
-              <th width="20%">坐下次数</th>
+              <th width="20%">坐下时长</th>
               <th width="20%">使用时间</th>
               <th width="20%">所属时段</th>
             </tr>
@@ -45,7 +45,7 @@
               <td width="15%">{{ index }}</td>
               <td width="20%">{{ item.durNum }}</td>
               <td width="20%">{{ item.createTime }}</td>
-              <td width="20%">{{ item.time }}</td>
+              <td width="20%">{{ item.showDate }}</td>
             </tr>
           </table>
         </el-tab-pane>
@@ -133,25 +133,12 @@ export default {
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
     this.filter.sn = sn
-    this.init()
+    this.search()
   },
   methods: {
     ...mapActions('skeletonButtock', [
       'fetchSkeletonButtockSitNumDetail'
     ]),
-    async init() {
-      const result = await this.fetchSkeletonButtockSitNumDetail({
-        pageNumber: 1,
-        pageSize: 10
-      })
-      if (result.code !== 200) {
-        this.$message.warning(result.message)
-      }
-      this.tableData = result.data.result
-      this.pagination.pageSize = result.data.pagination.pageSize
-      this.pagination.total = result.data.pagination.totalCount
-      this.initCharts()
-    },
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'showDate')
