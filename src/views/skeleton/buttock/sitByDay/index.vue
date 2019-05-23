@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitByDay">
     <div class="skeletonButtockSitByDay-title">
-      <DetailTitle title="坐下时长"/>
+      <DetailTitle title="坐下次数"/>
     </div>
     <div class="skeletonButtockSitByDay-filter">
       设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="skeletonButtockSitByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="坐下时长"/>
+          <LittleTitle title="坐下次数"/>
           <v-chart
             :options="sitNumOption"
             :theme="themebrokeline"

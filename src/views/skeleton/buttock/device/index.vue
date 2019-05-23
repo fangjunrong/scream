@@ -73,9 +73,6 @@
         <el-form-item :label-width="formLabelWidth" label="部门">
           <el-input v-model="info.data.department"></el-input>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="动力">
-          <el-input v-model="info.data.department"></el-input>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="info.visible = false">取 消</el-button>
@@ -225,20 +222,18 @@ export default {
       this.bind.typeText = `序列号：${item.sn}`
     },
     async bindSubmit() {
-      this.$message('待做')
-      // const id = this.bind.data.id ? this.bind.data.id : ''
-      // const result = await this.changeSkeletonButtockDevice(this.bind.data)
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      //   return false
-      // }
-      // if (id) {
-      //   this.$message.success('修改成功')
-      // } else {
-      //   this.$message.success('添加成功')
-      // }
-      // this.bind.visible = false
-      // this.search()
+      if (!this.bind.data.personId) {
+        this.$message('请选择人员')
+        return false
+      }
+      const result = await this.changeSkeletonButtockDevice(this.bind.data)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+        return false
+      }
+      this.$message.success('绑定成功')
+      this.bind.visible = false
+      this.search()
     },
     unbindItem() {
       this.$message('待做')

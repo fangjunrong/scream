@@ -540,7 +540,8 @@ export default {
       themeCircle: '',
       themebrokeline: '',
       themearealine: '',
-      themecolumnar: ''
+      themecolumnar: '',
+      interval: ''
     }
   },
   mounted() {
@@ -549,6 +550,12 @@ export default {
     this.themecolumnar = columnar
     this.initBrokeLine()
     this.initCircle()
+    this.interval = setInterval(() => {
+      this.initBrokeLine()
+    }, 10000)
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   },
   methods: {
     ...mapActions('climb', [

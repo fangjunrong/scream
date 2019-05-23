@@ -43,7 +43,7 @@
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ index }}</td>
-              <td width="20%">{{ item.durNum }}</td>
+              <td width="20%">{{ item.stepsNum }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.showDate }}</td>
             </tr>
@@ -142,7 +142,7 @@ export default {
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'createTime')
-      this.brokeline.series[0].data = _.map(this.tableData, 'durNum')
+      this.brokeline.series[0].data = _.map(this.tableData, 'stepsNum')
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })

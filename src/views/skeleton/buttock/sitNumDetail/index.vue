@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitDetail">
     <div class="skeletonButtockSitDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="坐下时长详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="坐下次数详情"/>
     </div>
     <div class="skeletonButtockSitDetail-filter">
       <el-form :inline="true">
@@ -22,7 +22,7 @@
         <el-tab-pane label="图表">
           <div class="skeletonButtockSitDetail-charts-container">
             <div class="chart1">
-              <LittleTitle title="坐下时长"/>
+              <LittleTitle title="坐下次数"/>
               <v-chart
                 ref="online"
                 :options="brokeline"
@@ -35,7 +35,7 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">ID</th>
-              <th width="20%">坐下时长</th>
+              <th width="20%">坐下次数</th>
               <th width="20%">使用时间</th>
               <th width="20%">所属时段</th>
             </tr>
@@ -43,7 +43,7 @@
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ index }}</td>
-              <td width="20%">{{ item.durNum }}</td>
+              <td width="20%">{{ item.sitNum }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.showDate }}</td>
             </tr>
@@ -142,7 +142,7 @@ export default {
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'createTime')
-      this.brokeline.series[0].data = _.map(this.tableData, 'durNum')
+      this.brokeline.series[0].data = _.map(this.tableData, 'sitNum')
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
