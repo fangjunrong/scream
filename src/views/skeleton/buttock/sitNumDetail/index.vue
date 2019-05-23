@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitDetail">
     <div class="skeletonButtockSitDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="坐下次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="坐下次数详情"/>
     </div>
     <div class="skeletonButtockSitDetail-filter">
       <el-form :inline="true">

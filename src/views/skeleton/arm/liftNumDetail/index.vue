@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonArmLiftDetail">
     <div class="skeletonArmLiftDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="托举次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="托举次数详情"/>
     </div>
     <div class="skeletonArmLiftDetail-filter">
       <el-form :inline="true">
@@ -78,7 +78,8 @@ export default {
   data() {
     return {
       filter: {
-        searchDate: ''
+        searchDate: '',
+        deviceId: ''
       },
       tableData: [{
         id: '0',

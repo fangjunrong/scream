@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonArmDurationDetail">
     <div class="skeletonArmDurationDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="托举时长详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="托举时长详情"/>
     </div>
     <div class="skeletonArmDurationDetail-filter">
       <el-form :inline="true">

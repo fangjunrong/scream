@@ -4,7 +4,7 @@
       <DetailTitle title="支撑时长"/>
     </div>
     <div class="skeletonButtockDurationByDay-filter">
-      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
+      设备型号：{{ filter.model }} 设备序列号：{{ filter.deviceId }}
     </div>
     <div class="skeletonButtockDurationByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
@@ -133,7 +133,7 @@ export default {
         name: 'skeletonButtockDurationNumDetail',
         query: {
           date: event.name,
-          sn: this.filter.sn,
+          sn: this.filter.deviceId,
           model: this.filter.model
         }
       })

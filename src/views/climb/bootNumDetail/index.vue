@@ -1,7 +1,7 @@
 <template>
   <div class="climbDevice">
     <div class="climbDevice-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="开机次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="开机次数详情"/>
     </div>
     <div class="climbDevice-filter">
       <el-form :inline="true">

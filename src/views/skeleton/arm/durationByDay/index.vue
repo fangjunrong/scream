@@ -4,7 +4,7 @@
       <DetailTitle title="托举时长"/>
     </div>
     <div class="skeletonArmDurationByDay-filter">
-      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
+      设备型号：{{ filter.model }} 设备序列号：{{ filter.deviceId }}
     </div>
     <div class="skeletonArmDurationByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
@@ -133,7 +133,7 @@ export default {
         name: 'skeletonArmDurationNumDetail',
         query: {
           date: event.name,
-          sn: this.filter.sn,
+          sn: this.filter.deviceId,
           model: this.filter.model
         }
       })

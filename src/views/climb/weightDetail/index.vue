@@ -1,7 +1,7 @@
 <template>
   <div class="climbWeightDetail">
     <div class="climbWeightDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="重量等级详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="重量等级详情"/>
     </div>
     <div class="climbWeightDetail-filter">
       <el-form :inline="true">
