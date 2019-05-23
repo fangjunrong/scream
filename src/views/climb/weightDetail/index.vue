@@ -78,7 +78,8 @@ export default {
   data() {
     return {
       filter: {
-        searchDate: ''
+        searchDate: '',
+        sn: ''
       },
       tableData: [{
         id: '0',
