@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       filter: {
-        sn: '',
+        deviceId: '',
         searchDate: ''
       },
       tableData: [],
@@ -132,7 +132,7 @@ export default {
     const date = this.$route.query.date
     this.filter.searchDate = date
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     this.themebrokeline = brokeline
     this.search()
   },

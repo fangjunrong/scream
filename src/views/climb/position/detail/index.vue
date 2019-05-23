@@ -67,7 +67,7 @@ export default {
     return {
       filter: {
         searchDate: '',
-        sn: ''
+        deviceId: ''
       },
       tableData: [],
       info: {
@@ -85,7 +85,7 @@ export default {
   },
   mounted() {
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     const date = this.$route.query.date
     this.filter.searchDate = date
     this.search()
