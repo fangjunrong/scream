@@ -30,7 +30,7 @@
             </el-carousel>
           </div>
           <div class="index__container-horizon-box3 box circle">
-            <LittleTitle title="外骨骼数量 总数量"/>
+            <LittleTitle title="外骨骼数量 设备总数量"/>
             <div class="half">
               <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
             </div>
@@ -380,7 +380,7 @@ export default {
       },
       allNumOption: {
         title: {
-          text: '总数量',
+          text: '设备总数量',
           left: 'center',
           textStyle: {
             fontSize: '16',
@@ -399,7 +399,7 @@ export default {
         },
         series: [
           {
-            name: '总数量',
+            name: '设备总数量',
             type: 'pie',
             radius: ['50%', '80%'],
             center: ['50%', '50%'],

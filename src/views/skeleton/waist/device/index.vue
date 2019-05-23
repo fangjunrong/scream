@@ -156,7 +156,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      const personList = await this.fetchSkeletonWaistDeviceList({
+      const personList = await this.fetchSkeletonWaistPersonList({
         pageNumber: 1,
         pageSize: 100000
       })
