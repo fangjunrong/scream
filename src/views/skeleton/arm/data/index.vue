@@ -48,7 +48,7 @@
             :options="liftNumOption"
             :theme="themebrokeline"
             style="height: 320px;width:600px"
-            @click="stepNumClick"/>
+            @click="liftNumClick"/>
         </div>
         <div class="chart4">
           <LittleTitle title="托举时长"/>
@@ -306,7 +306,7 @@ export default {
         }
       })
     },
-    stepNumClick(event) {
+    liftNumClick(event) {
       this.$router.push({
         name: 'skeletonArmLiftNum',
         query: {

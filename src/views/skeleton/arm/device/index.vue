@@ -226,6 +226,7 @@ export default {
         this.$message('请选择人员')
         return false
       }
+      this.bind.data.status = 1
       const result = await this.changeSkeletonArmDevice(this.bind.data)
       if (result.code !== 200) {
         this.$message.warning(result.message)
@@ -247,12 +248,14 @@ export default {
           return false
         }
         this.bind.data.personId = ''
+        this.bind.data.status = 0
         const result = await this.changeSkeletonArmDevice(this.bind.data)
         if (result.code !== 200) {
           this.$message.warning(result.message)
           return false
         }
         this.$message.success('取消绑定成功')
+        this.search()
       }).catch(() => {
         this.$message({
           type: 'info',

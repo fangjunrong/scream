@@ -85,7 +85,7 @@
     <el-dialog :visible.sync="bind.visible" :title="bind.typeText">
       <el-form :model="bind.data">
         <el-form-item :label-width="formLabelWidth" label="选择人员">
-          <el-select v-model="bind.data.people" placeholder="请选择">
+          <el-select v-model="bind.data.personId" placeholder="请选择">
             <el-option
               v-for="item in personList"
               :key="item.id"
@@ -229,6 +229,7 @@ export default {
         this.$message('请选择人员')
         return false
       }
+      this.bind.data.status = 1
       const result = await this.changeSkeletonWaistDevice(this.bind.data)
       if (result.code !== 200) {
         this.$message.warning(result.message)
@@ -238,8 +239,32 @@ export default {
       this.bind.visible = false
       this.search()
     },
-    unbindItem() {
-      this.$message('待做')
+    unbindItem(item) {
+      this.bind.data = _.cloneDeep(item)
+      this.$confirm('确认解除绑定？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async response => {
+        if (!this.bind.data.personId) {
+          this.$message('未有绑定人员')
+          return false
+        }
+        this.bind.data.personId = ''
+        this.bind.data.status = 0
+        const result = await this.changeSkeletonWaistDevice(this.bind.data)
+        if (result.code !== 200) {
+          this.$message.warning(result.message)
+          return false
+        }
+        this.$message.success('取消绑定成功')
+        this.search()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消解除绑定'
+        })
+      })
     },
     async handleSizeChange(val) {
       const result = await this.getData({

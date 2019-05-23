@@ -6,12 +6,20 @@
         <div class="index__container-top boxs">
           <div class="index__container-horizon-box1 box">
             <div class="chart1">
-              <LittleTitle title="在线活跃率"/>
-              <v-chart :options="activeRateOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbActiveRateClick"/>
+              <LittleTitle title="台阶数"/>
+              <v-chart
+                :options="bootNumOption"
+                :theme="themebrokeline"
+                style="height: 194px;width: 268px"
+                @click="climbStepNumClick"/>
             </div>
             <div class="chart2">
-              <LittleTitle title="开机次数"/>
-              <v-chart :options="stepsNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbBootNumClick"/>
+              <LittleTitle title="弯腰次数"/>
+              <v-chart
+                :options="bendNumOption"
+                :theme="themebrokeline"
+                style="height: 194px;width: 268px"
+                @click="bendClick"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -34,12 +42,20 @@
         <div class="index__container-bottom boxs">
           <div class="index__container-horizon-box1 box">
             <div class="chart3">
-              <LittleTitle title="台阶数"/>
-              <v-chart :options="bootNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbStepNumClick"/>
+              <LittleTitle title="托举次数"/>
+              <v-chart
+                :options="liftNumOption"
+                :theme="themebrokeline"
+                style="height: 194px;width: 268px"
+                @click="liftNumClick"/>
             </div>
             <div class="chart4">
-              <LittleTitle title="重量等级"/>
-              <v-chart :options="weightNumOption" :theme="themebrokeline" style="height: 194px;width: 268px" @click="climbWeightClick"/>
+              <LittleTitle title="坐下次数"/>
+              <v-chart
+                :options="sitNumOption"
+                :theme="themebrokeline"
+                style="height: 194px;width: 268px"
+                @click="sitClick"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -82,15 +98,11 @@ export default {
   data() {
     return {
       textarea: '',
-      activeRateData: [],
-      activeRateDataX: [],
-      stepsNumData: [],
-      stepsNumDataX: [],
       bootNumData: [],
       bootNumdataX: [],
       weightNumData: [],
       weightNumDataX: '',
-      activeRateOption: {
+      liftNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -112,7 +124,7 @@ export default {
           }
         },
         series: [{
-          data: [],
+          data: this.onlineData,
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -123,7 +135,40 @@ export default {
           }
         }]
       },
-      stepsNumOption: {
+      sitNumOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: [],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: this.onlineData,
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      bendNumOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
@@ -565,13 +610,16 @@ export default {
       'fetchClimbWeightTotal'
     ]),
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmActiveRate'
+      'fetchSkeletonArmActiveRate',
+      'fetchSkeletonArmLiftTotal'
     ]),
     ...mapActions('skeletonWaist', [
-      'fetchSkeletonWaistActiveRate'
+      'fetchSkeletonWaistActiveRate',
+      'fetchSkeletonWaistBendTotal'
     ]),
     ...mapActions('skeletonButtock', [
-      'fetchSkeletonButtockActiveRate'
+      'fetchSkeletonButtockActiveRate',
+      'fetchSkeletonButtockSitTotal'
     ]),
     async initBrokeLine() {
       this.themebrokeline = brokeline
@@ -588,27 +636,40 @@ export default {
       }
       this.bootNumData = bootTotalResult.data.map((v) => { return v.total })
       this.bootNumDataX = bootTotalResult.data.map((v) => { return v.showDate })
-      const stepsTotalResult = await this.fetchClimbStepsTotal()
-      if (stepsTotalResult.code !== 200) {
-        this.$message.warning(stepsTotalResult.message)
-      }
-      this.stepsNumData = stepsTotalResult.data.map((v) => { return v.total })
-      this.stepsNumDataX = stepsTotalResult.data.map((v) => { return v.showDate })
       const weightTotalResult = await this.fetchClimbWeightTotal()
       if (weightTotalResult.code !== 200) {
         this.$message.warning(weightTotalResult.message)
       }
+      const bendTotalResult = await this.fetchSkeletonWaistBendTotal()
+      if (bendTotalResult.code !== 200) {
+        this.$message.warning(bendTotalResult.message)
+      }
+      this.bendNumData = bendTotalResult.data.map((v) => { return v.total })
+      this.bendNumDataX = bendTotalResult.data.map((v) => { return v.showDate })
+      const liftTotalResult = await this.fetchSkeletonArmLiftTotal()
+      if (liftTotalResult.code !== 200) {
+        this.$message.warning(liftTotalResult.message)
+      }
+      const sitTotalResult = await this.fetchSkeletonButtockSitTotal()
+      if (sitTotalResult.code !== 200) {
+        this.$message.warning(sitTotalResult.message)
+      }
+      this.sitNumData = sitTotalResult.data.map((v) => { return v.total })
+      this.sitNumDataX = sitTotalResult.data.map((v) => { return v.showDate })
+      this.liftNumData = liftTotalResult.data.map((v) => { return v.total })
+      this.liftNumDataX = liftTotalResult.data.map((v) => { return v.showDate })
+      this.bendNumOption.series[0].data = this.bendNumData
+      this.bendNumOption.xAxis.data = this.bendNumDataX
+      this.liftNumOption.series[0].data = this.liftNumData
+      this.liftNumOption.xAxis.data = this.liftNumDataX
+      this.sitNumOption.series[0].data = this.sitNumData
+      this.sitNumOption.xAxis.data = this.sitNumDataX
       this.weightNumData = weightTotalResult.data.map((v) => { return v.total })
       this.weightNumDataX = weightTotalResult.data.map((v) => { return v.showDate })
-      this.activeRateOption.series[0].data = this.activeRateData
-      this.stepsNumOption.series[0].data = this.stepsNumData
-      this.stepsNumOption.xAxis.data = this.stepsNumDataX
       this.bootNumOption.series[0].data = this.bootNumData
       this.bootNumOption.xAxis.data = this.bootNumDataX
       this.weightNumOption.series[0].data = this.weightNumData
       this.weightNumOption.xAxis.data = this.weightNumDataX
-      this.activeRateOption.series[0].data = this.activeRateData
-      this.activeRateOption.xAxis.data = this.activeRateDataX
     },
     async initCircle() {
       const armResult = await this.fetchSkeletonArmActiveRate()
@@ -695,6 +756,30 @@ export default {
     workEfficiency(event) {
       this.$router.push({
         name: 'skeletonArmBusinessET'
+      })
+    },
+    bendClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistHealth',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    liftNumClick(event) {
+      this.$router.push({
+        name: 'skeletonArmLiftNum',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    sitClick(event) {
+      this.$router.push({
+        name: 'skeletonButtockSitNum',
+        query: {
+          date: event.name
+        }
       })
     }
   }

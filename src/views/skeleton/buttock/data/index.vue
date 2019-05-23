@@ -322,7 +322,7 @@ export default {
       this.durationNumData = durationTotalResult.data.map((v) => { return v.total })
       this.durationNumDataX = durationTotalResult.data.map((v) => { return v.showDate })
       const sitTotalResult = await this.fetchSkeletonButtockSitTotal(param)
-      if (durationTotalResult.code !== 200) {
+      if (sitTotalResult.code !== 200) {
         this.$message.warning(durationTotalResult.message)
       }
       this.sitNumData = sitTotalResult.data.map((v) => { return v.total })
