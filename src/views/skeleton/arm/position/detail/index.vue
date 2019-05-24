@@ -2,7 +2,7 @@
   <div class="armPositionDetail">
     <div class="armPositionDetail-title">
       <!-- //todo -->
-      <DetailTitle :sub-title="'设备序列号：'+filter.sn" title="轨迹路径"/>
+      <DetailTitle :sub-title="'设备序列号：'+filter.deviceId" title="轨迹路径"/>
     </div>
     <div class="armPositionDetail-filter">
       <el-form :inline="true">
@@ -34,7 +34,7 @@
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ index }}</td>
+              <td width="15%">{{ index + 1 }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.time }}</td>
