@@ -100,7 +100,7 @@ export default {
     return {
       filter: {
         name: '',
-        sn: '',
+        deviceId: '',
         customer: '',
         department: ''
       },

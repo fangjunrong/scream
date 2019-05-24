@@ -100,7 +100,7 @@ export default {
     return {
       filter: {
         name: '',
-        sn: '',
+        deviceId: '',
         customer: '',
         department: ''
       },
@@ -156,7 +156,6 @@ export default {
       this.personList = personList.data.result
     },
     async search() {
-      debugger
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
       const result = await this.fetchSkeletonArmPersonList(param)
       if (result.code !== 200) {

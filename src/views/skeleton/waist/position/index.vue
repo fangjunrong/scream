@@ -155,7 +155,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     },
     async getData(param) {
       return await this.fetchSkeletonWaistPositionList(param)

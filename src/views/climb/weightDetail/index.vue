@@ -1,7 +1,7 @@
 <template>
   <div class="climbWeightDetail">
     <div class="climbWeightDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="重量等级详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="重量等级详情"/>
     </div>
     <div class="climbWeightDetail-filter">
       <el-form :inline="true">
@@ -78,7 +78,8 @@ export default {
   data() {
     return {
       filter: {
-        searchDate: ''
+        searchDate: '',
+        deviceId: ''
       },
       tableData: [{
         id: '0',
@@ -142,7 +143,7 @@ export default {
     const searchDate = this.$route.query.date
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     this.search()
   },
   methods: {

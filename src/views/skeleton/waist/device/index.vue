@@ -85,7 +85,7 @@
     <el-dialog :visible.sync="bind.visible" :title="bind.typeText">
       <el-form :model="bind.data">
         <el-form-item :label-width="formLabelWidth" label="选择人员">
-          <el-select v-model="bind.data.people" placeholder="请选择">
+          <el-select v-model="bind.data.personId" placeholder="请选择">
             <el-option
               v-for="item in personList"
               :key="item.id"
@@ -156,7 +156,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      const personList = await this.fetchSkeletonWaistDeviceList({
+      const personList = await this.fetchSkeletonWaistPersonList({
         pageNumber: 1,
         pageSize: 100000
       })
@@ -225,23 +225,46 @@ export default {
       this.bind.typeText = `序列号：${item.sn}`
     },
     async bindSubmit() {
-      this.$message('待做')
-      // const id = this.bind.data.id ? this.bind.data.id : ''
-      // const result = await this.changeSkeletonWaistDevice(this.bind.data)
-      // if (result.code !== 200) {
-      //   this.$message.warning(result.message)
-      //   return false
-      // }
-      // if (id) {
-      //   this.$message.success('修改成功')
-      // } else {
-      //   this.$message.success('添加成功')
-      // }
-      // this.bind.visible = false
-      // this.search()
+      if (!this.bind.data.personId) {
+        this.$message('请选择人员')
+        return false
+      }
+      this.bind.data.status = 1
+      const result = await this.changeSkeletonWaistDevice(this.bind.data)
+      if (result.code !== 200) {
+        this.$message.warning(result.message)
+        return false
+      }
+      this.$message.success('绑定成功')
+      this.bind.visible = false
+      this.search()
     },
-    unbindItem() {
-      this.$message('待做')
+    unbindItem(item) {
+      this.bind.data = _.cloneDeep(item)
+      this.$confirm('确认解除绑定？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async response => {
+        if (!this.bind.data.personId) {
+          this.$message('未有绑定人员')
+          return false
+        }
+        this.bind.data.personId = ''
+        this.bind.data.status = 0
+        const result = await this.changeSkeletonWaistDevice(this.bind.data)
+        if (result.code !== 200) {
+          this.$message.warning(result.message)
+          return false
+        }
+        this.$message.success('取消绑定成功')
+        this.search()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消解除绑定'
+        })
+      })
     },
     async handleSizeChange(val) {
       const result = await this.getData({

@@ -1,10 +1,10 @@
 <template>
   <div class="skeletonButtockSitByDay">
     <div class="skeletonButtockSitByDay-title">
-      <DetailTitle title="坐下时长"/>
+      <DetailTitle title="坐下次数"/>
     </div>
     <div class="skeletonButtockSitByDay-filter">
-      设备型号：{{ filter.model }} 设备序列号：{{ filter.sn }}
+      设备型号：{{ filter.model }} 设备序列号：{{ filter.deviceId }}
     </div>
     <div class="skeletonButtockSitByDay-charts">
       <el-tabs v-model="activeName" tab-position="top" style="height: 200px;">
@@ -14,7 +14,7 @@
       </el-tabs>
       <div class="skeletonButtockSitByDay-charts-container">
         <div class="chart3">
-          <LittleTitle title="坐下时长"/>
+          <LittleTitle title="坐下次数"/>
           <v-chart
             :options="sitNumOption"
             :theme="themebrokeline"
@@ -41,7 +41,7 @@ export default {
     return {
       filter: {
         searchDate: '',
-        sn: '',
+        deviceId: '',
         customer: '',
         department: '',
         moedel: '',
@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     this.themebrokeline = brokeline
-    this.filter.sn = this.$route.query.sn
+    this.filter.deviceId = this.$route.query.sn
     this.filter.model = this.$route.query.model
     this.filter.searchDate = this.$route.query.date
     this.filter.customer = this.$route.query.customer
@@ -117,7 +117,7 @@ export default {
       'fetchSkeletonButtockSitTotal'
     ]),
     async search() {
-      const param = _.pick(this.filter, ['days', 'sn', 'customer', 'department'])
+      const param = _.pick(this.filter, ['days', 'deviceId', 'customer', 'department'])
       const result = await this.fetchSkeletonButtockSitTotal(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
@@ -133,7 +133,7 @@ export default {
         name: 'skeletonButtockSitNumDetail',
         query: {
           date: event.name,
-          sn: this.filter.sn,
+          sn: this.filter.deviceId,
           model: this.filter.model
         }
       })

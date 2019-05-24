@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonWaistStepDetail">
     <div class="skeletonWaistStepDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="步数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="步数详情"/>
     </div>
     <div class="skeletonWaistStepDetail-filter">
       <el-form :inline="true">
@@ -132,7 +132,7 @@ export default {
     const searchDate = this.$route.query.date
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     this.search()
   },
   methods: {

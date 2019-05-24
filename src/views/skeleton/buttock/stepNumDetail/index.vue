@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockStepDetail">
     <div class="skeletonButtockStepDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="步数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="步数详情"/>
     </div>
     <div class="skeletonButtockStepDetail-filter">
       <el-form :inline="true">
@@ -43,7 +43,7 @@
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
               <td width="15%">{{ index }}</td>
-              <td width="20%">{{ item.durNum }}</td>
+              <td width="20%">{{ item.stepsNum }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.showDate }}</td>
             </tr>
@@ -132,7 +132,7 @@ export default {
     const searchDate = this.$route.query.date
     this.filter.searchDate = searchDate
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     this.search()
   },
   methods: {
@@ -142,7 +142,7 @@ export default {
     initCharts() {
       this.themebrokeline = brokeline
       this.brokeline.xAxis.data = _.map(this.tableData, 'createTime')
-      this.brokeline.series[0].data = _.map(this.tableData, 'durNum')
+      this.brokeline.series[0].data = _.map(this.tableData, 'stepsNum')
     },
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })

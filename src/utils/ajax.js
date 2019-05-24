@@ -2,7 +2,7 @@ import axios from 'axios' // 引入axios
 // import qs from 'qs' // 引入qs
 import Cookies from 'js-cookie'
 import router from '@/router/index'
-import { Loading } from 'element-ui'
+// import { Loading } from 'element-ui'
 import { Message } from 'element-ui'
 
 // axios 默认配置 更多配置查看Axios中文文档
@@ -92,15 +92,15 @@ const ajax = {
    * @returns {Promise}
    */
   get(url, data = {}) {
-    var loadInstance = Loading.service()
+    // var loadInstance = Loading.service()
     return new Promise((resolve, reject) => {
       axios.get(url, {
         params: data
       }).then(response => {
-        loadInstance.close()
+        // loadInstance.close()
         resolve(response.data)
       }, err => {
-        loadInstance.close()
+        // loadInstance.close()
         reject(err)
       })
     })
@@ -112,14 +112,14 @@ const ajax = {
    * @returns {Promise}
    */
   post(url, data = {}) {
-    var loadInstance = Loading.service()
+    // var loadInstance = Loading.service()
     return new Promise((resolve, reject) => {
       axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
       axios.post(url, data).then(response => {
-        loadInstance.close()
+        // loadInstance.close()
         resolve(response.data)
       }, err => {
-        loadInstance.close()
+        // loadInstance.close()
         reject(err)
       })
     })

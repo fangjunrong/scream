@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitNum">
     <div class="skeletonButtockSitNum-title">
-      <DetailTitle :sub-title="filter.searchDate" title="坐下时长"/>
+      <DetailTitle :sub-title="filter.searchDate" title="坐下次数"/>
     </div>
     <div class="skeletonButtockSitNum-filter">
       <el-form :inline="true">
@@ -29,7 +29,7 @@
           <th width="15%">设备ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
-          <th width="30%">坐下时长</th>
+          <th width="30%">坐下次数</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
@@ -67,7 +67,7 @@ export default {
         customer: '',
         department: '',
         searchDate: '',
-        sn: ''
+        deviceId: ''
       },
       tableData: [],
       info: {
@@ -88,7 +88,7 @@ export default {
     const date = this.$route.query.date
     this.filter.searchDate = date
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     this.search()
   },
   methods: {

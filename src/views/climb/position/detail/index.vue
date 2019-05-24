@@ -67,7 +67,7 @@ export default {
     return {
       filter: {
         searchDate: '',
-        sn: ''
+        deviceId: ''
       },
       tableData: [],
       info: {
@@ -85,7 +85,7 @@ export default {
   },
   mounted() {
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     const date = this.$route.query.date
     this.filter.searchDate = date
     this.search()
@@ -168,7 +168,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     },
     async getData(param) {
       return await this.fetchClimbPositionDetail(param)
@@ -225,7 +225,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     },
     async handleCurrentChange(val) {
       const result = await this.getData({
@@ -238,7 +238,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     }
   }
 }

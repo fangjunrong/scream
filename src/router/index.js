@@ -92,6 +92,7 @@ export const constantRouterMap = [
         children: [{
           path: 'arm',
           name: 'skeletonArm',
+          redirect: '/main/skeleton/arm/device',
           component: () =>
               import('@/views/skeleton/arm/index'),
           children: [{
@@ -178,6 +179,7 @@ export const constantRouterMap = [
         }, {
           path: 'waist',
           name: 'skeletonWaist',
+          redirect: '/main/skeleton/waist/device',
           component: () =>
               import('@/views/skeleton/waist/index'),
           children: [{
@@ -249,6 +251,7 @@ export const constantRouterMap = [
         }, {
           path: 'buttock',
           name: 'skeletonButtock',
+          redirect: '/main/skeleton/buttock/device',
           component: () =>
               import('@/views/skeleton/buttock/index'),
           children: [{

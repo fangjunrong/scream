@@ -165,7 +165,7 @@ export default {
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
       setTimeout(() => {
-        this.initMap()
+        setTimeout(() => { this.initMap() }, 300)
       }, 100)
     },
     async getData(param) {
@@ -223,7 +223,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     },
     async handleCurrentChange(val) {
       const result = await this.getData({
@@ -236,7 +236,7 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
-      this.initMap()
+      setTimeout(() => { this.initMap() }, 300)
     }
   }
 }

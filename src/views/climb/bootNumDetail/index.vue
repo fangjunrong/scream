@@ -1,7 +1,7 @@
 <template>
   <div class="climbDevice">
     <div class="climbDevice-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.sn" title="开机次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="开机次数详情"/>
     </div>
     <div class="climbDevice-filter">
       <el-form :inline="true">
@@ -55,7 +55,7 @@ export default {
     return {
       filter: {
         searchDate: '',
-        sn: ''
+        deviceId: ''
       },
       tableData: [{
         id: '0',
@@ -83,7 +83,7 @@ export default {
   },
   mounted() {
     const sn = this.$route.query.sn
-    this.filter.sn = sn
+    this.filter.deviceId = sn
     const date = this.$route.query.date
     this.filter.searchDate = date
     this.search()
