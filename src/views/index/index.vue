@@ -244,6 +244,7 @@ export default {
         },
         tooltip: {
           trigger: 'item',
+          position: 'right',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
         legend: {
@@ -577,7 +578,8 @@ export default {
       'fetchClimbActiveRate',
       'fetchClimbBootTotal',
       'fetchClimbStepsTotal',
-      'fetchClimbWeightTotal'
+      'fetchClimbWeightTotal',
+      'fetchClimbDeviceList'
     ]),
     ...mapActions('skeletonArm', [
       'fetchSkeletonArmActiveRate',
@@ -605,7 +607,6 @@ export default {
       }
       this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
       this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
-      this.climbNum = this.activeRateData.length
       const bootTotalResult = await this.fetchClimbBootTotal()
       if (bootTotalResult.code !== 200) {
         this.$message.warning(bootTotalResult.message)
@@ -640,6 +641,14 @@ export default {
       this.bootNumOption.xAxis.data = this.bootNumDataX
     },
     async initCircle() {
+      const climbDeviceResult = await this.fetchClimbDeviceList({
+        pageNumber: 1,
+        pageSize: 10
+      })
+      if (climbDeviceResult.code !== 200) {
+        this.$message.warning(climbDeviceResult.message)
+      }
+      this.climbNum = climbDeviceResult.data.pagination.totalCount
       const armDeviceResult = await this.fetchSkeletonArmDeviceList({
         pageNumber: 1,
         pageSize: 10
