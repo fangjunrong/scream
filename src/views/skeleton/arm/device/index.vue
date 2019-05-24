@@ -15,28 +15,34 @@
     <div class="armDevice-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="80">ID</th>
-          <th width="10%">名称</th>
-          <th width="10%">型号</th>
+          <th width="60">ID</th>
+          <th width="9%">名称</th>
+          <th width="11%">型号</th>
           <th width="15%">序列号</th>
-          <th width="10%">所属厂商</th>
-          <th width="10%">穿戴人员</th>
-          <th width="8%">状态</th>
-          <th width="15%">更新时间</th>
-          <th width="280">操作</th>
+          <th width="7%">所属厂商</th>
+          <th width="7%">客户</th>
+          <th width="7%">归属部门</th>
+          <th width="7%">联系人</th>
+          <th width="7%">穿戴人员</th>
+          <th width="6%">状态</th>
+          <!--<th width="15%">更新时间</th>-->
+          <th width="200">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="80">{{ item.id }}</td>
-          <td width="10%">{{ item.name }}</td>
-          <td width="10%">{{ item.model }}</td>
+          <td width="60">{{ item.id }}</td>
+          <td width="9%">{{ item.name }}</td>
+          <td width="11%">{{ item.model }}</td>
           <td width="15%">{{ item.sn }}</td>
-          <td width="10%">{{ item.company }}</td>
-          <td width="10%">{{ item.personName }}</td>
-          <td width="8%">{{ item.status === 1 ? "已绑定" : "未绑定" }}</td>
-          <td width="15%">{{ item.createTime }}</td>
-          <td width="280">
+          <td width="7%">{{ item.company }}</td>
+          <td width="7%">{{ item.customer }}</td>
+          <td width="7%">{{ item.department }}</td>
+          <td width="7%">{{ item.contacts }}</td>
+          <td width="7%">{{ item.personModel ? item.personModel.name : '' }}</td>
+          <td width="6%">{{ item.status === 1 ? "已绑定" : "未绑定" }}</td>
+          <!--<td width="15%">{{ item.createTime }}</td>-->
+          <td width="200">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
             <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
             <el-button v-if="!item.status" type="primary" class="selftable-btn" @click="bindItem(item)">绑定</el-button>
@@ -67,11 +73,17 @@
         <el-form-item :label-width="formLabelWidth" label="序列号">
           <el-input v-model="info.data.sn"></el-input>
         </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="所属厂商">
+          <el-input v-model="info.data.company"></el-input>
+        </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="客户">
           <el-input v-model="info.data.customer"></el-input>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="部门">
+        <el-form-item :label-width="formLabelWidth" label="归属部门">
           <el-input v-model="info.data.department"></el-input>
+        </el-form-item>
+        <el-form-item :label-width="formLabelWidth" label="联系人">
+          <el-input v-model="info.data.contacts"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

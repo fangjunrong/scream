@@ -83,30 +83,30 @@
       </el-table> -->
       <table class="selftable selftable-head">
         <tr>
-          <th width="80">ID</th>
+          <th width="60">ID</th>
           <th width="10%">名称</th>
           <th width="15%">型号</th>
-          <th width="10%">序列号</th>
+          <th width="15%">序列号</th>
           <th width="10%">所属厂商</th>
           <th width="10%">客户</th>
           <th width="8%">归属部门</th>
           <th width="8%">联系人</th>
-          <th width="10%">创建时间</th>
-          <th width="200">操作</th>
+          <!--<th width="10%">创建时间</th>-->
+          <th width="120">操作</th>
         </tr>
       </table>
       <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="80">{{ item.id }}</td>
+          <td width="60">{{ item.id }}</td>
           <td width="10%">{{ item.name }}</td>
           <td width="15%">{{ item.model }}</td>
-          <td width="10%">{{ item.sn }}</td>
+          <td width="15%">{{ item.sn }}</td>
           <td width="10%">{{ item.company }}</td>
           <td width="10%">{{ item.customer }}</td>
           <td width="8%">{{ item.department }}</td>
           <td width="8%">{{ item.contacts }}</td>
-          <td width="10%">{{ item.createTime }}</td>
-          <td width="200">
+          <!--<td width="10%">{{ item.createTime }}</td>-->
+          <td width="120">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
             <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
           </td>
