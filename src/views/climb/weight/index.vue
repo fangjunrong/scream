@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="filter.createTime"
+            v-model="filter.searchDate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -66,7 +66,8 @@ export default {
       filter: {
         customer: '',
         department: '',
-        searchDate: ''
+        searchDate: '',
+        deviceId: ''
       },
       tableData: [],
       info: {
@@ -87,6 +88,8 @@ export default {
   mounted() {
     const date = this.$route.query.date
     this.filter.searchDate = date
+    const sn = this.$route.query.sn
+    this.filter.deviceId = sn
     this.search()
   },
   methods: {
@@ -110,8 +113,11 @@ export default {
       this.$router.push({
         name: 'climbWeightByDay',
         query: {
+          date: item.showDate,
           sn: item.climbDeviceModel.sn,
-          model: item.climbDeviceModel.model
+          model: item.climbDeviceModel.model,
+          customer: this.filter.customer,
+          department: this.filter.department
         }
       })
     },

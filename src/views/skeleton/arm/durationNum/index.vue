@@ -26,20 +26,20 @@
     <div class="skeletonArmDurationNum-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="15%">设备ID</th>
+          <th width="15%">ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
           <th width="30%">托举时长</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
-      <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+      <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="15%">{{ item.deviceId }}</td>
+          <td width="15%">{{ index + 1 }}</td>
           <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
           <td width="20%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.sn : '' }}</div></td>
-          <td width="30%">{{ item.durationNum }}</td>
-          <td width="20%">{{ item.createTime }}</td>
+          <td width="30%">{{ item.durNum }}</td>
+          <td width="20%">{{ timestampToPeriod(item.createTime) }}</td>
         </tr>
       </table>
     </div>
@@ -143,6 +143,19 @@ export default {
       this.tableData = result.data.result
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
+    },
+    timestampToPeriod(timestamp) {
+      var date = new Date(timestamp)
+      var h = date.getHours()
+      if (h < 11) {
+        return '早上'
+      } else if (h < 13) {
+        return '中午'
+      } else if (h < 18) {
+        return '下午'
+      } else {
+        return '晚上'
+      }
     }
   }
 }

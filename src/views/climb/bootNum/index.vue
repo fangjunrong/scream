@@ -26,16 +26,16 @@
     <div class="climbDevice-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="15%">设备ID</th>
+          <th width="15%">ID</th>
           <th width="20%">设备型号</th>
           <th width="20%">设备序列号</th>
           <th width="30%">开机次数</th>
           <th width="20%">最新更新时间</th>
         </tr>
       </table>
-      <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+      <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="15%">{{ item.deviceId }}</td>
+          <td width="15%">{{ index + 1 }}</td>
           <td width="20%">{{ item.climbDeviceModel ? item.climbDeviceModel.model : '' }}</td>
           <td width="20%"><div class="link" @click="toDetail(item)">{{ item.climbDeviceModel ? item.climbDeviceModel.sn : '' }}</div></td>
           <td width="30%">{{ item.bootNum }}</td>
