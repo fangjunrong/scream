@@ -71,7 +71,7 @@
             </div>
           </div>
           <div class="index__container-horizon-box3 box">
-            <LittleTitle title="开机次数 弯腰次数"/>
+            <LittleTitle title="开机次数 在线活跃率"/>
             <v-chart :options="columnar" :theme="themecolumnar" style="height: 400px; width: 448px;"/>
           </div>
         </div>
@@ -737,7 +737,7 @@ export default {
         })
       } else if (event.name === '爬楼机数量') {
         this.$router.push({
-          name: 'climb'
+          name: 'climbDevice'
         })
       }
     },
