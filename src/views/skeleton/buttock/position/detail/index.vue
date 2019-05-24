@@ -37,7 +37,7 @@
               <td width="15%">{{ index + 1 }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
               <td width="20%">{{ item.createTime }}</td>
-              <td width="20%">{{ item.id }}</td>
+              <td width="20%">{{ timestampToPeriod(item.createTime) }}</td>
             </tr>
           </table>
         </el-tab-pane>
@@ -198,6 +198,19 @@ export default {
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
       setTimeout(() => { this.initMap() }, 300)
+    },
+    timestampToPeriod(timestamp) {
+      var date = new Date(timestamp)
+      var h = date.getHours()
+      if (h < 11) {
+        return '早上'
+      } else if (h < 13) {
+        return '中午'
+      } else if (h < 18) {
+        return '下午'
+      } else {
+        return '晚上'
+      }
     }
   }
 }
