@@ -25,16 +25,16 @@
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="15%">设备ID</th>
+              <th width="15%">ID</th>
               <th width="20%">设备型号</th>
               <th width="20%">设备序列号</th>
               <th width="30%">定位信息(经度, 纬度)</th>
               <th width="20%">更新时间</th>
             </tr>
           </table>
-          <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+          <table v-for="(item,index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ item.deviceId }}</td>
+              <td width="15%">{{ index + 1 }}</td>
               <td width="20%">{{ item.deviceModel ? item.deviceModel.model : '' }}</td>
               <td width="20%">{{ item.deviceModel ? item.deviceModel.sn : '' }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
@@ -109,7 +109,7 @@ export default {
         var marker = new AMap.Marker({
           position: point,
           // offset: new AMap.Pixel(-12,-12),
-          title: _self.tableData[0].model + ' : ' + _self.tableData[0].id,
+          title: _self.tableData[0].deviceModel.model + ' : ' + _self.tableData[0].deviceModel.sn,
           map: map
         })
         marker.on('click', function() { _self.jumpToDetail(_self.tableData[0]) }, _self.tableData[0].id)
@@ -120,7 +120,7 @@ export default {
           marker = new AMap.Marker({
             position: point,
             // offset: new AMap.Pixel(-12,-12),
-            title: _self.tableData[i].model + ' : ' + _self.tableData[i].id,
+            title: _self.tableData[i].deviceModel.model + ' : ' + _self.tableData[i].deviceModel.sn,
             map: map
           })
           marker.on('click', function() { _self.jumpToDetail(_self.tableData[i]) }, _self.tableData[i].id)
