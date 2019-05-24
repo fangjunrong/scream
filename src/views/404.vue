@@ -18,7 +18,7 @@
 </template>
 
 <script>
-
+// 注释
 export default {
   name: 'Page404',
   computed: {
