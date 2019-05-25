@@ -24,8 +24,11 @@
           </div>
           <div class="index__container-horizon-box2 box">
             <el-carousel trigger="click" height="448px">
-              <el-carousel-item v-for="item in 4" :key="item">
-                <h3 class="small">{{ item }}</h3>
+              <el-carousel-item v-for="(item, index) in picList" :key="index" @click.native="linkTo(item.link)">
+                <Picture
+                  :src="item.pic"
+                  size="856 448"
+                />
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -88,6 +91,11 @@ import brokeline from '@/utils/echartsTheme/brokeline.json'
 import arealine from '@/utils/echartsTheme/brokeline.json'
 import columnar from '@/utils/echartsTheme/columnar.json'
 import { getNowFormatDate } from '@/utils/common'
+import armPic from '@/assets/arm.jpeg'
+import buttockPic from '@/assets/buttock.png'
+import waistPic from '@/assets/waist.png'
+import waistPowerPic from '@/assets/waist_power.png'
+import climbPic from '@/assets/climb.jpg'
 
 import Header from './../layout/main/uiComponents/header/index'
 export default {
@@ -98,6 +106,22 @@ export default {
   },
   data() {
     return {
+      picList: [{
+        link: '/main/climb/device',
+        pic: climbPic
+      }, {
+        link: '/main/skeleton/arm/device',
+        pic: armPic
+      }, {
+        link: '/main/skeleton/waist/device',
+        pic: waistPic
+      }, {
+        link: '/main/skeleton/waist/device',
+        pic: waistPowerPic
+      }, {
+        link: '/main/skeleton/buttock/device',
+        pic: buttockPic
+      }],
       textarea: '',
       bootNumData: [],
       bootNumdataX: [],
@@ -599,6 +623,9 @@ export default {
       'fetchSkeletonButtockDeviceList',
       'fetchSkeletonButtockBootTotal'
     ]),
+    linkTo(link) {
+      this.$router.push(link)
+    },
     async initBrokeLine() {
       this.themebrokeline = brokeline
       const activeRateResult = await this.fetchClimbActiveRate()
