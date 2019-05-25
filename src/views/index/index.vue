@@ -6,20 +6,13 @@
         <div class="index__container-top boxs">
           <div class="index__container-horizon-box1 box">
             <div class="chart1">
-              <LittleTitle title="台阶数"/>
-              <v-chart
-                :options="bootNumOption"
-                :theme="themebrokeline"
-                style="height: 194px;width: 268px"
-                @click="climbStepNumClick"/>
+              <LittleTitle title="工作效率"/>
+              <v-chart :options="workEfficiencyOption" :theme="themearealine" style="height: 194px;width: 268px" @click="workEfficiency"/>
             </div>
             <div class="chart2">
-              <LittleTitle title="搬动次数"/>
-              <v-chart
-                :options="bendNumOption"
-                :theme="themebrokeline"
-                style="height: 194px;width: 268px"
-                @click="bendClick"/>
+              <LittleTitle title="成本费用"/>
+              <v-chart :options="costOption" :theme="themearealine" style="height: 194px;width: 268px" @click="workEfficiency"/>
+
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
@@ -34,12 +27,12 @@
           </div>
           <div class="index__container-horizon-box3 box circle">
             <LittleTitle title="设备总数量"/>
-            <div class="half">
-              <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
+            <div class="">
+              <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 400px;width: 490px" @click="numClick"/>
             </div>
-            <div class="half">
+            <!-- <div class="half">
               <v-chart :options="allNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="index__container-bottom boxs">
@@ -53,24 +46,32 @@
                 @click="liftNumClick"/>
             </div>
             <div class="chart4">
-              <LittleTitle title="支撑次数"/>
+              <LittleTitle title="台阶数"/>
               <v-chart
-                :options="sitNumOption"
+                :options="bootNumOption"
                 :theme="themebrokeline"
                 style="height: 194px;width: 268px"
-                @click="sitClick"/>
+                @click="climbStepNumClick"/>
             </div>
           </div>
           <div class="index__container-horizon-box2 box">
             <div class="half">
-              <LittleTitle title="工作效率"/>
-              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px" @click="workEfficiency"/>
-              <div class="summary">工作效率（按月）：同比增长 <span class="num">20%</span> ，环比增长 <span class="num">30%</span></div>
+              <LittleTitle title="搬动次数"/>
+              <v-chart
+                :options="bendNumOption"
+                :theme="themebrokeline"
+                style="height: 400px;width: 430px"
+                @click="bendClick"/>
+                <!-- <div class="summary">工作效率（按月）：同比增长 <span class="num">20%</span> ，环比增长 <span class="num">30%</span></div> -->
             </div>
             <div class="half">
-              <LittleTitle title="成本费用"/>
-              <v-chart :options="arealine" :theme="themearealine" style="height: 350px;width: 430px" @click="workEfficiency"/>
-              <div class="summary">成本费用（按月）：同比减少 <span class="num">30%</span> ，环比减少 <span class="num">40%</span></div>
+              <LittleTitle title="支撑次数"/>
+              <v-chart
+                :options="sitNumOption"
+                :theme="themebrokeline"
+                style="height: 400px;width: 430px"
+                @click="sitClick"/>
+                <!-- <div class="summary">成本费用（按月）：同比减少 <span class="num">30%</span> ，环比减少 <span class="num">40%</span></div> -->
             </div>
           </div>
           <div class="index__container-horizon-box3 box">
@@ -91,7 +92,7 @@ import brokeline from '@/utils/echartsTheme/brokeline.json'
 import arealine from '@/utils/echartsTheme/brokeline.json'
 import columnar from '@/utils/echartsTheme/columnar.json'
 import { getNowFormatDate } from '@/utils/common'
-import armPic from '@/assets/arm.jpg'
+import armPic from '@/assets/arm.jpeg'
 import buttockPic from '@/assets/buttock.png'
 import waistPic from '@/assets/waist.png'
 import waistPowerPic from '@/assets/waist_power.png'
@@ -259,8 +260,9 @@ export default {
       },
       skeletonNumOption: {
         title: {
-          text: '外骨骼数量',
+          text: '设备总数量',
           left: 'center',
+          top: '30px',
           textStyle: {
             fontSize: '16',
             color: '#e1e1e1'
@@ -268,20 +270,21 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          position: 'right',
+          // position: 'right',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
         legend: {
           orient: 'vertical',
-          show: false,
-          x: 'left',
-          data: []
+          // x: 'center',
+          // y: 'bottom',
+          bottom: 0,
+          data: ['手臂外骨骼', '腰部助力外骨骼', '智能随身椅', '智能辅助设备']
         },
         series: [
           {
-            name: '外骨骼数量',
+            name: '设备总数量',
             type: 'pie',
-            radius: ['50%', '80%'],
+            radius: ['30%', '55%'],
             center: ['50%', '50%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,
@@ -290,17 +293,8 @@ export default {
               borderColor: '#001430'
             },
             label: {
-              normal: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                show: false,
-                textStyle: {
-                  fontSize: '30',
-                  fontWeight: 'bold'
-                }
-              }
+              formatter: '{b}: {@2012} ({d}%)',
+              color: '#fff'
             },
             labelLine: {
               normal: {
@@ -310,7 +304,7 @@ export default {
             data: [
               {
                 value: 1,
-                name: '上肢助力外骨骼',
+                name: '手臂外骨骼',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -364,7 +358,26 @@ export default {
                     }],
                     globalCoord: true // 缺省为 false
                   }
-                }}
+                }
+              }, { value: 1,
+                name: '智能辅助设备',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                      offset: 0, color: '#ff8400' // 0% 处的颜色
+                    },
+                    {
+                      offset: 1, color: '#ff009c' // 100% 处的颜色
+                    }],
+                    globalCoord: true // 缺省为 false
+                  }
+                }
+              }
             ]
           }
         ]
@@ -421,7 +434,7 @@ export default {
             data: [
               {
                 value: 1,
-                name: '智能辅助设备数量',
+                name: '智能辅助设备',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -467,14 +480,14 @@ export default {
       skeletonButtockNum: 1,
       skeletonNum: 1,
       climbNum: 1,
-      arealine: {
+      workEfficiencyOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: ['2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
           splitLine: { // 网格线
             'show': false
           }
@@ -483,7 +496,46 @@ export default {
           type: 'value'
         },
         series: [{
-          data: [320, 680, 280, 480, 1290, 500, 1320],
+          data: [72, 76, 82, 88, 96],
+          type: 'line',
+          color: '#4ac9d6',
+          smooth: true,
+          itemStyle: {
+            opacity: 0
+          },
+          areaStyle: { // 覆盖区域
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0, color: '#146EAF' // 0% 处的颜色
+              }, {
+                offset: 1, color: '#001E3C' // 100% 处的颜色
+              }]
+            }
+          }
+        }]
+      },
+      costOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
+          splitLine: { // 网格线
+            'show': false
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [{
+          data: [100, 96, 90, 85, 79, 70],
           type: 'line',
           color: '#4ac9d6',
           smooth: true,
@@ -703,7 +755,9 @@ export default {
       this.skeletonNumOption.series[0].data[0].value = this.skeletonArmNum
       this.skeletonNumOption.series[0].data[1].value = this.skeletonWaistNum
       this.skeletonNumOption.series[0].data[2].value = this.skeletonButtockNum
+      this.skeletonNumOption.series[0].data[3].value = this.climbNum
       this.skeletonNum = this.skeletonArmNum + this.skeletonWaistNum + this.skeletonButtockNum
+      // this.skeletonNumOption.legend.data[0] = `上肢助力外骨骼${this.skeletonArmNum}`
       this.allNum = this.climbNum + this.skeletonNum
       this.allNumOption.series[0].data[0].value = this.climbNum
       this.allNumOption.series[0].data[1].value = this.skeletonNum
@@ -771,7 +825,7 @@ export default {
         this.$router.push({
           name: 'skeletonArm'
         })
-      } else if (event.name === '智能辅助设备数量') {
+      } else if (event.name === '智能辅助设备') {
         this.$router.push({
           name: 'climbDevice'
         })
