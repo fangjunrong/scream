@@ -26,7 +26,7 @@
     <div class="climbPosition-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="地图">
-          <div id="map" style="height:500px"></div>
+          <div id="map" style="height:640px"></div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">

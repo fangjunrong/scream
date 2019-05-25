@@ -15,7 +15,7 @@
       </el-form>
       <ul class="skeletonButtockData-filter-textShow">
         <li>所有设备（共{{ deviceNum }}台）的使用信息：</li>
-        <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 支撑时长：{{ durationNumData[durationNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
+        <li>活跃设备数：{{ activeRateData[activeRateData.length - 1] }} 支撑时长：{{ durationNumData[durationNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonButtockData-charts">
@@ -26,7 +26,7 @@
       </el-tabs>
       <div class="skeletonButtockData-charts-container">
         <div class="chart1">
-          <LittleTitle title="在线活跃率"/>
+          <LittleTitle title="活跃设备数"/>
           <v-chart
             ref="online"
             :options="activeRateOption"

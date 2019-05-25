@@ -15,7 +15,7 @@
       </el-form>
       <ul class="skeletonWaistData-filter-textShow">
         <li>所有设备（共{{ deviceNum }}台）的使用信息：</li>
-        <li>在线活跃率 {{ activeRateData[activeRateData.length - 1] }}% 弯腰次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
+        <li>活跃设备数：{{ activeRateData[activeRateData.length - 1] }} 弯腰次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonWaistData-charts">
@@ -26,7 +26,7 @@
       </el-tabs>
       <div class="skeletonWaistData-charts-container">
         <div class="chart1 chart">
-          <LittleTitle title="在线活跃率"/>
+          <LittleTitle title="活跃设备数"/>
           <v-chart
             ref="online"
             :options="activeRateOption"

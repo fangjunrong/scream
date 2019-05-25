@@ -20,7 +20,7 @@
     <div class="skeletonButtockPosition-table">
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="地图">
-          <div id="map" style="height:500px" tabindex="0"></div>
+          <div id="map" style="height:640px" tabindex="0"></div>
         </el-tab-pane>
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">

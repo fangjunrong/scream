@@ -15,8 +15,8 @@
       </el-form>
       <ul class="climbData-filter-textShow">
         <li>所有设备（共 {{ deviceNum }} 台）的使用信息：</li>
-        <li>在线活跃率： {{ activeRateData[activeRateData.length - 1] }} %  台阶数：{{ stepsNumData[stepsNumData.length -1] }}
-          开机次数： {{ bootNumData[bootNumData.length - 1] }}重量等级：{{ weightNumData[weightNumData.length - 1] }}</li>
+        <li>活跃设备数：{{ activeRateData[activeRateData.length - 1] }} 台阶数：{{ stepsNumData[stepsNumData.length -1] }}
+          开机次数：{{ bootNumData[bootNumData.length - 1] }} 重量等级：{{ weightNumData[weightNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="climbData-charts">
@@ -27,7 +27,7 @@
       </el-tabs>
       <div class="climbData-charts-container">
         <div class="chart1">
-          <LittleTitle title="在线活跃率"/>
+          <LittleTitle title="活跃设备数"/>
           <v-chart
             ref="online"
             :options="activeRateOption"
