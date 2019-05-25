@@ -59,7 +59,7 @@
             @click="durationClick"/>
         </div>
         <div class="chart5">
-          <LittleTitle title="坐下次数"/>
+          <LittleTitle title="支撑次数"/>
           <v-chart
             :options="sitNumOption"
             :theme="themebrokeline"

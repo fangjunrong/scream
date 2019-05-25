@@ -23,7 +23,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-arm"></use>
           </svg>
-          <span slot="title">手臂助力外骨骼</span>
+          <span slot="title">上肢助力外骨骼</span>
         </template>
         <el-menu-item index="/main/skeleton/arm/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/person">人员信息</el-menu-item>
@@ -50,7 +50,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-buttock"></use>
           </svg>
-          <span slot="title">臀部助力外骨骼</span>
+          <span slot="title">智能随身椅</span>
         </template>
         <el-menu-item index="/main/skeleton/buttock/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/person">人员信息</el-menu-item>
@@ -63,7 +63,7 @@
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-climb"></use>
           </svg>
-          <span slot="title">爬楼机</span>
+          <span slot="title">智能辅助设备</span>
         </template>
         <el-menu-item index="/main/climb/device">设备信息</el-menu-item>
         <el-menu-item index="/main/climb/position">定位信息</el-menu-item>

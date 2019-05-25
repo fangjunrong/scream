@@ -21,7 +21,7 @@
           <th width="10%">年龄</th>
           <th width="10%">身高</th>
           <th width="10%">体重</th>
-          <th width="10%">文化水平</th>
+          <th width="10%">职称</th>
           <th width="20%">穿戴设备</th>
           <!--<th width="15%">更新时间</th>-->
           <th width="200">操作</th>
@@ -74,7 +74,7 @@
         <el-form-item :label-width="formLabelWidth" label="年龄">
           <el-input v-model="info.data.age"></el-input>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="学历">
+        <el-form-item :label-width="formLabelWidth" label="职称">
           <el-input v-model="info.data.education"></el-input>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth" label="身高">

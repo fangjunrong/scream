@@ -21,7 +21,7 @@
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="图表">
           <div class="chart1">
-            <LittleTitle title="每件搬运的弯腰次数"/>
+            <LittleTitle title="每件搬运的搬动次数"/>
             <v-chart
               :options="bendNumOption"
               :theme="themebrokeline"
@@ -32,7 +32,7 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">序列号</th>
-              <th width="20%">弯腰次数</th>
+              <th width="20%">搬动次数</th>
               <th width="20%">疲劳度</th>
               <th width="20%">最新更新时间</th>
             </tr>

@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonButtockSitDetail">
     <div class="skeletonButtockSitDetail-title">
-      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="坐下次数详情"/>
+      <DetailTitle :sub-title="'设备序列号:' + filter.deviceId" title="支撑次数详情"/>
     </div>
     <div class="skeletonButtockSitDetail-filter">
       <el-form :inline="true">
@@ -22,7 +22,7 @@
         <el-tab-pane label="图表">
           <div class="skeletonButtockSitDetail-charts-container">
             <div class="chart1">
-              <LittleTitle title="坐下次数"/>
+              <LittleTitle title="支撑次数"/>
               <v-chart
                 ref="online"
                 :options="brokeline"
@@ -35,7 +35,7 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">ID</th>
-              <th width="20%">坐下次数</th>
+              <th width="20%">支撑次数</th>
               <th width="20%">使用时间</th>
               <th width="20%">所属时段</th>
             </tr>

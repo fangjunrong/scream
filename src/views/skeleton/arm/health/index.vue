@@ -5,7 +5,7 @@
     </div>
     <div class="armHealth-filter">
       <el-form :inline="true">
-        <el-form-item label="弯腰次数">
+        <el-form-item label="搬动次数">
           <el-input v-model="filter.num" class="sinput"></el-input>
         </el-form-item>
         <el-form-item label="日期">
@@ -26,7 +26,7 @@
           <th width="10%">人员姓名</th>
           <th width="10%">设备名称</th>
           <!-- <th width="10%">搬运次数</th> -->
-          <th width="10%">弯腰次数	</th>
+          <th width="10%">搬动次数	</th>
           <th width="10%">疲劳度</th>
           <th width="10%">最新更新时间</th>
         </tr>

@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonWaistHealthDetail">
     <div class="skeletonWaistHealthDetail-title">
-      <DetailTitle title="健康管理"/>
+      <DetailTitle :sub-title="'人员姓名：' + filter.personName" title="健康管理"/>
     </div>
     <div class="skeletonWaistHealthDetail-filter">
       <el-form :inline="true">
@@ -21,7 +21,7 @@
       <el-tabs tab-position="top" style="height: 200px;">
         <el-tab-pane label="图表">
           <div class="chart1">
-            <LittleTitle title="每件搬运的弯腰次数"/>
+            <LittleTitle title="每件搬运的搬动次数"/>
             <v-chart
               :options="bendNumOption"
               :theme="themebrokeline"
@@ -32,17 +32,17 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">序列号</th>
-              <th width="20%">弯腰次数</th>
+              <th width="20%">搬动次数</th>
               <th width="20%">疲劳度</th>
               <th width="20%">最新更新时间</th>
             </tr>
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ index }}</td>
+              <td width="15%">{{ index + 1 }}</td>
               <td width="20%">{{ item.bendNum }}</td>
-              <td width="20%">{{ item.bendNum }}</td>
-              <td width="20%">{{ item.showDate }}</td>
+              <td width="20%">{{ item.fatigue }}</td>
+              <td width="20%">{{ item.createTime }}</td>
             </tr>
           </table>
         </el-tab-pane>
@@ -76,6 +76,7 @@ export default {
     return {
       filter: {
         deviceId: '',
+        personName: '',
         searchDate: ''
       },
       tableData: [],
@@ -133,6 +134,8 @@ export default {
     this.filter.searchDate = date
     const sn = this.$route.query.sn
     this.filter.deviceId = sn
+    const personName = this.$route.query.personName
+    this.filter.personName = personName
     this.themebrokeline = brokeline
     this.search()
   },
@@ -148,7 +151,7 @@ export default {
       }
       this.tableData = result.data.result
       this.bendNumData = this.tableData.map((v) => { return v.bendNum })
-      this.bendNumDataX = this.tableData.map((v) => { return v.showDate })
+      this.bendNumDataX = this.tableData.map((v) => { return v.createTime })
       this.bendNumOption.series[0].data = this.bendNumData
       this.bendNumOption.xAxis.data = this.bendNumDataX
       this.pagination.pageSize = result.data.pagination.pageSize
