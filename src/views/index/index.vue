@@ -71,7 +71,7 @@
             </div>
           </div>
           <div class="index__container-horizon-box3 box">
-            <LittleTitle title="开机次数 在线活跃率"/>
+            <LittleTitle title="开机次数 活跃设备数"/>
             <v-chart :options="columnar" :theme="themecolumnar" style="height: 400px; width: 448px;"/>
           </div>
         </div>
@@ -493,7 +493,7 @@ export default {
           }
         },
         legend: {
-          data: ['开机次数', '在线活跃率']
+          data: ['开机次数', '活跃设备数']
         },
         grid: {
           left: '3%',
@@ -539,7 +539,7 @@ export default {
             data: [120, 40, 50, 30]
           },
           {
-            name: '在线活跃率',
+            name: '活跃设备数',
             type: 'bar',
             data: [30, 50, 80, 59]
           }
@@ -708,22 +708,22 @@ export default {
       if (climbActiveRateTotalResult.code !== 200) {
         this.$message.warning(climbActiveRateTotalResult.message)
       }
-      const climbActiveRateNumToday = climbActiveRateTotalResult.data[climbActiveRateTotalResult.data.length - 1 ].total
+      const climbActiveRateNumToday = climbActiveRateTotalResult.data[climbActiveRateTotalResult.data.length - 1 ].activeRate
       const skeletonArmActiveRateTotalResult = await this.fetchSkeletonArmActiveRate({ pageSize: 10, pageNumber: 1 })
       if (skeletonArmActiveRateTotalResult.code !== 200) {
         this.$message.warning(skeletonArmActiveRateTotalResult.message)
       }
-      const skeletonArmActiveRateNumToday = skeletonArmActiveRateTotalResult.data[skeletonArmActiveRateTotalResult.data.length - 1 ].total
+      const skeletonArmActiveRateNumToday = skeletonArmActiveRateTotalResult.data[skeletonArmActiveRateTotalResult.data.length - 1 ].activeRate
       const skeletonWaistActiveRateTotalResult = await this.fetchSkeletonWaistActiveRate({ pageSize: 10, pageNumber: 1 })
       if (skeletonWaistActiveRateTotalResult.code !== 200) {
         this.$message.warning(skeletonWaistActiveRateTotalResult.message)
       }
-      const skeletonWaistActiveRateNumToday = skeletonWaistActiveRateTotalResult.data[skeletonWaistActiveRateTotalResult.data.length - 1 ].total
+      const skeletonWaistActiveRateNumToday = skeletonWaistActiveRateTotalResult.data[skeletonWaistActiveRateTotalResult.data.length - 1 ].activeRate
       const skeletonButtockActiveRateTotalResult = await this.fetchSkeletonButtockActiveRate({ pageSize: 10, pageNumber: 1 })
       if (skeletonButtockActiveRateTotalResult.code !== 200) {
         this.$message.warning(skeletonButtockActiveRateTotalResult.message)
       }
-      const skeletonButtockActiveRateNumToday = skeletonButtockActiveRateTotalResult.data[skeletonButtockActiveRateTotalResult.data.length - 1 ].total
+      const skeletonButtockActiveRateNumToday = skeletonButtockActiveRateTotalResult.data[skeletonButtockActiveRateTotalResult.data.length - 1 ].activeRate
       this.activeRateListNum = [climbActiveRateNumToday, skeletonArmActiveRateNumToday, skeletonWaistActiveRateNumToday, skeletonButtockActiveRateNumToday]
       this.columnar.series[1].data = this.activeRateListNum
     },
