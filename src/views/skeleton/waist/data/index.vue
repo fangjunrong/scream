@@ -15,7 +15,7 @@
       </el-form>
       <ul class="skeletonWaistData-filter-textShow">
         <li>所有设备（共{{ deviceNum }}台）的使用信息：</li>
-        <li>活跃设备数：{{ activeRateData[activeRateData.length - 1] }} 弯腰次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
+        <li>活跃设备数：{{ activeRateData[activeRateData.length - 1] }} 搬动次数：{{ bendNumData[bendNumData.length - 1] }}  开机次数：{{ bootNumData[bootNumData.length - 1] }}</li>
       </ul>
     </div>
     <div class="skeletonWaistData-charts">
@@ -51,7 +51,7 @@
             @click="stepNumClick"/>
         </div>
         <div class="chart4">
-          <LittleTitle title="弯腰次数"/>
+          <LittleTitle title="搬动次数"/>
           <v-chart
             :options="bendNumOption"
             :theme="themebrokeline"

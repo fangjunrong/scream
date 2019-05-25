@@ -14,7 +14,7 @@
                 @click="climbStepNumClick"/>
             </div>
             <div class="chart2">
-              <LittleTitle title="弯腰次数"/>
+              <LittleTitle title="搬动次数"/>
               <v-chart
                 :options="bendNumOption"
                 :theme="themebrokeline"
@@ -33,7 +33,7 @@
             </el-carousel>
           </div>
           <div class="index__container-horizon-box3 box circle">
-            <LittleTitle title="外骨骼数量 设备总数量"/>
+            <LittleTitle title="设备总数量"/>
             <div class="half">
               <v-chart :options="skeletonNumOption" :theme="themeCircle" style="height: 350px;width: 220px" @click="numClick"/>
             </div>
@@ -53,7 +53,7 @@
                 @click="liftNumClick"/>
             </div>
             <div class="chart4">
-              <LittleTitle title="坐下次数"/>
+              <LittleTitle title="支撑次数"/>
               <v-chart
                 :options="sitNumOption"
                 :theme="themebrokeline"
@@ -91,7 +91,7 @@ import brokeline from '@/utils/echartsTheme/brokeline.json'
 import arealine from '@/utils/echartsTheme/brokeline.json'
 import columnar from '@/utils/echartsTheme/columnar.json'
 import { getNowFormatDate } from '@/utils/common'
-import armPic from '@/assets/arm.jpeg'
+import armPic from '@/assets/arm.jpg'
 import buttockPic from '@/assets/buttock.png'
 import waistPic from '@/assets/waist.png'
 import waistPowerPic from '@/assets/waist_power.png'
@@ -107,9 +107,6 @@ export default {
   data() {
     return {
       picList: [{
-        link: '/main/climb/device',
-        pic: climbPic
-      }, {
         link: '/main/skeleton/arm/device',
         pic: armPic
       }, {
@@ -121,6 +118,9 @@ export default {
       }, {
         link: '/main/skeleton/buttock/device',
         pic: buttockPic
+      }, {
+        link: '/main/climb/device',
+        pic: climbPic
       }],
       textarea: '',
       bootNumData: [],
@@ -310,7 +310,7 @@ export default {
             data: [
               {
                 value: 1,
-                name: '手臂外骨骼',
+                name: '上肢助力外骨骼',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -329,7 +329,7 @@ export default {
                 }
               },
               { value: 1,
-                name: '腰部外骨骼',
+                name: '腰部助力外骨骼',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -348,7 +348,7 @@ export default {
                 }
               },
               { value: 1,
-                name: '臀部外骨骼',
+                name: '智能随身椅',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -421,7 +421,7 @@ export default {
             data: [
               {
                 value: 1,
-                name: '爬楼机数量',
+                name: '智能辅助设备数量',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -537,7 +537,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['爬楼机', '手臂外骨骼', '腰部外骨骼', '臀部外骨骼'],
+          data: ['智能辅助设备', '上肢助力外骨骼', '腰部助力外骨骼', '智能随身椅'],
           splitLine: { // 网格线
             'show': false
           },
@@ -755,15 +755,15 @@ export default {
       this.columnar.series[1].data = this.activeRateListNum
     },
     numClick(event) {
-      if (event.name === '臀部外骨骼') {
+      if (event.name === '智能随身椅') {
         this.$router.push({
           name: 'skeletonButtock'
         })
-      } else if (event.name === '腰部外骨骼') {
+      } else if (event.name === '腰部助力外骨骼') {
         this.$router.push({
           name: 'skeletonWaist'
         })
-      } else if (event.name === '手臂外骨骼') {
+      } else if (event.name === '上肢助力外骨骼') {
         this.$router.push({
           name: 'skeletonArm'
         })
@@ -771,7 +771,7 @@ export default {
         this.$router.push({
           name: 'skeletonArm'
         })
-      } else if (event.name === '爬楼机数量') {
+      } else if (event.name === '智能辅助设备数量') {
         this.$router.push({
           name: 'climbDevice'
         })

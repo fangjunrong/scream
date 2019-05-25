@@ -19,7 +19,7 @@ export const PathToChinese = {
 export const apiConstant = {
   login: '/login',
   /*
-  爬楼机
+  智能辅助设备
   */
   climbDeviceList: '/sys/climb/deviceList',
   climbDeviceEdit: '/sys/climb/deviceEdit',
@@ -41,7 +41,7 @@ export const apiConstant = {
   // climbPositionEdit: '/sys/climb/positionEdit',
   // climbPositionDelete: '/sys/climb/positionDelete',
   /*
-     腰部外骨骼
+     腰部助力外骨骼
    */
   skeletonWaistDeviceList: '/sys/carry/deviceList',
   skeletonWaistDeviceEdit: '/sys/carry/deviceEdit',
@@ -64,7 +64,7 @@ export const apiConstant = {
   skeletonWaistDataBendNumDetail: '/sys/carry/bendNumDetail',
   skeletonWaistDataBendTotal: '/sys/carry/bendTotal',
   /*
-     手臂外骨骼
+     上肢助力外骨骼
    */
   skeletonArmDeviceList: '/sys/arm/deviceList',
   skeletonArmDeviceEdit: '/sys/arm/deviceEdit',
@@ -87,7 +87,7 @@ export const apiConstant = {
   skeletonArmDataDurationNumDetail: '/sys/arm/durationNumDetail',
   skeletonArmDataDurationTotal: '/sys/arm/durationTotal',
   /*
-     臀部外骨骼
+     智能随身椅
    */
   skeletonButtockDeviceList: '/sys/hip/deviceList',
   skeletonButtockDeviceEdit: '/sys/hip/deviceEdit',
