@@ -5,9 +5,9 @@
     </div>
     <div class="armHealth-filter">
       <el-form :inline="true">
-        <el-form-item label="搬动次数">
+        <!--<el-form-item label="托举次数">
           <el-input v-model="filter.num" class="sinput"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="日期">
           <el-date-picker
             v-model="filter.searchDate"
@@ -23,21 +23,27 @@
     <div class="armHealth-table">
       <table class="selftable selftable-head">
         <tr>
+          <th width="6%">序列号</th>
           <th width="10%">人员姓名</th>
-          <th width="10%">设备名称</th>
+          <th width="10%">设备型号</th>
+          <th width="10%">设备序列号</th>
           <!-- <th width="10%">搬运次数</th> -->
-          <th width="10%">搬动次数	</th>
+          <th width="10%">托举次数</th>
+          <th width="10%">托举时长</th>
           <th width="10%">疲劳度</th>
           <th width="10%">最新更新时间</th>
         </tr>
       </table>
-      <table v-for="item in tableData" :key="item.id" class="selftable selftable-body">
+      <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
-          <td width="10%"><div class="link" @click="toDetail(item)">{{ item.deviceModel ? item.deviceModel.name : '' }}</div></td>
+          <td width="6%">{{ index + 1 }}</td>
+          <td width="10%"><div class="link" @click="toDetail(item)">{{ item.personModel ? item.personModel.name : '' }}</div></td>
           <td width="10%">{{ item.deviceModel? item.deviceModel.model : '' }}</td>
+          <td width="10%">{{ item.deviceModel? item.deviceModel.sn : '' }}</td>
           <!-- <td width="10%">{{ item.bendNum }}</td> -->
-          <td width="10%">{{ item.bendNum }}</td>
-          <td width="10%">{{ item.bendNum }}</td>
+          <td width="10%">{{ item.liftNum }}</td>
+          <td width="10%">{{ item.durNum }}</td>
+          <td width="10%">{{ item.fatigue }}</td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
       </table>
@@ -57,6 +63,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import { getNowFormatDate } from '@/utils/common'
 import _ from 'lodash'
 export default {
   name: 'ArmHealth',
@@ -89,16 +96,20 @@ export default {
   },
   mounted() {
     const date = this.$route.query.date
-    this.filter.searchDate = date
+    if (date != null) {
+      this.filter.searchDate = date
+    } else {
+      this.filter.searchDate = getNowFormatDate()
+    }
     this.search()
   },
   methods: {
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmBendNum'
+      'fetchSkeletonArmFatigue'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonArmBendNum(param)
+      const result = await this.fetchSkeletonArmFatigue(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -107,14 +118,15 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonArmBendNum(param)
+      return await this.fetchSkeletonArmFatigue(param)
     },
     toDetail(item) {
       this.$router.push({
         name: 'skeletonArmHealthDetail',
         query: {
-          date: this.filter.searchDate,
-          sn: item.deviceModel.sn
+          date: item.showDate,
+          sn: item.deviceModel.sn,
+          personName: item.personModel.name
         }
       })
     },

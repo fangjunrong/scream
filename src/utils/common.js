@@ -86,6 +86,8 @@ export const apiConstant = {
   skeletonArmDataDurationNum: '/sys/arm/durationNum',
   skeletonArmDataDurationNumDetail: '/sys/arm/durationNumDetail',
   skeletonArmDataDurationTotal: '/sys/arm/durationTotal',
+  skeletonArmDataFatigue: '/sys/arm/fatigue',
+  skeletonArmDataFatigueDetail: '/sys/arm/fatigueDetail',
   /*
      智能随身椅
    */
@@ -112,6 +114,8 @@ export const apiConstant = {
   skeletonButtockDataSitNum: '/sys/hip/sitNum',
   skeletonButtockDataSitNumDetail: '/sys/hip/sitNumDetail',
   skeletonButtockDataSitTotal: '/sys/hip/sitTotal',
+  skeletonButtockDataFatigue: '/sys/hip/fatigue',
+  skeletonButtockDataFatigueDetail: '/sys/hip/fatigueDetail',
 
   userList: '/sys/user/users',
   userEdit: '/sys/user/useredit',

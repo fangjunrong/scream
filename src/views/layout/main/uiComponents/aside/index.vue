@@ -27,6 +27,7 @@
         </template>
         <el-menu-item index="/main/skeleton/arm/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/person">人员信息</el-menu-item>
+        <el-menu-item index="/main/skeleton/arm/health">健康管理</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/position">定位信息</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/data">统计数据</el-menu-item>
         <el-menu-item index="/main/skeleton/arm/businessET">商业ET</el-menu-item>
@@ -54,6 +55,7 @@
         </template>
         <el-menu-item index="/main/skeleton/buttock/device">设备信息</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/person">人员信息</el-menu-item>
+        <el-menu-item index="/main/skeleton/buttock/health">健康管理</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/position">定位信息</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/data">统计数据</el-menu-item>
         <el-menu-item index="/main/skeleton/buttock/businessET">商业ET</el-menu-item>

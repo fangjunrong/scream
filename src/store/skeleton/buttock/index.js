@@ -110,6 +110,14 @@ const skeletonButtock = {
     async fetchSkeletonButtockDurationTotal({ commit }, data) {
       const result = await ajax.post(apiConstant.skeletonButtockDataDurationTotal, data)
       return result
+    },
+    async fetchSkeletonButtockFatigue({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataFatigue, data)
+      return result
+    },
+    async fetchSkeletonButtockFatigueDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonButtockDataFatigueDetail, data)
+      return result
     }
   }
 }

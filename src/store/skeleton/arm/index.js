@@ -98,6 +98,14 @@ const skeletonArm = {
     async fetchSkeletonArmDurationTotal({ commit }, data) {
       const result = await ajax.post(apiConstant.skeletonArmDataDurationTotal, data)
       return result
+    },
+    async fetchSkeletonArmFatigue({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataFatigue, data)
+      return result
+    },
+    async fetchSkeletonArmFatigueDetail({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonArmDataFatigueDetail, data)
+      return result
     }
   }
 }

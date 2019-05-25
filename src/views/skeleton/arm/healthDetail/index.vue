@@ -1,7 +1,7 @@
 <template>
   <div class="skeletonArmHealthDetail">
     <div class="skeletonArmHealthDetail-title">
-      <DetailTitle title="健康管理"/>
+      <DetailTitle :sub-title="'人员姓名：' + filter.personName" title="健康管理"/>
     </div>
     <div class="skeletonArmHealthDetail-filter">
       <el-form :inline="true">
@@ -32,16 +32,18 @@
           <table class="selftable selftable-head">
             <tr>
               <th width="15%">序列号</th>
-              <th width="20%">搬动次数</th>
+              <th width="20%">托举次数</th>
+              <th width="20%">托举时长</th>
               <th width="20%">疲劳度</th>
               <th width="20%">最新更新时间</th>
             </tr>
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ index }}</td>
-              <td width="20%">{{ item.bendNum }}</td>
-              <td width="20%">{{ item.bendNum }}</td>
+              <td width="15%">{{ index + 1 }}</td>
+              <td width="20%">{{ item.liftNum }}</td>
+              <td width="20%">{{ item.durNum }}</td>
+              <td width="20%">{{ item.fatigue }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>
           </table>
@@ -76,6 +78,7 @@ export default {
     return {
       filter: {
         deviceId: '',
+        personName: '',
         searchDate: ''
       },
       tableData: [],
@@ -133,29 +136,31 @@ export default {
     this.filter.searchDate = date
     const sn = this.$route.query.sn
     this.filter.deviceId = sn
+    const personName = this.$route.query.personName
+    this.filter.personName = personName
     this.themebrokeline = brokeline
     this.search()
   },
   methods: {
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmBendNumDetail'
+      'fetchSkeletonArmFatigueDetail'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonArmBendNumDetail(param)
+      const result = await this.fetchSkeletonArmFatigueDetail(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
-      this.bendNumData = this.tableData.map((v) => { return v.bendNum })
-      this.bendNumDataX = this.tableData.map((v) => { return v.showDate })
+      this.bendNumData = this.tableData.map((v) => { return v.liftNum })
+      this.bendNumDataX = this.tableData.map((v) => { return v.createTime })
       this.bendNumOption.series[0].data = this.bendNumData
       this.bendNumOption.xAxis.data = this.bendNumDataX
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonArmBendNumDetail(param)
+      return await this.fetchSkeletonArmFatigueDetail(param)
     },
     async handleSizeChange(val) {
       const result = await this.getData({
