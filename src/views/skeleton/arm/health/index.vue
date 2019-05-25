@@ -5,9 +5,9 @@
     </div>
     <div class="armHealth-filter">
       <el-form :inline="true">
-        <el-form-item label="搬动次数">
+        <!--<el-form-item label="托举次数">
           <el-input v-model="filter.num" class="sinput"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="日期">
           <el-date-picker
             v-model="filter.searchDate"
@@ -28,7 +28,8 @@
           <th width="10%">设备型号</th>
           <th width="10%">设备序列号</th>
           <!-- <th width="10%">搬运次数</th> -->
-          <th width="10%">搬动次数	</th>
+          <th width="10%">托举次数</th>
+          <th width="10%">托举时长</th>
           <th width="10%">疲劳度</th>
           <th width="10%">最新更新时间</th>
         </tr>
@@ -40,7 +41,8 @@
           <td width="10%">{{ item.deviceModel? item.deviceModel.model : '' }}</td>
           <td width="10%">{{ item.deviceModel? item.deviceModel.sn : '' }}</td>
           <!-- <td width="10%">{{ item.bendNum }}</td> -->
-          <td width="10%">{{ item.bendNum }}</td>
+          <td width="10%">{{ item.liftNum }}</td>
+          <td width="10%">{{ item.durNum }}</td>
           <td width="10%">{{ item.fatigue }}</td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
@@ -103,11 +105,11 @@ export default {
   },
   methods: {
     ...mapActions('skeletonArm', [
-      'fetchSkeletonArmBendNum'
+      'fetchSkeletonArmFatigue'
     ]),
     async search() {
       const param = _.assign(this.filter, { pageSize: 10, pageNumber: 1 })
-      const result = await this.fetchSkeletonArmBendNum(param)
+      const result = await this.fetchSkeletonArmFatigue(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -116,7 +118,7 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async getData(param) {
-      return await this.fetchSkeletonArmBendNum(param)
+      return await this.fetchSkeletonArmFatigue(param)
     },
     toDetail(item) {
       this.$router.push({
