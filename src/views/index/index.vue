@@ -262,6 +262,7 @@ export default {
         title: {
           text: '设备总数量',
           left: 'center',
+          show: false,
           top: '30px',
           textStyle: {
             fontSize: '16',
@@ -284,8 +285,8 @@ export default {
           {
             name: '设备总数量',
             type: 'pie',
-            radius: ['30%', '55%'],
-            center: ['50%', '50%'],
+            radius: ['25%', '45%'],
+            center: ['50%', '40%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,
             itemStyle: {
