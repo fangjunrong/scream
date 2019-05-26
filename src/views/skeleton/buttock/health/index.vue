@@ -43,7 +43,7 @@
           <!-- <td width="10%">{{ item.bendNum }}</td> -->
           <td width="10%">{{ item.sitNum }}</td>
           <td width="10%">{{ item.durNum }}</td>
-          <td width="10%">{{ item.fatigue }}</td>
+          <td width="10%">{{ calcuFatigue(item) }}</td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
       </table>
@@ -129,6 +129,14 @@ export default {
           personName: item.personModel.name
         }
       })
+    },
+    calcuFatigue(item) {
+      if (item.durNum < 7200) {
+        return '低'
+      } else if (item.durNum / item.sitNum < 600) {
+        return '高'
+      }
+      return '中'
     },
     async handleSizeChange(val) {
       const result = await this.getData({

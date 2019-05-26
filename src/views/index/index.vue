@@ -148,7 +148,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -181,7 +181,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -214,7 +214,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -285,7 +285,7 @@ export default {
           {
             name: '设备总数量',
             type: 'pie',
-            radius: ['30%', '50%'],
+            radius: ['35%', '75%'],
             center: ['50%', '40%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,

@@ -41,7 +41,7 @@
           <td width="10%">{{ item.deviceModel? item.deviceModel.sn : '' }}</td>
           <!-- <td width="10%">{{ item.bendNum }}</td> -->
           <td width="10%">{{ item.bendNum }}</td>
-          <td width="10%">{{ item.fatigue }}</td>
+          <td width="10%">{{ calcuFatigue(item) }}</td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
       </table>
@@ -127,6 +127,14 @@ export default {
           personName: item.personModel.name
         }
       })
+    },
+    calcuFatigue(item) {
+      if (item.bendNum < 1200) {
+        return '低'
+      } else if (item.bendNum > 3000) {
+        return '高'
+      }
+      return '中'
     },
     async handleSizeChange(val) {
       const result = await this.getData({
