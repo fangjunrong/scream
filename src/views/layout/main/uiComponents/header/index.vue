@@ -81,7 +81,10 @@ export default {
       margin-left: 2.7% !important;
     }
     .logo3{
-      margin-left: 4.6% !important;
+      position: absolute;
+      left: 50%;
+      margin-left: -380px !important;
+      // margin-left: 4.6% !important;
     }
   }
   &__right{
