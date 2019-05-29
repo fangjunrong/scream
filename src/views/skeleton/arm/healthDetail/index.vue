@@ -43,7 +43,7 @@
               <td width="15%">{{ index + 1 }}</td>
               <td width="20%">{{ item.liftNum }}</td>
               <td width="20%">{{ item.durNum }}</td>
-              <td width="20%">{{ item.fatigue }}</td>
+              <td width="20%">{{ calcuFatigue(item) }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>
           </table>
@@ -161,6 +161,14 @@ export default {
     },
     async getData(param) {
       return await this.fetchSkeletonArmFatigueDetail(param)
+    },
+    calcuFatigue(item) {
+      if (item.durNum < 3600) {
+        return '低'
+      } else if (item.durNum / item.liftNum > 60) {
+        return '高'
+      }
+      return '中'
     },
     async handleSizeChange(val) {
       const result = await this.getData({

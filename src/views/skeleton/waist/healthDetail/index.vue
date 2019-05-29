@@ -41,7 +41,7 @@
             <tr>
               <td width="15%">{{ index + 1 }}</td>
               <td width="20%">{{ item.bendNum }}</td>
-              <td width="20%">{{ item.fatigue }}</td>
+              <td width="20%">{{ calcuFatigue(item) }}</td>
               <td width="20%">{{ item.createTime }}</td>
             </tr>
           </table>
@@ -159,6 +159,14 @@ export default {
     },
     async getData(param) {
       return await this.fetchSkeletonWaistBendNumDetail(param)
+    },
+    calcuFatigue(item) {
+      if (item.bendNum < 1200) {
+        return '低'
+      } else if (item.bendNum > 3000) {
+        return '高'
+      }
+      return '中'
     },
     async handleSizeChange(val) {
       const result = await this.getData({

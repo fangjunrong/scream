@@ -93,9 +93,9 @@ import arealine from '@/utils/echartsTheme/brokeline.json'
 import columnar from '@/utils/echartsTheme/columnar.json'
 import { getNowFormatDate } from '@/utils/common'
 import armPic from '@/assets/arm.jpg'
-import buttockPic from '@/assets/buttock.png'
-import waistPic from '@/assets/waist.png'
-import waistPowerPic from '@/assets/waist_power.png'
+import buttockPic from '@/assets/buttock.jpg'
+import waistPic from '@/assets/waist.jpg'
+import waistPowerPic from '@/assets/waist_power.jpg'
 import climbPic from '@/assets/climb.jpg'
 
 import Header from './../layout/main/uiComponents/header/index'
@@ -148,7 +148,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -181,7 +181,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -214,7 +214,7 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -279,13 +279,13 @@ export default {
           // x: 'center',
           // y: 'bottom',
           bottom: 0,
-          data: ['手臂外骨骼', '腰部助力外骨骼', '智能随身椅', '智能辅助设备']
+          data: ['上肢助力外骨骼', '腰部助力外骨骼', '智能随身椅', '智能辅助设备']
         },
         series: [
           {
             name: '设备总数量',
             type: 'pie',
-            radius: ['25%', '45%'],
+            radius: ['35%', '75%'],
             center: ['50%', '40%'],
             avoidLabelOverlap: false,
             hoverAnimation: false,
@@ -294,7 +294,7 @@ export default {
               borderColor: '#001430'
             },
             label: {
-              formatter: '{b}: {@2012} ({d}%)',
+              formatter: '{@2012}台 ({d}%)',
               color: '#fff'
             },
             labelLine: {
@@ -305,7 +305,7 @@ export default {
             data: [
               {
                 value: 1,
-                name: '手臂外骨骼',
+                name: '上肢助力外骨骼',
                 itemStyle: {
                   color: {
                     type: 'linear',
@@ -488,7 +488,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
+          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
           splitLine: { // 网格线
             'show': false
           }
@@ -497,7 +497,7 @@ export default {
           type: 'value'
         },
         series: [{
-          data: [72, 76, 82, 88, 96],
+          data: [60, 72, 76, 82, 88, 96],
           type: 'line',
           color: '#4ac9d6',
           smooth: true,
@@ -590,7 +590,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['智能辅助设备', '上肢助力外骨骼', '腰部助力外骨骼', '智能随身椅'],
+          data: ['智能辅助设备', '智能随身椅', '腰部助力外骨骼', '上肢助力外骨骼'],
           splitLine: { // 网格线
             'show': false
           },
@@ -645,6 +645,7 @@ export default {
     this.initColumnar()
     this.interval = setInterval(() => {
       this.initBrokeLine()
+      this.initColumnar()
     }, 10000)
   },
   beforeDestroy() {
@@ -687,7 +688,7 @@ export default {
       }
       this.activeRateData = activeRateResult.data.map((v) => { return v.activeRate })
       this.activeRateDataX = activeRateResult.data.map((v) => { return v.showDate })
-      const bootTotalResult = await this.fetchClimbBootTotal()
+      const bootTotalResult = await this.fetchClimbStepsTotal()
       if (bootTotalResult.code !== 200) {
         this.$message.warning(bootTotalResult.message)
       }
@@ -703,14 +704,14 @@ export default {
       if (liftTotalResult.code !== 200) {
         this.$message.warning(liftTotalResult.message)
       }
+      this.liftNumData = liftTotalResult.data.map((v) => { return v.total })
+      this.liftNumDataX = liftTotalResult.data.map((v) => { return v.showDate })
       const sitTotalResult = await this.fetchSkeletonButtockSitTotal()
       if (sitTotalResult.code !== 200) {
         this.$message.warning(sitTotalResult.message)
       }
       this.sitNumData = sitTotalResult.data.map((v) => { return v.total })
       this.sitNumDataX = sitTotalResult.data.map((v) => { return v.showDate })
-      this.liftNumData = liftTotalResult.data.map((v) => { return v.total })
-      this.liftNumDataX = liftTotalResult.data.map((v) => { return v.showDate })
       this.bendNumOption.series[0].data = this.bendNumData
       this.bendNumOption.xAxis.data = this.bendNumDataX
       this.liftNumOption.series[0].data = this.liftNumData
@@ -784,7 +785,7 @@ export default {
         this.$message.warning(skeletonButtockBootTotalResult.message)
       }
       const skeletonButtockBootNumToday = skeletonButtockBootTotalResult.data[skeletonButtockBootTotalResult.data.length - 1 ].total
-      this.bootListNum = [climbBootNumToday, skeletonArmBootNumToday, skeletonWaistBootNumToday, skeletonButtockBootNumToday]
+      this.bootListNum = [climbBootNumToday, skeletonButtockBootNumToday, skeletonWaistBootNumToday, skeletonArmBootNumToday]
       this.columnar.series[0].data = this.bootListNum
       const climbActiveRateTotalResult = await this.fetchClimbActiveRate({ pageSize: 10, pageNumber: 1 })
       if (climbActiveRateTotalResult.code !== 200) {
@@ -806,7 +807,7 @@ export default {
         this.$message.warning(skeletonButtockActiveRateTotalResult.message)
       }
       const skeletonButtockActiveRateNumToday = skeletonButtockActiveRateTotalResult.data[skeletonButtockActiveRateTotalResult.data.length - 1 ].activeRate
-      this.activeRateListNum = [climbActiveRateNumToday, skeletonArmActiveRateNumToday, skeletonWaistActiveRateNumToday, skeletonButtockActiveRateNumToday]
+      this.activeRateListNum = [climbActiveRateNumToday, skeletonButtockActiveRateNumToday, skeletonWaistActiveRateNumToday, skeletonArmActiveRateNumToday]
       this.columnar.series[1].data = this.activeRateListNum
     },
     numClick(event) {

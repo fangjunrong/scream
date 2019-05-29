@@ -29,14 +29,14 @@
           <LittleTitle title="工作效率"/>
           <v-chart
             ref="online"
-            :options="brokeline"
+            :options="workEfficiencyOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"/>
         </div>
         <div class="chart2">
           <LittleTitle title="成本费用"/>
           <v-chart
-            :options="brokeline"
+            :options="costOption"
             :theme="themebrokeline"
             style="height: 450px;width: 600px"/>
         </div>
@@ -66,15 +66,14 @@ export default {
       tableData: [],
       formLabelWidth: '100px',
       themebrokeline: '',
-      onlineData: [320, 680, 280, 480, 1290, 500, 1320],
-      brokeline: {
+      workEfficiencyOption: {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c}'
         },
         xAxis: {
           type: 'category',
-          data: ['2019-04-23', '2019-04-24', '2019-04-25', '2019-04-26', '2019-04-27', '2019-04-28', '2019-04-29'],
+          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
           splitLine: { // 网格线
             'show': false
           },
@@ -89,7 +88,40 @@ export default {
           }
         },
         series: [{
-          data: this.onlineData,
+          data: [60, 72, 76, 82, 88, 96],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      costOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [100, 96, 90, 85, 79, 70],
           type: 'line',
           color: '#4ac9d6',
           itemStyle: {
@@ -105,10 +137,6 @@ export default {
   mounted() {
     this.init()
     this.themebrokeline = brokeline
-    this.brokeline.series[0].data = this.onlineData
-    // setTimeout(() => {
-    //   this.brokeline.series[0].data = [1, 2, 3, 4]
-    // }, 2000)
   },
   methods: {
     ...mapActions('climb', [
