@@ -104,7 +104,7 @@ export default {
         value: '0',
         label: '否'
       }],
-      formLabelWidth: '100px',
+      formLabelWidth: '120px',
       pagination: {
         currentPage: 1,
         pageSize: 100,
