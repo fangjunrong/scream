@@ -28,6 +28,7 @@
             <tr>
               <th width="15%">ID</th>
               <th width="30%">定位信息(经度, 纬度)</th>
+              <th width="30%">定位信息</th>
               <th width="20%">定位时间</th>
               <th width="20%">所属时段</th>
             </tr>
@@ -36,6 +37,7 @@
             <tr>
               <td width="15%">{{ index + 1 }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
+              <td width="20%">{{ convert(item.longitude, item.latitude) }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ item.id }}</td>
             </tr>
@@ -94,6 +96,24 @@ export default {
     ...mapActions('climb', [
       'fetchClimbPositionDetail'
     ]),
+    convert(longitude, latitude) {
+      var geocoder
+      let address
+      if (!geocoder) {
+        geocoder = new AMap.Geocoder({
+          city: '010', // 城市设为北京，默认：“全国”
+          radius: 1000 // 范围，默认：500
+        })
+      }
+      var lnglat = `${longitude}, ${latitude}`
+      geocoder.getAddress(lnglat, function(status, result) {
+        if (status === 'complete' && result.regeocode) {
+          address = result.regeocode.formattedAddress
+          console.log(address)
+        }
+      })
+      return address
+    },
     initMap() {
       const _self = this
       // const _data = { 'company': 'XSTO', 'contacts': '', 'countTotal': 0, 'createTime': 1550545961000, 'currentPage': 0, 'customer': '日日顺-刘女士', 'department': '', 'enablePage': false, 'id': 28, 'isDelete': 0, 'maxRows': 5000, 'model': 'ZW7170ES(1769)/IOT/德聚顺(辽宁)物流有限公司', 'name': '电动载物爬楼机', 'pageSize': 20, 'pages': 0, 'sn': '866289038519734', 'start': 0, 'stepsModels': [{ 'bootNum': 0, 'bootRate': 0.0, 'boots': 0, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542169000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9185826', 'longitude': '121.5899748', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }, { 'bootNum': 0, 'bootRate': 0.0, 'boots': 1, 'countTotal': 0, 'createDate': 1557504000000, 'createTime': 1557542260000, 'currentPage': 0, 'days': 0, 'enablePage': false, 'latitude': '038.9194043', 'longitude': '121.5909837', 'maxRows': 5000, 'pageSize': 20, 'pages': 0, 'start': 0, 'total': 0, 'usedNum': 0, 'weight': 0.0 }] }
