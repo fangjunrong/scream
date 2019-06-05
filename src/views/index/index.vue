@@ -20,6 +20,7 @@
               <el-carousel-item v-for="(item, index) in picList" :key="index" @click.native="linkTo(item.link)">
                 <Picture
                   :src="item.pic"
+                  border="none"
                   size="856 448"
                 />
               </el-carousel-item>
@@ -909,10 +910,14 @@ export default {
     }
     &-top{
       overflow: hidden;
+      display: flex;
+      justify-content: center;
     }
     &-bottom{
       overflow: hidden;
       margin-top: 16px;
+      display: flex;
+      justify-content: center;
     }
     &-horizon{
       &-box1{
@@ -968,4 +973,9 @@ export default {
     background-color: #d3dce6;
 }
 
+@media screen and (max-width: 1750px) {
+    .index__container-horizon-box3{
+      display: none;
+    }
+}
 </style>

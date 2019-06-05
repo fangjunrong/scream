@@ -104,7 +104,7 @@ export default {
         value: '0',
         label: '否'
       }],
-      formLabelWidth: '100px',
+      formLabelWidth: '120px',
       pagination: {
         currentPage: 1,
         pageSize: 100,
@@ -188,10 +188,8 @@ export default {
       })
     },
     async handleSizeChange(val) {
-      const result = await this.getData({
-        pageNumber: 1,
-        pageSize: val
-      })
+      const param = _.assign(this.filter, { pageSize: val, pageNumber: 1 })
+      const result = await this.getData(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
@@ -200,10 +198,8 @@ export default {
       this.pagination.total = result.data.pagination.totalCount
     },
     async handleCurrentChange(val) {
-      const result = await this.getData({
-        pageNumber: val,
-        pageSize: 10
-      })
+      const param = _.assign(this.filter, { pageSize: 10, pageNumber: val })
+      const result = await this.getData(param)
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }

@@ -88,7 +88,7 @@ export default {
 .index{
   height: 100%;
   width: 100%;
-  background: url('../../assets/login-bg.gif');
+  background: url('../../assets/login-bg.jpg');
   background-size: 100% 100%;
   &__form{
     position: fixed;
