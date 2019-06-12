@@ -39,7 +39,7 @@
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ index + 1 }}</td>
+              <td width="80">{{ index + 1 }}</td>
               <td width="20%">{{ item.bendNum }}</td>
               <td width="20%">{{ calcuFatigue(item) }}</td>
               <td width="20%">{{ item.createTime }}</td>

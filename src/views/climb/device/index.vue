@@ -83,7 +83,7 @@
       </el-table> -->
       <table class="selftable selftable-head">
         <tr>
-          <th width="60">ID</th>
+          <th width="80">ID</th>
           <th width="10%">名称</th>
           <th width="15%">型号</th>
           <th width="15%">序列号</th>

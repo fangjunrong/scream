@@ -26,16 +26,18 @@
         <el-tab-pane label="列表">
           <table class="selftable selftable-head">
             <tr>
-              <th width="15%">ID</th>
+              <th width="80">ID</th>
               <th width="30%">定位信息(经度, 纬度)</th>
+              <th width="20%">定位信息</th>
               <th width="20%">定位时间</th>
               <th width="20%">所属时段</th>
             </tr>
           </table>
           <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
             <tr>
-              <td width="15%">{{ index + 1 }}</td>
+              <td width="80">{{ index + 1 }}</td>
               <td width="30%">{{ item.longitude }}, {{ item.latitude }}</td>
+              <td width="20%">{{ item.addressText }}</td>
               <td width="20%">{{ item.createTime }}</td>
               <td width="20%">{{ timestampToPeriod(item.createTime) }}</td>
             </tr>
@@ -166,9 +168,30 @@ export default {
         this.$message.warning(result.message)
       }
       this.tableData = result.data.result
+      for (let i = 0; i < this.tableData.length; i++) {
+        this.convert(this.tableData[i].longitude, this.tableData[i].latitude, i)
+      }
       this.pagination.pageSize = result.data.pagination.pageSize
       this.pagination.total = result.data.pagination.totalCount
       setTimeout(() => { this.initMap() }, 300)
+    },
+    convert(longitude, latitude, i) {
+      let geocoder
+      let address
+      const _self = this
+      if (!geocoder) {
+        geocoder = new AMap.Geocoder({
+          city: '010', // 城市设为北京，默认：“全国”
+          radius: 1000 // 范围，默认：500
+        })
+      }
+      var lnglat = `${longitude}, ${latitude}`
+      geocoder.getAddress(lnglat, function(status, result) {
+        if (status === 'complete' && result.regeocode) {
+          address = result.regeocode.formattedAddress
+          _self.$set(_self.tableData[i], 'addressText', address)
+        }
+      })
     },
     async getData(param) {
       return await this.fetchSkeletonArmPositionDetail(param)

@@ -15,7 +15,7 @@
     <div class="waistDevice-table">
       <table class="selftable selftable-head">
         <tr>
-          <th width="60">ID</th>
+          <th width="80">ID</th>
           <th width="9%">名称</th>
           <th width="9%">型号</th>
           <th width="12%">序列号</th>
