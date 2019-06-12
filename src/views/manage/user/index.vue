@@ -3,7 +3,7 @@
     <div class="user-title">
       <DetailTitle title="设备信息"/>
     </div>
-    <div class="user-filter">
+    <div v-if="isManage" class="user-filter">
       <el-form :inline="true">
         <el-form-item label="用户名">
           <el-input v-model="filter.name" class="sinput"></el-input>
@@ -33,12 +33,12 @@
           <td width="20%">{{ item.createTime }}</td>
           <td width="20%">
             <el-button type="primary" class="selftable-btn" @click="change(item)">修改</el-button>
-            <el-button type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
+            <el-button v-if="isManage" type="primary" class="selftable-btn selftable-btn-delete" @click="deleteItem(item)">删除</el-button>
           </td>
         </tr>
       </table>
     </div>
-    <div class="user-pagination">
+    <div v-if="isManage" class="user-pagination">
       <el-pagination
         :current-page="pagination.currentPage"
         :page-sizes="[10, 20, 50, 100]"
@@ -51,13 +51,13 @@
     </div>
     <el-dialog :visible.sync="info.visible" :title="info.typeText">
       <el-form :model="info.data">
-        <el-form-item :label-width="formLabelWidth" label="用户名">
+        <el-form-item v-if="isManage" :label-width="formLabelWidth" label="用户名">
           <el-input v-model="info.data.name"></el-input>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="昵称">
+        <el-form-item v-if="isManage" :label-width="formLabelWidth" label="昵称">
           <el-input v-model="info.data.nick"></el-input>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth" label="是否管理员">
+        <el-form-item v-if="isManage" :label-width="formLabelWidth" label="是否管理员">
           <el-select v-model="info.data.isManage" placeholder="请选择">
             <el-option
               v-for="item in options"
@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'User',
@@ -105,6 +105,9 @@ export default {
         label: '否'
       }],
       formLabelWidth: '120px',
+      isManage: false,
+      user: '',
+      name: '',
       pagination: {
         currentPage: 1,
         pageSize: 100,
@@ -121,11 +124,27 @@ export default {
       'changeUser',
       'deleteUser'
     ]),
+    ...mapState('user', [
+      'loginInfo'
+    ]),
     async init() {
-      const result = await this.fetchUserList({
-        pageNumber: 1,
-        pageSize: 10
-      })
+      this.user = this.loginInfo()
+      this.isManage = this.user.isManage
+      this.name = this.user.name
+      let result
+      if (this.isManage) {
+        result = await this.fetchUserList({
+          pageNumber: 1,
+          pageSize: 10
+        })
+      } else {
+        this.filter.name = this.user.name
+        result = await this.fetchUserList({
+          name: this.name,
+          pageNumber: 1,
+          pageSize: 10
+        })
+      }
       if (result.code !== 200) {
         this.$message.warning(result.message)
       }
