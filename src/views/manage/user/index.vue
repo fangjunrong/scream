@@ -98,10 +98,10 @@ export default {
         data: {}
       },
       options: [{
-        value: '1',
+        value: 1,
         label: '是'
       }, {
-        value: '0',
+        value: 0,
         label: '否'
       }],
       formLabelWidth: '120px',
