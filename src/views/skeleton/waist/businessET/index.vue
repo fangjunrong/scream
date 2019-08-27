@@ -16,6 +16,8 @@
       <ul class="waistData-filter-textShow">
         <li>工作效率（按月）： 同比增长 20% ， 环比增长 30%</li>
         <li>成本费用（按月）： 同比减少 30% ， 环比减少 40%</li>
+        <li>物件破损率（按月）： 同比减少 10% ， 环比减少 30%</li>
+        <li>人员流动（按月）： 同比减少 10% ， 环比减少 20%</li>
       </ul>
     </div>
     <div class="waistData-charts">
@@ -31,14 +33,30 @@
             ref="online"
             :options="workEfficiencyOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"/>
+            style="height: 320px;width: 600px"/>
         </div>
         <div class="chart2">
           <LittleTitle title="成本费用"/>
           <v-chart
             :options="costOption"
             :theme="themebrokeline"
-            style="height: 450px;width: 600px"/>
+            style="height: 320px;width: 600px"/>
+        </div>
+        <div class="chart3">
+          <LittleTitle title="物件破损率"/>
+          <v-chart
+            :options="damageOption"
+            :theme="themebrokeline"
+            style="height: 320px;width: 600px"
+            @click="damageClick"/>
+        </div>
+        <div class="chart4">
+          <LittleTitle title="人员流动"/>
+          <v-chart
+            :options="personOption"
+            :theme="themebrokeline"
+            style="height: 320px;width: 600px"
+            @click="personClick"/>
         </div>
       </div>
     </div>
@@ -73,7 +91,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
+          data: ['2019-2', '2019-3', '2019-4', '2019-5', '2019-6', '2019-7'],
           splitLine: { // 网格线
             'show': false
           },
@@ -106,7 +124,73 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['2018-12', '2019-1', '2019-2', '2019-3', '2019-4', '2019-5'],
+          data: ['2019-2', '2019-3', '2019-4', '2019-5', '2019-6', '2019-7'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [100, 96, 90, 85, 79, 70],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      damageOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2019-2', '2019-3', '2019-4', '2019-5', '2019-6', '2019-7'],
+          splitLine: { // 网格线
+            'show': false
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          axisTick: {
+            show: false
+          }
+        },
+        series: [{
+          data: [100, 96, 90, 85, 79, 70],
+          type: 'line',
+          color: '#4ac9d6',
+          itemStyle: {
+            normal: {
+              color: '#4ac9d6',
+              borderColor: '#fff' // 拐点边框颜色
+            }
+          }
+        }]
+      },
+      personOption: {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}'
+        },
+        xAxis: {
+          type: 'category',
+          data: ['2019-2', '2019-3', '2019-4', '2019-5', '2019-6', '2019-7'],
           splitLine: { // 网格线
             'show': false
           },
@@ -161,6 +245,22 @@ export default {
     },
     async getData(param) {
       return await this.fetchwaistDataList(param)
+    },
+    damageClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistDamage',
+        query: {
+          date: event.name
+        }
+      })
+    },
+    personClick(event) {
+      this.$router.push({
+        name: 'skeletonWaistPerson',
+        query: {
+          date: event.name
+        }
+      })
     },
     brokeClick(event) {
       this.$router.push({

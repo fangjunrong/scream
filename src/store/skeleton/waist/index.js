@@ -27,6 +27,18 @@ const skeletonWaist = {
       const result = await ajax.post(apiConstant.skeletonWaistDeviceDelete, data)
       return result
     },
+    async fetchSkeletonWaistDamageList({ commit }, data) {
+      const result = await ajax.post(`${apiConstant.skeletonWaistDamageList}?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`, data)
+      return result
+    },
+    async changeSkeletonWaistDamage({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonWaistDamageEdit, data)
+      return result
+    },
+    async deleteSkeletonWaistDamage({ commit }, data) {
+      const result = await ajax.post(apiConstant.skeletonWaistDamageDelete, data)
+      return result
+    },
     async fetchSkeletonWaistPositionList({ commit }, data) {
       const result = await ajax.post(`${apiConstant.skeletonWaistPositionList}?pageNumber=${data.pageNumber}&pageSize=${data.pageSize}`, data)
       return result

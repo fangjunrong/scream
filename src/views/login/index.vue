@@ -37,8 +37,8 @@ export default {
   data() {
     return {
       loginInfo: {
-        name: 'admin',
-        password: '123456'
+        name: '',
+        password: ''
       },
       loginInfoRule: {
         name: [{

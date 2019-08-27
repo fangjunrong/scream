@@ -24,24 +24,28 @@
       <table class="selftable selftable-head">
         <tr>
           <th width="6%">序列号</th>
-          <th width="10%">人员姓名</th>
+          <th width="6%">人员姓名</th>
           <th width="10%">设备型号</th>
           <th width="10%">设备序列号</th>
-          <!-- <th width="10%">搬运次数</th> -->
-          <th width="10%">搬动次数	</th>
+          <th width="6%">搬动次数</th>
+          <th width="6%">助力</th>
+          <th width="6%">能耗</th>
           <th width="10%">疲劳度</th>
+          <th width="10%">姿态习惯</th>
           <th width="10%">最新更新时间</th>
         </tr>
       </table>
       <table v-for="(item, index) in tableData" :key="item.id" class="selftable selftable-body">
         <tr>
           <td width="6%">{{ index + 1 }}</td>
-          <td width="10%"><div class="link" @click="toDetail(item)">{{ item.personModel ? item.personModel.name : '' }}</div></td>
+          <td width="6%"><div class="link" @click="toDetail(item)">{{ item.personModel ? item.personModel.name : '' }}</div></td>
           <td width="10%">{{ item.deviceModel? item.deviceModel.model : '' }}</td>
           <td width="10%">{{ item.deviceModel? item.deviceModel.sn : '' }}</td>
-          <!-- <td width="10%">{{ item.bendNum }}</td> -->
-          <td width="10%">{{ item.bendNum }}</td>
+          <td width="6%">{{ item.bendNum }}</td>
+          <td width="6%"><div class="link" @click="toDetail(item)">{{ item.bendNum }}</div></td>
+          <td width="6%"><div class="link" @click="toDetail(item)">{{ item.bendNum }}</div></td>
           <td width="10%">{{ calcuFatigue(item) }}</td>
+          <td width="10%"><div class="link" @click="toDetail(item)">{{ item.bendNum }}</div></td>
           <td width="10%">{{ item.createTime }}</td>
         </tr>
       </table>

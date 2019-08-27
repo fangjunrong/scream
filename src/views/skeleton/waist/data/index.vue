@@ -1,4 +1,4 @@
-/bendTotal<template>
+<template>
   <div class="skeletonWaistData">
     <div class="skeletonWaistData-title">
       <DetailTitle title="统计数据"/>
